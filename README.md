@@ -5,7 +5,7 @@ https://github.com/giventadevelop/spring-boot-oauth2-social-login.git
 
 https://www.javachinna.com/spring-boot-angular-10-user-registration-oauth2-social-login-part-1/
 
-
+Changed
 https://github.com/JavaChinna/spring-boot-angular-oauth2-social-login-demo
 
 Reddit clone built using Spring Boot, Spring Security with JPA Authentication, Spring Data JPA with MySQL, Spring MVC. The frontend is built using Angular - You can find the frontend source code here - https://github.com/SaiUpadhyayula/angular-reddit-clone
