@@ -1,6 +1,8 @@
 # How to Build Spring Boot Angular User Registration and OAuth2 Social Login with Facebook, Google, LinkedIn, and Github
 
 https://github.com/giventadevelop/spring-boot-oauth2-social-login.git
+
+
 https://www.javachinna.com/spring-boot-angular-10-user-registration-oauth2-social-login-part-1/
 
 
