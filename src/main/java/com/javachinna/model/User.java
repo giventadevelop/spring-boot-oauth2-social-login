@@ -17,9 +17,8 @@ import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import javax.persistence.CascadeType;
 
 /**
  * The persistent class for the user database table.
@@ -29,6 +28,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Data
+@EqualsAndHashCode
 public class User implements Serializable {
 
 	/**
@@ -65,7 +66,7 @@ public class User implements Serializable {
 
 	// bi-directional many-to-many association to Role
 	@JsonIgnore
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.ALL})
 	@JoinTable(name = "user_role", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "ROLE_ID") })
 	private Set<Role> roles;
 }
