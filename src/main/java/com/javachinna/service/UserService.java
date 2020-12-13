@@ -3,6 +3,7 @@ package com.javachinna.service;
 import java.util.Map;
 import java.util.Optional;
 
+import com.javachinna.dto.UserDTO;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 
@@ -17,11 +18,13 @@ import com.javachinna.model.User;
  */
 public interface UserService {
 
-	public User registerNewUser(SignUpRequest signUpRequest) throws UserAlreadyExistAuthenticationException;
+    public User registerNewUser(SignUpRequest signUpRequest) throws UserAlreadyExistAuthenticationException;
 
-	User findUserByEmail(String email);
+    User findUserByEmail(String email);
 
-	Optional<User> findUserById(Long id);
+    Optional<User> findUserById(Long id);
 
-	LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo);
+    LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo);
+
+    public UserDTO updateUserProfile(UserDTO existingUser);
 }

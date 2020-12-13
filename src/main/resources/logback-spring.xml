@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%-5level] %d{dd-MM-yyyy hh:mm:ss.SSS a} [%thread] %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>logs/logFile.log</file>
+        <encoder>
+            <pattern>[%-5level] %d{dd-MM-yyyy hh:mm:ss.SSS a} [%thread]  %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <springProperty scope="context" name="log_file_path" source="app.log.file.path"/>
+    <!--<appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <file>${log_file_path}/boot_oauth_app.log</file>
+
+        <encoder>
+
+            <pattern>[%-5level] %d{dd-MM-yyyy hh:mm:ss.SSS a} [%blue (%t) ] %highlight(%-5level) %-50logger{50}.%M -
+                %msg%n
+            </pattern>
+
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+
+            <fileNamePattern>${log_file_path}/boot_oauth_app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+
+            <maxFileSize>1MB</maxFileSize>
+
+            <maxHistory>30</maxHistory>
+
+            &lt;!&ndash;<totalSizeCap>1OMB</totalSizeCap>&ndash;&gt;
+
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+
+        </rollingPolicy>
+
+    </appender>-->
+
+    <appender name="RollingFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${log_file_path}/boot_oauth_app.log</file>
+        <encoder>
+            <pattern>%d [%thread] %-5level %-50logger{40} - %msg%n</pattern>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${log_file_path}/boot_oauth_app-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!--<maxFileSize>1MB</maxFileSize>-->
+            <maxFileSize>5MB</maxFileSize>
+            <!--<maxHistory>30</maxHistory>-->
+            <maxHistory>6</maxHistory>
+            <!--<totalSizeCap>10MB</totalSizeCap>-->
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="RollingFile" />
+    </root>
+
+    <!--<logger name="com.javachinna.controller" level="ALL" additivity="true">
+        <appender-ref ref="RollingFile"/>
+    </logger>-->
+</configuration>

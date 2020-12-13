@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -21,7 +22,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@Data
 public class Role implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static final String USER = "USER";
@@ -40,6 +41,9 @@ public class Role implements Serializable {
 	@ManyToMany(mappedBy = "roles")
 	private Set<User> users;
 
+	public Role() {
+		this.name = name;
+	}
 	public Role(String name) {
 		this.name = name;
 	}
