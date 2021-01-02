@@ -9,15 +9,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication(scanBasePackages = "com.javachinna")
 @EnableJpaRepositories
 @EnableTransactionManagement
-public class DemoApplication extends SpringBootServletInitializer {
+public class BootOAuth2SocialApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
-		SpringApplicationBuilder app = new SpringApplicationBuilder(DemoApplication.class);
+		SpringApplicationBuilder app = new SpringApplicationBuilder(BootOAuth2SocialApplication.class);
 		app.run();
 	}
 
 	@Override
 	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-		return application.sources(DemoApplication.class);
+		return application.sources(BootOAuth2SocialApplication.class);
 	}
 }

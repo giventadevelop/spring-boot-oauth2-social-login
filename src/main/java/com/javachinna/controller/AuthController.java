@@ -46,6 +46,9 @@ public class AuthController {
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		String jwt = tokenProvider.createToken(authentication);
 		LocalUser localUser = (LocalUser) authentication.getPrincipal();
+		if(localUser.getUser() .getDisplayName()==null){
+			localUser.getUser().setDisplayName(localUser.getUser().getEmail());
+		}
 		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, GeneralUtils.buildUserInfo(localUser)));
 	}
 

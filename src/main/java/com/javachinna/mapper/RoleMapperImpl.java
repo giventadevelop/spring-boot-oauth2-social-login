@@ -1,19 +1,17 @@
 package com.javachinna.mapper;
 
-
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.Generated;
-
 import com.javachinna.dto.RoleDTO;
 import com.javachinna.model.Role;
 import com.javachinna.model.User;
+import java.util.HashSet;
+import java.util.Set;
+import javax.annotation.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2020-12-10T23:09:50-0500",
-    comments = "version: 1.4.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-6.2.jar, environment: Java 1.8.0_261 (Oracle Corporation)"
+    date = "2020-12-13T13:57:16-0500",
+    comments = "version: 1.4.1.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-6.7.1.jar, environment: Java 1.8.0_261 (Oracle Corporation)"
 )
 @Component
 public class RoleMapperImpl implements RoleMapper {

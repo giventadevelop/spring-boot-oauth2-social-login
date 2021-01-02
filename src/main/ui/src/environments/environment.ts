@@ -3,7 +3,25 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+
+  API_BASE_URL: 'http://localhost:8080/',
+
+  OAUTH2_URL: 'http://localhost:8080/oauth2/authorization/',
+
+  REDIRECT_URL: '?redirect_uri=http://localhost:8080/login/oauth2/code/google',
+
+  API_URL: 'http://localhost:8080/api/',
+  AUTH_API: 'http://localhost:8080/api/auth/',
+  GOOGLE_AUTH_URL:
+    'http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080/login/oauth2/code/google',
+  FACEBOOK_AUTH_URL:
+    'http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:8080/login/oauth2/code/google',
+  GITHUB_AUTH_URL:
+    'http://localhost:8080/oauth2/authorization/github?redirect_uri=http://localhost:8080/login/oauth2/code/github',
+
+  LINKEDIN_AUTH_URL:
+    'http://localhost:8080/oauth2/authorization/linkedin?redirect_uri=http://localhost:8080/login/oauth2/code/google',
 };
 
 /*

@@ -10,8 +10,8 @@ import org.mapstruct.factory.Mappers;
  * 
  */
 
-//@Mapper(componentModel = "spring", uses = {UserMapper.class})
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class})
+//@Mapper(componentModel = "spring")
 public interface RoleMapper   {
 
     public RoleMapper INSTANCE = Mappers.getMapper(RoleMapper.class);

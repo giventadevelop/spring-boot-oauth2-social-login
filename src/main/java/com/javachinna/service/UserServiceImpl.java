@@ -91,10 +91,15 @@ import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer
     @Transactional
     public LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
+
         if (StringUtils.isEmpty(oAuth2UserInfo.getName())) {
-            throw new OAuth2AuthenticationProcessingException("Name not found from OAuth2 provider");
+            if(!registrationId.equalsIgnoreCase("github")) {
+                throw new OAuth2AuthenticationProcessingException("Name not found from OAuth2 provider");
+            }
         } else if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
-            throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
+            if(!registrationId.equalsIgnoreCase("github")) {
+                throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
+            }
         }
         SignUpRequest userDetails = toUserRegistrationObject(registrationId, oAuth2UserInfo);
         User user = findUserByEmail(oAuth2UserInfo.getEmail());
@@ -107,6 +112,14 @@ import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer
         } else {
             user = registerNewUser(userDetails);
         }
+        if(user.getEmail()==null) {
+            if (attributes.get("login") != null) {
+                user.setEmail((String) attributes.get("login"));
+            } else {
+                user.setEmail((String) attributes.get("id"));
+            }
+        }
+
 
         return LocalUser.create(user, attributes, idToken, userInfo);
     }

@@ -2,6 +2,7 @@ package com.javachinna.config;
 
 import java.util.Locale;
 
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,18 +11,20 @@ import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.i18n.CookieLocaleResolver;
-
+//@EnableWebMvc
 @Configuration
-public class WebConfig implements WebMvcConfigurer {
+public class WebConfig  implements WebMvcConfigurer {
 
 	private final long MAX_AGE_SECS = 3600;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		//registry.addMapping("/**").allowedOrigins("*","http://localhost:4200").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
-		registry.addMapping("/**").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
+		registry.addMapping("/**").allowedOrigins("*","http://awsbeanstalk2-env.eba-puiq3awc.us-east-2.elasticbeanstalk.com","http://localhost:4200","http://localhost:8080").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
+		//registry.addMapping("/**").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
 	}
 
 	@Bean
