@@ -61,6 +61,7 @@ export class ProfileComponent implements OnInit {
       },
       (err) => {
         this.errorMessage = err.error.message;
+        console.log('user update profile error :- ', this.errorMessage);
         this.isSignUpFailed = true;
       }
     );

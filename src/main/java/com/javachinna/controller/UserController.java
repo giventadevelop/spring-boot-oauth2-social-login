@@ -3,8 +3,6 @@ package com.javachinna.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javachinna.dto.UserDTO;
-import com.javachinna.mapper.UserMapper;
-import com.javachinna.model.User;
 import com.javachinna.service.UserService;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -39,7 +37,7 @@ public class UserController {
 	}
 
 	@PostMapping("/user")
-	public ResponseEntity<?> updateUserProfile(@RequestBody UserDTO userDto) {
+	public ResponseEntity<UserDTO> updateUserProfile(@RequestBody UserDTO userDto) {
 		ObjectMapper mapper = new ObjectMapper();
 		//Converting the Object to JSONString
 		String jsonString = null;
@@ -56,7 +54,12 @@ public class UserController {
 		logger.warn("This is a warn log jsonString");
 		logger.debug(jsonString);
 		userDto.setModifiedDate(new Date());
-		return ResponseEntity.ok(userService.updateUserProfile(userDto));
+		logger.trace("update user profile updateUserProfile");
+		logger.trace("update user profile updateUserProfile userDto", userDto);
+
+		userDto=userService.updateUserProfile(userDto);
+		logger.debug(" line 61 updateUserProfile returned userDto is :", userDto.toString());
+		return ResponseEntity.ok(userDto);
 	}
 
 	@GetMapping("/all")

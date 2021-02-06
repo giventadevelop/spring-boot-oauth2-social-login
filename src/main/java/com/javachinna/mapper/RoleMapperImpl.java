@@ -1,11 +1,12 @@
 package com.javachinna.mapper;
 
-import com.javachinna.dto.RoleDTO;
-import com.javachinna.model.Role;
-import com.javachinna.model.User;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Generated;
+
+import com.javachinna.dto.RoleDTO;
+import com.javachinna.model.Role;
+import com.javachinna.model.User;
 import org.springframework.stereotype.Component;
 
 @Generated(
@@ -26,10 +27,10 @@ public class RoleMapperImpl implements RoleMapper {
 
         roleDTO.setRoleId( role.getRoleId() );
         roleDTO.setName( role.getName() );
-        Set<User> set = role.getUsers();
+       /* Set<User> set = role.getUsers();
         if ( set != null ) {
             roleDTO.setUsers( new HashSet<User>( set ) );
-        }
+        }*/
 
         return roleDTO;
     }
@@ -44,10 +45,10 @@ public class RoleMapperImpl implements RoleMapper {
 
         role.setRoleId( roleDTO.getRoleId() );
         role.setName( roleDTO.getName() );
-        Set<User> set = roleDTO.getUsers();
+       /* Set<User> set = roleDTO.getUsers();
         if ( set != null ) {
             role.setUsers( new HashSet<User>( set ) );
-        }
+        }*/
 
         return role;
     }

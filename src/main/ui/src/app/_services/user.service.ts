@@ -43,6 +43,10 @@ export class UserService {
   }
 
   upDateUserProfile(user): Observable<any> {
+    console.log(
+      ' environment.API_URL + user    ',
+      environment.API_URL + 'user'
+    );
     console.log(JSON.stringify(user));
     return this.http.post(environment.API_URL + 'user', user, httpOptions);
   }

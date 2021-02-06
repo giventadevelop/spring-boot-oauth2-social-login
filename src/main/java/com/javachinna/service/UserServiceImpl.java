@@ -6,10 +6,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javachinna.controller.UserController;
 import com.javachinna.dto.UserDTO;
 import com.javachinna.mapper.UserMapper;
+import com.javachinna.model.Role;
+import com.javachinna.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,30 +20,30 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.javachinna.dto.LocalUser;
 import com.javachinna.dto.SignUpRequest;
 import com.javachinna.dto.SocialProvider;
 import com.javachinna.exception.OAuth2AuthenticationProcessingException;
 import com.javachinna.exception.UserAlreadyExistAuthenticationException;
-import com.javachinna.model.Role;
-import com.javachinna.model.User;
 import com.javachinna.repo.RoleRepository;
 import com.javachinna.repo.UserRepository;
 import com.javachinna.security.oauth2.user.OAuth2UserInfo;
 import com.javachinna.security.oauth2.user.OAuth2UserInfoFactory;
 import com.javachinna.util.GeneralUtils;
 
-import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer.Vanilla.std;
-
 /**
  * @author Chinna
  * @since 26/3/18
  */
-    @Service
-    @AllArgsConstructor
-    public class UserServiceImpl implements UserService {
-   /* @Autowired
-    protected final org.apache.commons.logging.Log logger;*/
+@Service
+@AllArgsConstructor
+public class UserServiceImpl implements UserService {
+
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private UserRepository userRepository;
 
     private RoleRepository roleRepository;
@@ -93,11 +94,11 @@ import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
 
         if (StringUtils.isEmpty(oAuth2UserInfo.getName())) {
-            if(!registrationId.equalsIgnoreCase("github")) {
+            if (!registrationId.equalsIgnoreCase("github")) {
                 throw new OAuth2AuthenticationProcessingException("Name not found from OAuth2 provider");
             }
         } else if (StringUtils.isEmpty(oAuth2UserInfo.getEmail())) {
-            if(!registrationId.equalsIgnoreCase("github")) {
+            if (!registrationId.equalsIgnoreCase("github")) {
                 throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
             }
         }
@@ -112,7 +113,7 @@ import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer
         } else {
             user = registerNewUser(userDetails);
         }
-        if(user.getEmail()==null) {
+        if (user.getEmail() == null) {
             if (attributes.get("login") != null) {
                 user.setEmail((String) attributes.get("login"));
             } else {
@@ -136,8 +137,8 @@ import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer
             e.printStackTrace();
         }
         System.out.println(jsonString);*/
-        System.out.println("existingUser.getId()" + existingUser.getId());
-        User user= userRepository.findById(existingUser.getId()).get();
+        // System.out.println("existingUser.getId()" + existingUser.getId());
+        User user = userRepository.findById(existingUser.getId()).get();
 
        /* try {
             jsonString = mapper.writeValueAsString(user);
@@ -147,9 +148,13 @@ import static com.fasterxml.jackson.databind.deser.std.UntypedObjectDeserializer
         System.out.println("user " +jsonString);*/
 
         existingUser.setCreatedDate(user.getCreatedDate());
-        user= userMapper.userDTOToJpaUser(existingUser,user);
-      //  logger.debug("updating User Profile");
-        return userMapper.userToUserDTO(userRepository.save(user));
+        user = userMapper.userDTOToJpaUser(existingUser, user);
+        logger.trace("updateUserProfile updating User Profile");
+        logger.debug("updateUserProfile updating User Profile before save line 153 :-");
+        user=userRepository.save(user);
+        existingUser=userMapper.userToUserDTO(user);
+        return existingUser;
+        //return userMapper.userToUserDTO(userRepository.save(user));
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {

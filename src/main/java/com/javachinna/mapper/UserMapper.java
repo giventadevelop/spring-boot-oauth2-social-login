@@ -1,10 +1,8 @@
 package com.javachinna.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
-import com.javachinna.model.User;
 import com.javachinna.dto.UserDTO;
+import com.javachinna.model.User;
+import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring" , uses = {RoleMapper.class})
 public interface UserMapper  {

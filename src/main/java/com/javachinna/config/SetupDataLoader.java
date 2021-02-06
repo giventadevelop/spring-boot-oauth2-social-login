@@ -2,6 +2,8 @@ package com.javachinna.config;
 
 import java.util.*;
 
+import com.javachinna.model.Role;
+import com.javachinna.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
@@ -10,8 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.javachinna.dto.SocialProvider;
-import com.javachinna.model.Role;
-import com.javachinna.model.User;
 import com.javachinna.repo.RoleRepository;
 import com.javachinna.repo.UserRepository;
 
@@ -46,7 +46,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	}
 
 	@Transactional
-	private final User createUserIfNotFound(final String email, Set<Role> roles) {
+	public  User createUserIfNotFound(final String email, Set<Role> roles) {
 		User user = userRepository.findByEmail(email);
 		if (user == null) {
 			user = new User();
@@ -65,7 +65,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 	}
 
 	@Transactional
-	private final Role createRoleIfNotFound(final String name) {
+	public  Role createRoleIfNotFound(final String name) {
 		Role role = roleRepository.findByName(name);
 		if (role == null) {
 			role = roleRepository.save(new Role(name));

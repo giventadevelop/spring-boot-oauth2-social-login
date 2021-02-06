@@ -1,12 +1,12 @@
 package com.javachinna.mapper;
 
-import com.javachinna.dto.UserDTO;
-import com.javachinna.model.Role;
-import com.javachinna.model.User;
 import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Generated;
 
+import com.javachinna.dto.UserDTO;
+import com.javachinna.model.Role;
+import com.javachinna.model.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -34,14 +34,14 @@ private PasswordEncoder passwordEncoder;
         userDTO.setId( user.getId() );
         userDTO.setProviderUserId( user.getProviderUserId() );
         userDTO.setEmail( user.getEmail() );
-        userDTO.setEnabled( user.isEnabled() );
+        userDTO.setEnabled( user.getEnabled() );
         userDTO.setDisplayName( user.getDisplayName() );
         userDTO.setPassword( user.getPassword() );
         userDTO.setProvider( user.getProvider() );
-        Set<Role> set = user.getRoles();
+        /*Set<Role> set = user.getRoles();
         if ( set != null ) {
             userDTO.setRoles( new HashSet<Role>( set ) );
-        }
+        }*/
 
         return userDTO;
     }
@@ -57,7 +57,7 @@ private PasswordEncoder passwordEncoder;
         user.setId( UserDTO.getId() );
         user.setProviderUserId( UserDTO.getProviderUserId() );
         user.setEmail( UserDTO.getEmail() );
-        user.setEnabled( UserDTO.isEnabled() );
+        user.setEnabled( UserDTO.getEnabled());
         user.setDisplayName( UserDTO.getDisplayName() );
         user.setCreatedDate( UserDTO.getCreatedDate() );
         user.setModifiedDate( UserDTO.getModifiedDate() );
@@ -80,7 +80,7 @@ private PasswordEncoder passwordEncoder;
         user.setId( UserDTO.getId() );
         user.setProviderUserId( UserDTO.getProviderUserId() );
         user.setEmail( UserDTO.getEmail() );
-        user.setEnabled( UserDTO.isEnabled() );
+        user.setEnabled( UserDTO.getEnabled() );
         // user.setDisplayName( UserDTO.getDisplayName() );
         // user.setCreatedDate( UserDTO.getCreatedDate() );
         user.setModifiedDate( UserDTO.getModifiedDate() );

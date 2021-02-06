@@ -75,15 +75,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 			.authorizeRequests()
 				.antMatchers("/home","/assets/**",
 						"/polyfills.js","polyfills.js",
-						"/polyfills.js","polyfills.js",
 						"/main.js","main.js",
-						"/main.8ed5df0f6a038fe876d8.js","main.8ed5df0f6a038fe876d8.js",
-						"/main.3cfbdcd54939fdbe5d74.js","main.3cfbdcd54939fdbe5d74.js",
-						"/main.fd5482d6d7afddd6af9c.js",
-						"/main.daae9e14b1a34e7949d6.js","main.daae9e14b1a34e7949d6.js",
 						"/styles.css","styles.css",
-						"/styles.css","styles.css",
-						"/runtime.js","runtime.js",
 						"/runtime.js","runtime.js",
 						"/vendor.js","vendor.js",
 						"/favicon.ico","index.html","/","/login", "/error", "/api/all", "/api/auth/**", "/oauth2/**","/login/oauth2/code/**").permitAll()
