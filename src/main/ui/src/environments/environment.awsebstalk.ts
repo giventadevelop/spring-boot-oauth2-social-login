@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
 
-  API_BASE_URL: 'http://www.adwiise.com',
+  API_BASE_URL: 'https://www.adwiise.com',
 
   OAUTH2_URL: '/oauth2/authorization/',
 
@@ -10,12 +10,11 @@ export const environment = {
   API_URL: '/api/',
   AUTH_API: '/api/auth/',
   GOOGLE_AUTH_URL:
-    'http://www.adwiise.com/oauth2/authorization/google?redirect_uri=http://www.adwiise.com/login/oauth2/code/google',
+    'https://www.adwiise.com/oauth2/authorization/google?redirect_uri=https://www.adwiise.com/login/oauth2/code/google',
   FACEBOOK_AUTH_URL:
-    'http://www.adwiise.com/oauth2/authorization/facebook?redirect_uri=http://www.adwiise.com/login/oauth2/code/facebook',
-  GITHUB_AUTH_URL:
-    'http://www.adwiise.com/oauth2/authorization/github?redirect_uri=http://www.adwiise.com/login/oauth2/code/github',
+    'https://www.adwiise.com/oauth2/authorization/facebook?redirect_uri=https://www.adwiise.com/login/oauth2/code/facebook',
+  GITHUB_AUTH_URL: 'https://www.adwiise.com/oauth2/authorization/github',
 
   LINKEDIN_AUTH_URL:
-    'http://www.adwiise.com/oauth2/authorization/linkedin?redirect_uri=http://www.adwiise.com/login/oauth2/code/google',
+    'https://www.adwiise.com/oauth2/authorization/linkedin?redirect_uri=https://www.adwiise.com/login/oauth2/code/google',
 };

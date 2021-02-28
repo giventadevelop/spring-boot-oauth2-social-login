@@ -20,7 +20,10 @@ public class WebConfig  implements WebMvcConfigurer {
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
-		registry.addMapping("/**").allowedOrigins("*","http://awsbeanstalk2-env.eba-puiq3awc.us-east-2.elasticbeanstalk.com","http://localhost:4200","http://www.adwiise.com","https://www.adwiise.com","http://localhost:8080").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
+		registry.addMapping("/**").allowedOrigins("*","http://awsbeanstalk2-env.eba-puiq3awc.us-east-2.elasticbeanstalk.com",
+				"http://localhost:4200","http://www.adwiise.com","https://www.adwiise.com",
+				"https://www.facebook.com","http://www.facebook.com","www.facebook.com","facebook.com",
+				"http://localhost:8080","https://www.adwiise.com/login/oauth2/code/facebook").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
 		//registry.addMapping("/**").allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE").maxAge(MAX_AGE_SECS);
 	}
 

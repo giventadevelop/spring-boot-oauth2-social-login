@@ -34,6 +34,7 @@ import com.javachinna.security.oauth2.user.OAuth2UserInfo;
 import com.javachinna.security.oauth2.user.OAuth2UserInfoFactory;
 import com.javachinna.util.GeneralUtils;
 
+
 /**
  * @author Chinna
  * @since 26/3/18
@@ -93,6 +94,9 @@ public class UserServiceImpl implements UserService {
     public LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
 
+        logger.info("received processUserRegistration oAuth2UserInfo "+ oAuth2UserInfo.getName());
+        logger.debug("received processUserRegistration oAuth2UserInfo "+ oAuth2UserInfo.getName());
+
         if (StringUtils.isEmpty(oAuth2UserInfo.getName())) {
             if (!registrationId.equalsIgnoreCase("github")) {
                 throw new OAuth2AuthenticationProcessingException("Name not found from OAuth2 provider");
@@ -102,6 +106,10 @@ public class UserServiceImpl implements UserService {
                 throw new OAuth2AuthenticationProcessingException("Email not found from OAuth2 provider");
             }
         }
+
+        logger.info("  get userDetails processUserRegistration oAuth2UserInfo ");
+        logger.debug("  get userDetails processUserRegistration oAuth2UserInfo ");
+
         SignUpRequest userDetails = toUserRegistrationObject(registrationId, oAuth2UserInfo);
         User user = findUserByEmail(oAuth2UserInfo.getEmail());
         if (user != null) {
@@ -120,6 +128,8 @@ public class UserServiceImpl implements UserService {
                 user.setEmail((String) attributes.get("id"));
             }
         }
+        logger.info("  return processUserRegistration oAuth2UserInfo ");
+        logger.debug("  return processUserRegistration oAuth2UserInfo ");
 
 
         return LocalUser.create(user, attributes, idToken, userInfo);

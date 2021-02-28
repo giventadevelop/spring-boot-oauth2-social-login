@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.javachinna.controller.HomeController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
@@ -23,8 +24,13 @@ import com.javachinna.dto.SocialProvider;
 import com.javachinna.exception.OAuth2AuthenticationProcessingException;
 import com.javachinna.service.UserService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+	private static final Logger logger = LoggerFactory.getLogger(CustomOAuth2UserService.class);
 
 	@Autowired
 	private UserService userService;
@@ -34,7 +40,19 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 	@Override
 	public OAuth2User loadUser(OAuth2UserRequest oAuth2UserRequest) throws OAuth2AuthenticationException {
+
+		logger.info("received oAuth2UserRequest "+ oAuth2UserRequest);
+		logger.debug("received oAuth2UserRequest "+ oAuth2UserRequest);
+
+
 		OAuth2User oAuth2User = super.loadUser(oAuth2UserRequest);
+
+		logger.info("oAuth2User user is  "+ oAuth2User);
+		logger.info("oAuth2User user is  "+ oAuth2User.getAttributes().toString());
+		logger.debug("oAuth2User user is "+ oAuth2UserRequest);
+		logger.debug("oAuth2User user is  "+ oAuth2User.getAttributes().toString());
+
+
 		try {
 			Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
 			String provider = oAuth2UserRequest.getClientRegistration().getRegistrationId();

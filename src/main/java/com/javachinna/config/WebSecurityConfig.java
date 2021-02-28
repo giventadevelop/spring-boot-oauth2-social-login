@@ -73,13 +73,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(new RestAuthenticationEntryPoint())
 				.and()
 			.authorizeRequests()
-				.antMatchers("/home","/assets/**",
+				.antMatchers("/","/home","/assets/**",
 						"/polyfills.js","polyfills.js",
 						"/main.js","main.js",
 						"/styles.css","styles.css",
 						"/runtime.js","runtime.js",
 						"/vendor.js","vendor.js",
-						"/favicon.ico","index.html","/","/login", "/error", "/api/all", "/api/auth/**", "/oauth2/**","/login/oauth2/code/**").permitAll()
+						"/favicon.ico","index.html","/","/login", "/error", "/api/all",
+						"/api/auth/**", "/oauth2/**",
+						"/login/oauth2/code/**","/privacy-policy.html",
+						"http://www.adwiise.com/login/oauth2/code/facebook",
+						"https://www.adwiise.com/login/oauth2/code/facebook",
+						"https://www.adwiise.com/login/oauth2/code/**").permitAll()
 			.anyRequest()
 				.authenticated()
 				.and()
@@ -87,7 +92,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizationEndpoint()
 					.authorizationRequestRepository(cookieAuthorizationRequestRepository())
 					.and()
-				.redirectionEndpoint()
+				.redirectionEndpoint().baseUri("/login/oauth2/code/*")
 					.and()
 				.userInfoEndpoint()
 					.oidcUserService(customOidcUserService)
@@ -142,6 +147,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		RestTemplate restTemplate = new RestTemplate(Arrays.asList(new FormHttpMessageConverter(), tokenResponseHttpMessageConverter));
 		restTemplate.setErrorHandler(new OAuth2ErrorResponseErrorHandler());
 		DefaultAuthorizationCodeTokenResponseClient tokenResponseClient = new DefaultAuthorizationCodeTokenResponseClient();
+		tokenResponseClient.setRequestEntityConverter(new CustomRequestEntityConverter());
 		tokenResponseClient.setRestOperations(restTemplate);
 		return tokenResponseClient;
 	}
