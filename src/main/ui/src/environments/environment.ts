@@ -17,8 +17,12 @@ export const environment = {
     'http://localhost:8080/oauth2/authorization/google?redirect_uri=http://localhost:8080/login/oauth2/code/google',
   FACEBOOK_AUTH_URL:
     'http://localhost:8080/oauth2/authorization/facebook?redirect_uri=http://localhost:8080/login/oauth2/code/google',
+
   GITHUB_AUTH_URL:
     'http://localhost:8080/oauth2/authorization/github?redirect_uri=http://localhost:8080/login/oauth2/code/github',
+
+  TWITTER_AUTH_URL:
+    'http://localhost:8080/oauth2/authorization/twitter?redirect_uri=http://localhost:8080/login/oauth2/code/twitter',
 
   LINKEDIN_AUTH_URL:
     'http://localhost:8080/oauth2/authorization/linkedin?redirect_uri=http://localhost:8080/login/oauth2/code/google',

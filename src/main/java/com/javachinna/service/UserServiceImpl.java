@@ -1,10 +1,6 @@
 package com.javachinna.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 import com.javachinna.controller.UserController;
 import com.javachinna.dto.UserDTO;
@@ -65,6 +61,8 @@ public class UserServiceImpl implements UserService {
         Date now = Calendar.getInstance().getTime();
         user.setCreatedDate(now);
         user.setModifiedDate(now);
+       /* Set<Role> roles=user.getRoles();
+        user.setRoles(null);*/
         user = userRepository.save(user);
         userRepository.flush();
         return user;
@@ -92,6 +90,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
+
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
 
         logger.info("received processUserRegistration oAuth2UserInfo "+ oAuth2UserInfo.getName());
@@ -117,8 +116,10 @@ public class UserServiceImpl implements UserService {
                 throw new OAuth2AuthenticationProcessingException(
                         "Looks like you're signed up with " + user.getProvider() + " account. Please use your " + user.getProvider() + " account to login.");
             }
+            logger.debug(" Save updateExistingUser userDetails :"+ userDetails.toString());
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {
+            logger.debug(" Save registerNewUser oAuth2UserInfo :"+ oAuth2UserInfo.toString());
             user = registerNewUser(userDetails);
         }
         if (user.getEmail() == null) {

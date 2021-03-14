@@ -55,10 +55,15 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
 		try {
 			Map<String, Object> attributes = new HashMap<>(oAuth2User.getAttributes());
+
+			logger.debug("oAuth2User Attributes Line # 59 : "+ attributes.entrySet().toString());
+
 			String provider = oAuth2UserRequest.getClientRegistration().getRegistrationId();
 			if (provider.equals(SocialProvider.LINKEDIN.getProviderType())) {
 				populateEmailAddressFromLinkedIn(oAuth2UserRequest, attributes);
 			}
+
+			logger.debug("oAuth2User provider  Line # 66 : "+ attributes.entrySet().toString());
 			return userService.processUserRegistration(provider, attributes, null, null);
 		} catch (AuthenticationException ex) {
 			throw ex;

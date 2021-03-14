@@ -13,7 +13,11 @@ export const environment = {
     'https://www.adwiise.com/oauth2/authorization/google?redirect_uri=https://www.adwiise.com/login/oauth2/code/google',
   FACEBOOK_AUTH_URL:
     'https://www.adwiise.com/oauth2/authorization/facebook?redirect_uri=https://www.adwiise.com/login/oauth2/code/facebook',
-  GITHUB_AUTH_URL: 'https://www.adwiise.com/oauth2/authorization/github',
+  GITHUB_AUTH_URL:
+    'https://www.adwiise.com/oauth2/authorization/github?redirect_uri=http://www.adwiise.com/login/oauth2/code/github',
+
+  TWITTER_AUTH_URL:
+    'https://www.adwiise.com/oauth2/authorization/twitter?redirect_uri=https://www.adwiise.com/login/oauth2/code/twitter',
 
   LINKEDIN_AUTH_URL:
     'https://www.adwiise.com/oauth2/authorization/linkedin?redirect_uri=https://www.adwiise.com/login/oauth2/code/google',

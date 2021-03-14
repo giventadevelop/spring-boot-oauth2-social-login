@@ -24,7 +24,8 @@ import org.springframework.security.oauth2.client.http.OAuth2ErrorResponseErrorH
 import org.springframework.security.oauth2.core.http.converter.OAuth2AccessTokenResponseHttpMessageConverter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.security.web.firewall.RequestRejectedHandler;
+import org.springframework.security.web.firewall.HttpStatusRequestRejectedHandler;
 import com.javachinna.security.jwt.TokenAuthenticationFilter;
 import com.javachinna.security.oauth2.CustomOAuth2UserService;
 import com.javachinna.security.oauth2.CustomOidcUserService;
@@ -80,7 +81,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 						"/runtime.js","runtime.js",
 						"/vendor.js","vendor.js",
 						"/favicon.ico","index.html","/","/login", "/error", "/api/all",
-						"/api/auth/**", "/oauth2/**",
+						"/api/auth/**", "/oauth2/**","/oauth/authorize",
+						"/oauth2/authorization/**",
 						"/login/oauth2/code/**","/privacy-policy.html",
 						"http://www.adwiise.com/login/oauth2/code/facebook",
 						"https://www.adwiise.com/login/oauth2/code/facebook",
@@ -122,6 +124,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public HttpCookieOAuth2AuthorizationRequestRepository cookieAuthorizationRequestRepository() {
 		return new HttpCookieOAuth2AuthorizationRequestRepository();
+	}
+
+	@Bean
+	RequestRejectedHandler requestRejectedHandler() {
+		return new HttpStatusRequestRejectedHandler();
 	}
 
 	// This bean is load the user specific data when form login is used.

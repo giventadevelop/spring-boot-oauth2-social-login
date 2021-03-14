@@ -7,6 +7,7 @@ import com.javachinna.service.UserService;
 import com.javachinna.util.GeneralUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.slf4j.Logger;
@@ -38,7 +39,8 @@ public class HomeController {
 		return "index";
 	}
 
-	//@GetMapping("/login/oauth2/code/{social-media-app}")
+	@GetMapping("/login/oauth2/code/{social-media-app}")
+	//public ResponseEntity<?> authenticateUser(HttpRequest httpRequest, @PathVariable("social-media-app") String socialMediaApp) {
 	public ResponseEntity<?> authenticateUser(@PathVariable("social-media-app") String socialMediaApp) {
 		/*Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -47,6 +49,8 @@ public class HomeController {
 		if(localUser.getUser() .getDisplayName()==null){
 			localUser.getUser().setDisplayName(localUser.getUser().getEmail());
 		}*/
+
+		//logger.debug("httpRequest for socialMediaApp "+ socialMediaApp  + httpRequest.toString());
 
 		logger.info("received /login/oauth2/code/  for from social-media-app redirect uri of "+ socialMediaApp);
 		logger.debug("received /login/oauth2/code/  for from social-media-app redirect uri"+ socialMediaApp);

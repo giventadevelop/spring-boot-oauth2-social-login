@@ -22,7 +22,8 @@ public class CustomRequestEntityConverter implements Converter<OAuth2Authorizati
       RequestEntity<?> entity = defaultConverter.convert(req);
       MultiValueMap<String, String> params =  (MultiValueMap<String, String>) entity.getBody();
       String url = params.getFirst("redirect_uri");
-      if(url.contains("facebook")|| url.contains("github")){
+    //  if(url.contains("facebook")|| url.contains("github")){
+      if(url.contains("facebook")){
           url = url.replace("http", "https");
 
           if(url.contains("github")){

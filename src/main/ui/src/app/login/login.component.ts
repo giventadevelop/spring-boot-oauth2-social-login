@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
   googleURL = environment.GOOGLE_AUTH_URL;
   facebookURL = environment.FACEBOOK_AUTH_URL;
   githubURL = environment.GITHUB_AUTH_URL;
+  twitterURL = environment.TWITTER_AUTH_URL;
   linkedinURL = environment.LINKEDIN_AUTH_URL;
 
   constructor(
