@@ -3,6 +3,7 @@ package com.javachinna.config;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.FormHttpMessageConverter;
@@ -40,6 +41,7 @@ import com.javachinna.security.oauth2.OAuth2AuthenticationSuccessHandler;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
+	@Qualifier("localUserDetailService")
 	private UserDetailsService userDetailsService;
 
 	@Autowired

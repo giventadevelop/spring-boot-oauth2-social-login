@@ -34,6 +34,23 @@ export class ProfileComponent implements OnInit {
     this.editProfile = true;
   }
 
+  onRefreshToken() {
+    this.authService.refreshToken().subscribe(
+      (refreshTknResponse) => {
+        console.log(refreshTknResponse);
+        this.isSuccessful = true;
+        this.isSignUpFailed = false;
+      },
+      (err) => {
+        this.errorMessage = err.error.message;
+        console.log(
+          'refreshTknResponse error in prfl cmpnt :- ',
+          this.errorMessage
+        );
+        // this.isSignUpFailed = true;
+      }
+    );
+  }
   onSubmit(): void {
     // this.userOj = this.token.getUser();
     this.userOj.providerUserId = this.form.email;

@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "country")
+@Table(name = "COUNTRY")
 public class Country {
     @Id
     @Column(name = "COUNTRY_ID")

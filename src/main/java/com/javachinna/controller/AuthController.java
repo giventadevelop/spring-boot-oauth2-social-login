@@ -2,6 +2,8 @@ package com.javachinna.controller;
 
 import javax.validation.Valid;
 
+import com.javachinna.service.LocalUserDetailService;
+import com.javachinna.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,42 +25,112 @@ import com.javachinna.util.GeneralUtils;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.security.Principal;
+import java.time.Instant;
+
+import static org.springframework.http.HttpStatus.OK;
+
 @Slf4j
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-	@Autowired
-	AuthenticationManager authenticationManager;
+    @Autowired
+    AuthenticationManager authenticationManager;
 
-	@Autowired
-	UserService userService;
+    @Autowired
+    UserService userService;
 
-	@Autowired
-	TokenProvider tokenProvider;
+    @Autowired
+    LocalUserDetailService localUserDetailService;
 
-	@PostMapping("/signin")
-	public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-		SecurityContextHolder.getContext().setAuthentication(authentication);
-		String jwt = tokenProvider.createToken(authentication);
-		LocalUser localUser = (LocalUser) authentication.getPrincipal();
-		if(localUser.getUser() .getDisplayName()==null){
-			localUser.getUser().setDisplayName(localUser.getUser().getEmail());
-		}
-		return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, GeneralUtils.buildUserInfo(localUser)));
-	}
+    @Autowired
+    TokenProvider tokenProvider;
 
-	@PostMapping("/signup")
-	public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
-		try {
-			userService.registerNewUser(signUpRequest);
-		} catch (UserAlreadyExistAuthenticationException e) {
-			log.error("Exception Ocurred", e);
-			return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
-		}
-		return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
-	}
+    @Autowired
+    RefreshTokenService refreshTokenService;
+
+    /**
+     * login user
+     *
+     * @param loginRequest
+     * @return ResponseEntity<?> JwtAuthenticationResponse
+     */
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, Principal principal) throws Exception {
+        return createTokenResponse(loginRequest, false, principal);
+    }
+
+    /**
+     * Register user signup
+     *
+     * @param signUpRequest
+     * @return ResponseEntity<?> JwtAuthenticationResponse
+     */
+    @PostMapping("/signup")
+    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+        try {
+            userService.registerNewUser(signUpRequest);
+        } catch (UserAlreadyExistAuthenticationException e) {
+            log.error("Exception Ocurred", e);
+            return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
+    }
 
 
+    @PostMapping("/refresh/token")
+    public ResponseEntity<?> refreshTokens(@Valid @RequestBody LoginRequest loginRequest, Principal principal) throws Exception {
+        return createTokenResponse(loginRequest, true, principal);
+    }
+
+    /**
+     * Create authentication and token response for login and refresh token request
+     *
+     * @param loginRequest
+     * @param isRefreshToken
+     * @return ResponseEntity<?> JwtAuthenticationResponse
+     */
+    private ResponseEntity<?> createTokenResponse(LoginRequest loginRequest, boolean isRefreshToken, Principal principal) throws Exception {
+        LocalUser localUser = null;
+        String refreshToken = null;
+        String jwt = null;
+        Authentication authentication = null;
+        if (!isRefreshToken) {
+            authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            jwt = tokenProvider.createToken(authentication,null );
+            // cretae new refreshToken if not refreshing token
+            refreshToken = refreshTokenService.generateRefreshToken().getToken();
+            localUser = (LocalUser) authentication.getPrincipal();
+        } else {
+            refreshToken = loginRequest.getRefreshToken();
+            refreshTokenService.validateRefreshToken(refreshToken);
+            authentication = SecurityContextHolder.getContext().getAuthentication();
+            jwt = tokenProvider.createToken(authentication,loginRequest.getUserId() );
+            // jwt = tokenProvider.createToken(localUser);
+        }
+        Instant tokenExpiryTime = tokenProvider.getTokenExpiryTime();
+
+        if (localUser != null) {
+            if (localUser.getUser().getDisplayName() == null) {
+                localUser.getUser().setDisplayName(localUser.getUser().getEmail());
+            }
+        } else {
+            if(loginRequest.getUserId()!=null) {
+                localUser = localUserDetailService.loadUserById(loginRequest.getUserId());
+            }
+          //  localUser = (LocalUser) authentication.getPrincipal();
+        }
+
+        return ResponseEntity.ok(new JwtAuthenticationResponse(jwt, refreshToken, tokenExpiryTime, GeneralUtils.buildUserInfo(localUser)));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestBody LoginRequest loginRequest) {
+        refreshTokenService.deleteRefreshToken(loginRequest.getRefreshToken());
+        return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
+    }
 }
+

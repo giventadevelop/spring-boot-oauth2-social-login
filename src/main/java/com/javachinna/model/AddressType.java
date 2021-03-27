@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "address_type")
+@Table(name = "ADDRESS_TYPE")
 public class AddressType {
     @Id
     @Column(name = "ADDRESS_TYPE_ID")

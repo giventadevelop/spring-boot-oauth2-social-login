@@ -11,7 +11,7 @@ import java.util.Set;
 @AllArgsConstructor
 @ToString
 @Entity
-@Table(name = "role")
+@Table(name = "ROLE")
 public class Role {
 
     private static final long serialVersionUID = 1L;

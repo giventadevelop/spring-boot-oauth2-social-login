@@ -69,7 +69,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 		String targetUrl = env.getProperty("targetUrl");
 		//String targetUrl = "http://localhost:8080/login";
 
-		String token = tokenProvider.createToken(authentication);
+		String token = tokenProvider.createToken(authentication,null );
 
 		return UriComponentsBuilder.fromUriString(targetUrl).queryParam("token", token).build().toUriString();
 	}

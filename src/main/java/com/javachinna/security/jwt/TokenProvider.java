@@ -1,5 +1,6 @@
 package com.javachinna.security.jwt;
 
+import java.time.Instant;
 import java.util.Date;
 
 import org.slf4j.Logger;
@@ -17,6 +18,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
+import org.springframework.util.StringUtils;
 
 @Service
 public class TokenProvider {
@@ -29,8 +31,35 @@ public class TokenProvider {
 		this.appProperties = appProperties;
 	}
 
-	public String createToken(Authentication authentication) {
-		LocalUser userPrincipal = (LocalUser) authentication.getPrincipal();
+	/**
+	 * called when login and not for refresh token
+	 * @param authentication
+	 * @param userId
+	 * @return
+	 */
+	public String createToken(Authentication authentication, Long userId) {
+		LocalUser userPrincipal=null;
+		if(authentication!=null && authentication.getPrincipal()!=null && !StringUtils.startsWithIgnoreCase(authentication.getPrincipal().toString(),"anonymous")) {
+			userPrincipal = (LocalUser) authentication.getPrincipal();
+		}
+
+		Date now = new Date();
+		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
+if(userPrincipal!=null) {
+	return Jwts.builder().setSubject(Long.toString(userPrincipal.getUser().getId())).setIssuedAt(new Date()).setExpiration(expiryDate)
+			.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
+}else{
+	return Jwts.builder().setSubject(Long.toString(userId)).setIssuedAt(new Date()).setExpiration(expiryDate)
+			.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
+}
+	}
+
+	/**
+	 * Called from the refresh token module
+	 * @param userPrincipal
+	 * @return
+	 */
+	public String createToken(LocalUser userPrincipal) {
 
 		Date now = new Date();
 		Date expiryDate = new Date(now.getTime() + appProperties.getAuth().getTokenExpirationMsec());
@@ -38,6 +67,17 @@ public class TokenProvider {
 		return Jwts.builder().setSubject(Long.toString(userPrincipal.getUser().getId())).setIssuedAt(new Date()).setExpiration(expiryDate)
 				.signWith(SignatureAlgorithm.HS512, appProperties.getAuth().getTokenSecret()).compact();
 	}
+
+
+	/**
+	 * Get expiry time for the jwt Token
+	 * @return Instant
+	 */
+	public Instant getTokenExpiryTime(){
+
+		return Instant.now().plusMillis( appProperties.getAuth().getTokenExpirationMsec());
+	}
+
 
 	public Long getUserIdFromToken(String token) {
 		Claims claims = Jwts.parser().setSigningKey(appProperties.getAuth().getTokenSecret()).parseClaimsJws(token).getBody();
