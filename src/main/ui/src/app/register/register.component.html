@@ -1,43 +1,55 @@
+
+
+<div class="row">
+  <div class="col">
+    <h1>Reactive Forms</h1>
+    <hr>
+  </div>
+</div>
+
 <div class="col-md-12">
 	<div class="card card-container">
 		<img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" class="profile-img-card" />
-		<form *ngIf="!isSuccessful" name="form" (ngSubmit)="f.form.valid && onSubmit()" #f="ngForm" novalidate>
+		<form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="displayName">Display Name</label>
+        <input type="text"
+               [ngClass]="{'form-control': true,
+                  'is-invalid': !regnForm.displayName.valid && regnForm.displayName.touched,
+                  'is-valid': regnForm.displayName.valid}"
+               [formControlName]="'displayName'" id="displayName" placeholder="Enter display name">
+        <small *ngIf="regnForm.displayName.errors?.required && regnForm.displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name is required.</small>
+        <small *ngIf="regnForm.displayName.errors?.minlength && regnForm.displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name should be atleast 2 characters.</small>
+      </div>
 			<div class="form-group">
-				<label for="displayName">Display Name</label> <input type="text" class="form-control" name="displayName" [(ngModel)]="form.displayName" required minlength="3"
-					maxlength="20" #displayName="ngModel" />
-				<div class="alert-danger" *ngIf="f.submitted && displayName.invalid">
-					<div *ngIf="displayName.errors.required">Display Name is required</div>
-					<div *ngIf="displayName.errors.minlength">Display Name must be at least 3 characters</div>
-					<div *ngIf="displayName.errors.maxlength">Display Name must be at most 20 characters</div>
-				</div>
-			</div>
+				<label for="email">Email</label> <input type="email"  [ngClass]="{'form-control': true,
+                  'is-invalid': !regnForm.email.valid && regnForm.email.touched,
+                  'is-valid': regnForm.email.valid}"
+                                                [formControlName]="'email'" id="email" placeholder="email">
+        <small *ngIf="regnForm.email.errors?.required && regnForm.email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Email is required.</small>
+        <small *ngIf="regnForm.email.errors?.email && regnForm.email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Enter a valid email.</small>
+      </div>
 			<div class="form-group">
-				<label for="email">Email</label> <input type="email" class="form-control" name="email" [(ngModel)]="form.email" required email #email="ngModel" />
-				<div class="alert-danger" *ngIf="f.submitted && email.invalid">
-					<div *ngIf="email.errors.required">Email is required</div>
-					<div *ngIf="email.errors.email">Email must be a valid email address</div>
-				</div>
-			</div>
+				<label for="password">Password</label> <input type="password" [ngClass]="{'form-control': true,
+                  'is-invalid': !regnForm.password.valid && regnForm.password.touched,
+                  'is-valid': regnForm.password.valid}"
+                                                      [formControlName]="'password'" id="password" placeholder="password">
+        <small *ngIf="regnForm.password.errors?.required && regnForm.password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password is required.</small>
+        <small *ngIf="regnForm.password.errors?.minlength && regnForm.password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password should be atleast 6 characters.</small>
+      </div>
+
 			<div class="form-group">
-				<label for="password">Password</label> <input type="password" class="form-control" name="password" [(ngModel)]="form.password" required minlength="6"
-					#password="ngModel" />
-				<div class="alert-danger" *ngIf="f.submitted && password.invalid">
-					<div *ngIf="password.errors.required">Password is required</div>
-					<div *ngIf="password.errors.minlength">Password must be at least 6 characters</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="matchingPassword">Confirm Password</label> <input type="password" class="form-control" name="matchingPassword" [(ngModel)]="form.matchingPassword"
-					required minlength="6" #matchingPassword="ngModel" />
-				<div class="alert-danger" *ngIf="f.submitted && matchingPassword.invalid">
-					<div *ngIf="matchingPassword.errors.required">Confirm Password is required</div>
-					<div *ngIf="matchingPassword.errors.minlength">Confirm Password must be at least 6 characters</div>
-				</div>
-			</div>
+				<label for="matchingPassword">Confirm Password</label> <input type="password" [ngClass]="{'form-control': true,
+                  'is-invalid': !regnForm.matchingPassword.valid && regnForm.matchingPassword.touched,
+                  'is-valid': regnForm.matchingPassword.valid}"
+                                                                      [formControlName]="'matchingPassword'" id="matchingPassword" placeholder="matchingPassword">
+        <small *ngIf="regnForm.matchingPassword.errors?.required && regnForm.matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password is required.</small>
+        <small *ngIf="regnForm.matchingPassword.errors?.minlength && regnForm.matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password should be atleast 6 characters.</small>
+      </div>
 			<div class="form-group">
 				<button class="btn btn-primary btn-block">Sign Up</button>
 			</div>
-			<div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+			<div class="alert alert-danger" *ngIf="isSignUpFailed">
 				Signup failed!<br />{{ errorMessage }}
 			</div>
 		</form>
