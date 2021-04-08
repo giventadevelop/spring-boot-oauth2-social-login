@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @EqualsAndHashCode
 public class UserDTO {
-    private Long id;
+    private Long userId;
     private Date createdDate;
     private String displayName;
     private String email;
@@ -24,6 +24,9 @@ public class UserDTO {
     private String providerUserId;
     private Long addressId;
     private Set<Role> roles;
+    private PostalAddressDTO postalAddress;
+    private Set<PhoneNumberDTO> phoneNumber;
+
 
 
 }

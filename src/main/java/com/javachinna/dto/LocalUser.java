@@ -1,8 +1,11 @@
 package com.javachinna.dto;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import com.javachinna.model.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -43,7 +46,11 @@ public class LocalUser extends User implements OAuth2User, OidcUser {
 	}
 
 	public static LocalUser create(com.javachinna.model.User user, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo) {
-		LocalUser localUser = new LocalUser(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, GeneralUtils.buildSimpleGrantedAuthorities(user.getRoles()),
+		/*LocalUser localUser = new LocalUser(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, GeneralUtils.buildSimpleGrantedAuthorities(user.getRoles()),
+				user, idToken, userInfo);*/
+		Set roles=new HashSet();
+		roles.add(new Role(1L,"ROLE_USER"));
+		LocalUser localUser = new LocalUser(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, GeneralUtils.buildSimpleGrantedAuthorities(roles),
 				user, idToken, userInfo);
 		localUser.setAttributes(attributes);
 		return localUser;

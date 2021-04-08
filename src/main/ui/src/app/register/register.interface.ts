@@ -1,3 +1,4 @@
+import {PostalAddress} from "./postal.address.interface";
 
 export interface RegisterUser
 {
@@ -5,4 +6,5 @@ export interface RegisterUser
   email: string;
   password: string;
   matchingPassword: string;
+  postalAddress : PostalAddress;
 }

@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Generated;
 
+import com.javachinna.dto.SocialProvider;
 import com.javachinna.dto.UserDTO;
 import com.javachinna.model.Role;
 import com.javachinna.model.User;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class UserMapperImpl implements UserMapper {
 
+private PostalAddressMapper postalAddressMapper;
 private PasswordEncoder passwordEncoder;
     @Override
     public UserDTO userToUserDTO(User user) {
@@ -31,7 +33,7 @@ private PasswordEncoder passwordEncoder;
 
         userDTO.setCreatedDate( user.getCreatedDate() );
         userDTO.setModifiedDate( user.getModifiedDate() );
-        userDTO.setId( user.getId() );
+        userDTO.setUserId( user.getId() );
         userDTO.setProviderUserId( user.getProviderUserId() );
         userDTO.setEmail( user.getEmail() );
         userDTO.setEnabled( user.getEnabled() );
@@ -47,44 +49,67 @@ private PasswordEncoder passwordEncoder;
     }
 
     @Override
-    public User userDTOToUser(UserDTO UserDTO) {
-        if ( UserDTO == null ) {
+    public User userDTOToUser(UserDTO userDTO) {
+        if ( userDTO == null ) {
             return null;
         }
 
         User user = new User();
+        /**
+         * a scenario where a new user sign up/register from web
+         * where the social provider is LOCAL and user id ==0
+         */
 
-        user.setId( UserDTO.getId() );
-        user.setProviderUserId( UserDTO.getProviderUserId() );
-        user.setEmail( UserDTO.getEmail() );
-        user.setEnabled( UserDTO.getEnabled());
-        user.setDisplayName( UserDTO.getDisplayName() );
-        user.setCreatedDate( UserDTO.getCreatedDate() );
-        user.setModifiedDate( UserDTO.getModifiedDate() );
-        user.setPassword( UserDTO.getPassword() );
-        user.setProvider( UserDTO.getProvider() );
-        Set<Role> set = UserDTO.getRoles();
-        if ( set != null ) {
-            user.setRoles( new HashSet<Role>( set ) );
+        if(userDTO.getUserId()== null || userDTO.getUserId().longValue()==0){
+            user.setDisplayName(userDTO.getDisplayName());
+            user.setEmail(userDTO.getEmail());
+            user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            final HashSet<Role> roles = new HashSet<Role>();
+            roles.add(new Role(Role.ROLE_USER));
+           // user.setRoles(roles);
+            user.setProvider(SocialProvider.LOCAL.getProviderType());
+            user.setEnabled(true);
+            user.setProviderUserId(userDTO.getProviderUserId());
+            user.addPostalAddress(postalAddressMapper.postalAddressDTOToPostalAddress(userDTO.getPostalAddress()));
+
+        }else{
+            user.setId( userDTO.getUserId() );
+            user.setProviderUserId( userDTO.getProviderUserId() );
+            user.setEmail( userDTO.getEmail() );
+            user.setEnabled( userDTO.getEnabled());
+            user.setDisplayName( userDTO.getDisplayName() );
+            user.setCreatedDate( userDTO.getCreatedDate() );
+            user.setModifiedDate( userDTO.getModifiedDate() );
+            user.setPassword( userDTO.getPassword() );
+            user.setProvider( userDTO.getProvider() );
+            Set<Role> set = userDTO.getRoles();
+            if ( set != null ) {
+              //  user.setRoles( new HashSet<Role>( set ) );
+            }
+
+            user.addPostalAddress(postalAddressMapper.postalAddressDTOToPostalAddress(userDTO.getPostalAddress()));
+
         }
-
+        
         return user;
     }
 
     @Override
-    public User userDTOToJpaUser(UserDTO UserDTO, User user) {
-        if ( UserDTO == null ) {
+    public User userDTOToJpaUser(UserDTO userDTO, User user) {
+
+        if ( userDTO == null ) {
             return null;
         }
 
-        user.setId( UserDTO.getId() );
-        user.setProviderUserId( UserDTO.getProviderUserId() );
-        user.setEmail( UserDTO.getEmail() );
-        user.setEnabled( UserDTO.getEnabled() );
+        user.setId( userDTO.getUserId() );
+        user.setProviderUserId( userDTO.getProviderUserId() );
+        user.setEmail( userDTO.getEmail() );
+        user.setEnabled( userDTO.getEnabled() );
         // user.setDisplayName( UserDTO.getDisplayName() );
         // user.setCreatedDate( UserDTO.getCreatedDate() );
-        user.setModifiedDate( UserDTO.getModifiedDate() );
-        user.setPassword(passwordEncoder.encode(UserDTO.getPassword())  );
+        user.setModifiedDate( userDTO.getModifiedDate() );
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())  );
+        user.addPostalAddress(postalAddressMapper.postalAddressDTOToPostalAddress(userDTO.getPostalAddress()));
         // user.setProvider( UserDTO.getProvider() );
         /*Set<Role> set = UserDTO.getRoles();
         if ( set != null ) {

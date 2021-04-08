@@ -2,6 +2,8 @@ package com.javachinna.controller;
 
 import javax.validation.Valid;
 
+import com.javachinna.dto.*;
+import com.javachinna.model.User;
 import com.javachinna.service.LocalUserDetailService;
 import com.javachinna.service.RefreshTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +15,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import com.javachinna.dto.ApiResponse;
-import com.javachinna.dto.JwtAuthenticationResponse;
-import com.javachinna.dto.LocalUser;
-import com.javachinna.dto.LoginRequest;
-import com.javachinna.dto.SignUpRequest;
 import com.javachinna.exception.UserAlreadyExistAuthenticationException;
 import com.javachinna.security.jwt.TokenProvider;
 import com.javachinna.service.UserService;
@@ -64,13 +61,14 @@ public class AuthController {
     /**
      * Register user signup
      *
-     * @param signUpRequest
+     * @param userDTO
      * @return ResponseEntity<?> JwtAuthenticationResponse
      */
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         try {
-            userService.registerNewUser(signUpRequest);
+           User retUser= userService.registerNewUser(userDTO);
+        //   userService.saveuserRole(retUser);
         } catch (UserAlreadyExistAuthenticationException e) {
             log.error("Exception Ocurred", e);
             return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);

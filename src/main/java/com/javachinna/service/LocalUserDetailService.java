@@ -1,5 +1,6 @@
 package com.javachinna.service;
 
+import com.javachinna.model.Role;
 import com.javachinna.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -10,6 +11,10 @@ import org.springframework.transaction.annotation.Transactional;
 import com.javachinna.dto.LocalUser;
 import com.javachinna.exception.ResourceNotFoundException;
 import com.javachinna.util.GeneralUtils;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * 
@@ -43,6 +48,10 @@ public class LocalUserDetailService implements UserDetailsService {
 	 * @return
 	 */
 	private LocalUser createLocalUser(User user) {
-		return new LocalUser(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, GeneralUtils.buildSimpleGrantedAuthorities(user.getRoles()), user);
+		Set roles=new HashSet();
+		roles.add(new Role(1L,"ROLE_USER"));
+		user.getUserRoles();
+		//return new LocalUser(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, GeneralUtils.buildSimpleGrantedAuthorities(user.getRoles()), user);
+		return new LocalUser(user.getEmail(), user.getPassword(), user.getEnabled(), true, true, true, GeneralUtils.buildSimpleGrantedAuthorities(roles), user);
 	}
 }

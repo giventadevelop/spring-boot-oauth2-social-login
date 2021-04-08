@@ -36,13 +36,13 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			return;
 		}
 		// Create initial roles
-		Role userRole = createRoleIfNotFound(Role.ROLE_USER);
+		/*Role userRole = createRoleIfNotFound(Role.ROLE_USER);
 		Role adminRole = createRoleIfNotFound(Role.ROLE_ADMIN);
 		Role modRole = createRoleIfNotFound(Role.ROLE_MODERATOR);
 		Set<Role> roleSet= new HashSet<>(Arrays.asList(userRole, adminRole, modRole));
 		//createUserIfNotFound("admin@javachinna.com", Set.(userRole, adminRole, modRole));
 		createUserIfNotFound("admin@javachinna.com", roleSet);
-		alreadySetup = true;
+		alreadySetup = true;*/
 	}
 
 	@Transactional
@@ -53,7 +53,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 			user.setDisplayName("Admin");
 			user.setEmail(email);
 			user.setPassword(passwordEncoder.encode("admin@"));
-			user.setRoles(roles);
+		//	user.setRoles(roles);
 			user.setProvider(SocialProvider.LOCAL.getProviderType());
 			user.setEnabled(true);
 			Date now = Calendar.getInstance().getTime();

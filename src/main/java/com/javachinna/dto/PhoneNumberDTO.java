@@ -12,6 +12,8 @@ public class PhoneNumberDTO {
 
     private Long phoneId;
     private Long userId;
+    private Integer phoneContactTypeId;
+    private String customLabel;
     private Short countryPrefix;
     private Short countyPrefix;
     private Integer localTelNumber;

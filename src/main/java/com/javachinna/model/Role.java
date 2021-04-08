@@ -29,9 +29,9 @@ public class Role {
     private String name;
 
     // bi-directional many-to-many association to User
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
+   /* @ManyToMany(fetch = FetchType.LAZY, mappedBy = "roles")
     private Set<User> users;
-
+*/
     public Role(String name) {
         this.name = name;
     }

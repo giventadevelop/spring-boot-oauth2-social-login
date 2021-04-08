@@ -2,17 +2,16 @@ package com.javachinna.service;
 
 import java.util.*;
 
-import com.javachinna.controller.UserController;
 import com.javachinna.dto.UserDTO;
 import com.javachinna.mapper.UserMapper;
-import com.javachinna.model.Role;
-import com.javachinna.model.User;
+import com.javachinna.model.*;
+import com.javachinna.repo.PostalAddressRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
@@ -45,40 +44,83 @@ public class UserServiceImpl implements UserService {
 
     private RoleRepository roleRepository;
 
+    private PostalAddressRepository postalAddressRepository;
+
+    private UserRoleRepository userRoleRepository;
+
     private PasswordEncoder passwordEncoder;
 
-    private UserMapper userMapper;
+    private final UserMapper userMapper;
 
     @Override
-    @Transactional(value = "transactionManager")
-    public User registerNewUser(final SignUpRequest signUpRequest) throws UserAlreadyExistAuthenticationException {
-        if (signUpRequest.getUserID() != null && userRepository.existsById(signUpRequest.getUserID())) {
-            throw new UserAlreadyExistAuthenticationException("User with User id " + signUpRequest.getUserID() + " already exist");
-        } else if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new UserAlreadyExistAuthenticationException("User with email id " + signUpRequest.getEmail() + " already exist");
+    @Transactional(value = "transactionManager",propagation = Propagation.REQUIRES_NEW)
+    public User registerNewUser(final UserDTO userDTO) throws UserAlreadyExistAuthenticationException {
+        if (userDTO.getUserId() != null && userRepository.existsById(userDTO.getUserId())) {
+            throw new UserAlreadyExistAuthenticationException("User with User id " + userDTO.getUserId() + " already exist");
+        } else if (userRepository.existsByEmail(userDTO.getEmail())) {
+            throw new UserAlreadyExistAuthenticationException("User with email id " + userDTO.getEmail() + " already exist");
         }
-        User user = buildUser(signUpRequest);
+        final User user = buildUser(userDTO);
+        Set<PostalAddress> postalAddressList = user.getPostalAddresses();
+
         Date now = Calendar.getInstance().getTime();
         user.setCreatedDate(now);
         user.setModifiedDate(now);
-       /* Set<Role> roles=user.getRoles();
-        user.setRoles(null);*/
-        user = userRepository.save(user);
-        userRepository.flush();
-        return user;
+       // user.setPostalAddresses(null);
+        Set<UserRole> userRoles=new HashSet<>();
+        // roles.stream().forEach(role -> userRoles.add(new UserRole(retUser.getId(),role.getRoleId())) );
+        UserRole userRole = new  UserRole();
+       // userRole.setUserId(retUser.getId());
+        userRole.setRoleId(1L);
+        userRoles.add(userRole);
+
+        user.setUserRoles(userRoles);
+        /*save a user first and then save the dependent entities
+        like user role ids in the join table and then the postalAddress and phone numbers.*/
+       final User retUser = userRepository.save(user);
+
+
+        // roles.stream().forEach(role -> userRoles.add(userRole) );
+       // userRoleRepository.saveAll(userRoles);
+
+       // postalAddressList.stream().forEach(postalAddress -> postalAddress.setUserId(retUser.getId()));
+        //postalAddressRepository.saveAll(postalAddressList);
+
+        //userRepository.flush();
+
+        // Set<Role> roles=user.getRoles();
+
+        return retUser;
     }
 
-    private User buildUser(final SignUpRequest formDTO) {
+    @Override
+    @Transactional(value = "transactionManager")
+    public void saveuserRole(User retUser) {
+        Set roles=new HashSet();
+
+        Set<UserRole> userRoles=new HashSet<>();
+        // roles.stream().forEach(role -> userRoles.add(new UserRole(retUser.getId(),role.getRoleId())) );
+        UserRole userRole = new  UserRole();
+        userRole.setUserId(retUser.getId());
+        userRole.setRoleId(1L);
+        userRoles.add(userRole);
+       // roles.stream().forEach(role -> userRoles.add(userRole) );
+        userRoleRepository.saveAll(userRoles);
+        userRoleRepository.flush();
+    }
+
+    private User buildUser(final UserDTO userDTO) {
         User user = new User();
-        user.setDisplayName(formDTO.getDisplayName());
-        user.setEmail(formDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(formDTO.getPassword()));
+        user=userMapper.userDTOToUser(userDTO);
+        /*user.setDisplayName(userDTO.getDisplayName());
+        user.setEmail(userDTO.getEmail());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         final HashSet<Role> roles = new HashSet<Role>();
         roles.add(roleRepository.findByName(Role.ROLE_USER));
         user.setRoles(roles);
-        user.setProvider(formDTO.getSocialProvider().getProviderType());
+        user.setProvider(userDTO.getSocialProvider().getProviderType());
         user.setEnabled(true);
-        user.setProviderUserId(formDTO.getProviderUserId());
+        user.setProviderUserId(userDTO.getProviderUserId());*/
         return user;
     }
 
@@ -109,7 +151,7 @@ public class UserServiceImpl implements UserService {
         logger.info("  get userDetails processUserRegistration oAuth2UserInfo ");
         logger.debug("  get userDetails processUserRegistration oAuth2UserInfo ");
 
-        SignUpRequest userDetails = toUserRegistrationObject(registrationId, oAuth2UserInfo);
+        UserDTO userDetails = toUserRegistrationObject(registrationId, oAuth2UserInfo);
         User user = findUserByEmail(oAuth2UserInfo.getEmail());
         if (user != null) {
             if (!user.getProvider().equals(registrationId) && !user.getProvider().equals(SocialProvider.LOCAL.getProviderType())) {
@@ -149,7 +191,7 @@ public class UserServiceImpl implements UserService {
         }
         System.out.println(jsonString);*/
         // System.out.println("existingUser.getId()" + existingUser.getId());
-        User user = userRepository.findById(existingUser.getId()).get();
+        User user = userRepository.findById(existingUser.getUserId()).get();
 
        /* try {
             jsonString = mapper.writeValueAsString(user);
@@ -173,7 +215,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(existingUser);
     }
 
-    private SignUpRequest toUserRegistrationObject(String registrationId, OAuth2UserInfo oAuth2UserInfo) {
+    private UserDTO toUserRegistrationObject(String registrationId, OAuth2UserInfo oAuth2UserInfo) {
         return SignUpRequest.getBuilder().addProviderUserID(oAuth2UserInfo.getId()).addDisplayName(oAuth2UserInfo.getName()).addEmail(oAuth2UserInfo.getEmail())
                 .addSocialProvider(GeneralUtils.toSocialProvider(registrationId)).addPassword("changeit").build();
     }

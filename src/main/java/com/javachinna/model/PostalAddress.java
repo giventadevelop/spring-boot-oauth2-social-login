@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -18,17 +15,12 @@ import javax.persistence.Table;
 @Table(name = "POSTAL_ADDRESS")
 public class PostalAddress {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ADDRESS_ID")
     private Long addressId;
 
-    @Column(name = "USER_ID")
+    @Column(name = "USER_ID", insertable = false, updatable = false)
     private Long userId;
-
-    @Column(name = "PHONE_ID")
-    private Long phoneId;
-
-    @Column(name = "ADDRESS_TYPE_ID")
-    private Integer addressTypeId;
 
     @Column(name = "NAME_PREFIX")
     private String namePrefix;
@@ -63,14 +55,25 @@ public class PostalAddress {
     @Column(name = "COUNTY_OR_MUNCIPAL_OR_SUBLOCALITY")
     private String countyOrMuncipalOrSublocality;
 
-    @Column(name = "STATE_OR_PROVICE")
-    private String stateOrProvice;
-
-    @Column(name = "COUNTRY_ID")
-    private Integer countryId;
+    @Column(name = "STATE_OR_PROVINCE")
+    private String stateOrProvince;
 
     @Column(name = "ZIP_OR_POSTAL_CODE")
     private String zipOrPostalCode;
 
+    //bi-directional many-to-one association to User
+    /*@ManyToOne
+    @JoinColumn(name="USER_ID", insertable=false, updatable=false, referencedColumnName="USER_ID")
+    private User user;*/
+
+    //uni-directional many-to-one association to Country
+    @ManyToOne
+    @JoinColumn(name="COUNTRY_ID")
+    private Country country;
+
+    //bi-directional many-to-one association to AddressType
+    @ManyToOne
+    @JoinColumn(name="ADDRESS_TYPE_ID")
+    private AddressType addressType;
 
 }

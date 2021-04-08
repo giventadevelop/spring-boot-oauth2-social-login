@@ -47,6 +47,8 @@ export class AuthService {
   }
 
   register(user): Observable<any> {
+    let url= environment.AUTH_API + 'signup';
+    console.log('register/signup url ',url) ;
     return this.http.post(
       environment.AUTH_API + 'signup',
       {
@@ -60,6 +62,11 @@ export class AuthService {
     );
   }
 
+  /**
+   * refresh token set up based on the below article
+   * https://jasonwatmore.com/post/2020/05/22/angular-9-jwt-authentication-with-refresh-tokens
+   * @private
+   */
   private startRefreshTokenTimer() {
     // parse json object from base64 encoded jwt token
     // const jwtToken = JSON.parse(atob(this.userValue.jwtToken.split('.')[1]));

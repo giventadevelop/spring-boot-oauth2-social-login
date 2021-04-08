@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -18,10 +15,17 @@ import javax.persistence.Table;
 @Table(name = "PHONE_NUMBER")
 public class PhoneNumber {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PHONE_ID")
     private Long phoneId;
 
-    @Column(name = "USER_ID")
+    @Column(name = "PHONE_CONTACT_TYPE_ID")
+    private Integer phoneContactTypeId;
+
+    @Column(name = "CUSTOM_LABEL")
+    private String customLabel;
+
+    @Column(name = "USER_ID", insertable = false, updatable = false)
     private Long userId;
 
     @Column(name = "COUNTRY_PREFIX")
@@ -35,5 +39,18 @@ public class PhoneNumber {
 
     @Column(name = "LOCAL_LEADING_ZEROS")
     private Byte localLeadingZeros;
+
+    @ManyToOne
+    @JoinColumn(name="USER_ID")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name="COUNTRY_ID")
+    private Country country;
+
+    @ManyToOne
+    @JoinColumn(name="PHONE_CONTACT_TYPE_ID")
+    private PhoneContactType phoneContactType;
+
 
 }

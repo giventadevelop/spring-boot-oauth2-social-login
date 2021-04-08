@@ -77,8 +77,9 @@ public class SignUpRequest {
 			return this;
 		}
 
-		public SignUpRequest build() {
-			return new SignUpRequest(providerUserID, displayName, email, password, socialProvider);
+		public UserDTO build() {
+			//return new SignUpRequest(providerUserID, displayName, email, password, socialProvider);
+			return null;
 		}
 	}
 }

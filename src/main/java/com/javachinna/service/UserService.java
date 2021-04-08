@@ -9,8 +9,8 @@ import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 
 import com.javachinna.dto.LocalUser;
-import com.javachinna.dto.SignUpRequest;
 import com.javachinna.exception.UserAlreadyExistAuthenticationException;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Chinna
@@ -18,7 +18,10 @@ import com.javachinna.exception.UserAlreadyExistAuthenticationException;
  */
 public interface UserService {
 
-    public User registerNewUser(SignUpRequest signUpRequest) throws UserAlreadyExistAuthenticationException;
+    public User registerNewUser(UserDTO signUpRequest) throws UserAlreadyExistAuthenticationException;
+
+    @Transactional(value = "transactionManager")
+    void saveuserRole(User retUser);
 
     User findUserByEmail(String email);
 

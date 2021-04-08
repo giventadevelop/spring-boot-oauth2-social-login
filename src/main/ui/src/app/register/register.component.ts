@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { FormBuilder, FormGroup, Validators, AbstractControl , FormControl}  from '@angular/forms';
 import {RegisterUser} from "./register.interface";
+import {PostalAddress} from "./postal.address.interface";
 
 
 
@@ -13,6 +14,7 @@ import {RegisterUser} from "./register.interface";
 })
 export class RegisterComponent implements OnInit {
   registerUser = {} as RegisterUser;
+  postalAddress = {} as PostalAddress;
   registerForm : FormGroup;
 
  // reactiveForm: FormGroup;
@@ -27,11 +29,29 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.registerForm = new FormGroup({
+    this.registerForm = this.formBuilder.group({
       displayName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-      matchingPassword: new FormControl('', [Validators.required, Validators.minLength(6)])
+      matchingPassword: new FormControl('', [Validators.required, Validators.minLength(6)]),
+        postalAddress : this.formBuilder.group({
+          addressId: new FormControl(''),
+          gender: new FormControl(''),
+          addressTypeId: new FormControl(''),
+          namePrefix: new FormControl(''),
+          firstName: new FormControl(''),
+          lastName: new FormControl(''),
+          nameSuffix: new FormControl(''),
+          addressLine1: new FormControl(''),
+          addressLine2: new FormControl(''),
+          addressLine3: new FormControl(''),
+          companyName: new FormControl(''),
+          cityOrTown: new FormControl(''),
+          countyOrMuncipalOrSublocality: new FormControl(''),
+          stateOrProvince: new FormControl(''),
+          zipOrPostalCode: new FormControl(''),
+          countryId: new FormControl('')
+         })
     });
     /*this.reactiveForm = this.formBuilder.group({
       /!*firstName: [null, [Validators.required, Validators.minLength(2)]],
@@ -63,6 +83,7 @@ export class RegisterComponent implements OnInit {
 
     console.log('registerForm', this.registerForm.value );
     console.log('this.registerUser', this.registerUser );
+    console.log('registerUser json', JSON.stringify(this.registerUser) );
     this.authService.register(this.registerUser).subscribe(
       data => {
         console.log(data);
