@@ -1,4 +1,5 @@
 export interface PostalAddress {
+  userId?: number;
   addressId: number;
   gender: string;
   addressTypeId:number;

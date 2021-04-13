@@ -1,4 +1,5 @@
-
+  <!--dynamic forms based on the article at url
+  https://codinglatte.com/posts/angular/angular-dynamic-form-fields-using-formarray/-->
 
 <div class="row">
   <div class="col">
@@ -35,7 +36,7 @@
                   'is-valid': regnForm.password.valid}"
                                                       [formControlName]="'password'" id="password" placeholder="password">
         <span *ngIf="regnForm.password.errors?.required && regnForm.password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password is required.</span>
-        <span *ngIf="regnForm.password.errors?.minlength && regnForm.password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password should be atleast 6 characters.</span>
+        <span *ngIf="regnForm.password.errors?.minlength && regnForm.password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password should be at least 6 characters.</span>
       </div>
 
 			<div class="form-group">
@@ -47,182 +48,278 @@
         <span *ngIf="regnForm.matchingPassword.errors?.minlength && regnForm.matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password should be atleast 6 characters.</span>
       </div>
 
-        <!--address-->
-      <div  formGroupName="postalAddress">
-      <div class="row" >
+        <!--address start -->
 
-        <div class="col" >
-          <div class="form-group">
-          <label  class="form-check-inline">Choose Gender</label>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio"
+      <div class="card">
+        <div class="card-body" formArrayName="postalAddresses">
+          <div class="card-title">Address</div>
+          <div  *ngFor="let postalAddress of postalAddressGroupList.controls; let i = index;">
+            <div [formGroupName]="i" > <!--phonegroup start-->
 
-                   [formControlName]="'gender'" id="male" value="male">
-            <label class="form-check-label" for="male">male</label>
+              <input type="hidden"  [formControlName]="'addressId'" id="addressId" />
+
+              <div class="row" >
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="addressTypeId"> Address Type </label>
+
+                    <select [formControlName]="'addressTypeId'" id="addressTypeId">
+                      <option [ngValue]="addressType.addressTypeId" selected *ngFor="let addressType of addressTypes">{{addressType.addressType}}</option>
+                    </select>
+
+                  </div>
+                </div> <!--col addressTypeId  end-->
+
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label  class="form-check-inline">Choose Gender</label>
+                    <div class=" form-check form-check-inline">
+                      <input class=" form-check-input" type="radio"
+
+                             name="gender"   [formControlName]="'gender'" id="male" value="male">
+                      <label class="form-check-label" for="male">male</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio"
+                             name="gender"  [formControlName]="'gender'" id="female" value="female">
+                      <label class="form-check-label" for="female">female</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio"
+                             name="gender"    [formControlName]="'gender'" id="other" value="other">
+                      <label class="form-check-label" for="other">other</label>
+                    </div>
+
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio"
+                             name="gender"   [formControlName]="'gender'" id="decline" value="decline">
+                      <label class="form-check-label" for="decline">decline to verify</label>
+                    </div>
+                  <!--  <small *ngIf="regnForm.gender.errors?.required && regnForm.gender.touched" class="form-check-inline form-text custom-invalid-feedback">Pick one option.</small>-->
+                  </div> <!--gender formgroup end-->
+                </div> <!--col gender end-->
+
+              </div>  <!--row 1 adrs  end-->
+
+              <div class="row"> <!--row name details-->
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="namePrefix">Name Prefix</label>
+                    <input type="text"
+                           [formControlName]="'namePrefix'" id="namePrefix" placeholder="Name Prefix">
+                  </div>
+                </div>
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="firstName">First Name </label>
+                    <input type="text"
+                           [formControlName]="'firstName'" id="firstName" placeholder="First Name">
+                  </div>
+                </div>
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="lastName">Last Name </label>
+                    <input type="text"
+                           [formControlName]="'lastName'" id="lastName" placeholder="Last Name">
+                  </div>
+                </div>
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="nameSuffix"> Name Suffix </label>
+                    <input type="text"
+                           [formControlName]="'nameSuffix'" id="nameSuffix" placeholder="Name suffix">
+                  </div>
+                </div>
+            </div>  <!--row 2 name  end-->
+
+              <div class="row">
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="companyName"> Company name </label>
+                    <input type="text"
+                           [formControlName]="'companyName'" id="companyName" placeholder="Company name">
+                  </div>
+                </div>
+              </div>  <!--row end single column company name-->
+
+              <div class="row"> <!--row address lines-->
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="addressLine1">Street Address</label>
+                    <input type="text"
+                           [formControlName]="'addressLine1'" id="addressLine1" placeholder="Enter street address">
+                  </div>
+                </div>
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="addressLine2">Home / Apartment Number </label>
+                    <input type="text"
+                           [formControlName]="'addressLine2'" id="addressLine2" placeholder="Address line two">
+                  </div>
+                </div>
+
+           <div class="col" >
+           <div class="form-group">
+             <label for="addressLine3">Address Line 3</label>
+           <input type="text"
+             [formControlName]="'addressLine3'" id="addressLine3" placeholder="Address Line 3">
+             </div>
+             </div>
+
+              </div> <!--row address lines 1,2.. end-->
+
+
+              <div class="row">
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="cityOrTown">City Or Town</label>
+                    <input type="text"
+                           [formControlName]="'cityOrTown'" id="cityOrTown" placeholder="City Or Town">
+                  </div>
+                </div>
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="countyOrMuncipalOrSublocality">County Or Muncipal Or Sublocality</label>
+                    <input type="text"
+                           [formControlName]="'countyOrMuncipalOrSublocality'" id="countyOrMuncipalOrSublocality" placeholder="County Or Muncipal Or Sublocality">
+                  </div>
+                </div>
+
+              </div> <!--row city county end-->
+
+              <div class="row">
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="stateOrProvince">Zip Or PostalCode</label>
+                    <input type="text"
+                           [formControlName]="'stateOrProvince'" id="stateOrProvince" placeholder="State Or Province">
+                  </div>
+                </div>
+
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="zipOrPostalCode">Zip Or PostalCode</label>
+                    <input type="text"
+                           [formControlName]="'zipOrPostalCode'" id="zipOrPostalCode" placeholder="Zip Or Postal Code">
+                  </div>
+                </div>
+
+                <div class="col" >
+                  <div class="form-group">
+                    <label for="country">Country</label>
+                    <select [formControlName]="'countryId'" id="country">
+                    <option [ngValue]="country.countryId" selected *ngFor="let country of countries">{{country.name}}</option>
+                    </select>
+                  </div>
+                </div>
+
+              </div> <!--row state country end-->
+
+            </div> <!--i iter end-->
+          </div> <!--ngfor end-->
+       </div>  <!--card body end-->
+      </div><!--card main end-->
+
+    <div class="card">
+        <div class="card-body" formArrayName="phoneNumbers">
+          <div class="card-title">Phone Number</div>
+          <div class="row">
+
+            <div  *ngFor="let phoneNumber of phoneNumberGroupList.controls; let i = index;">
+              <div [formGroupName]="i" > <!--phonegroup start-->
+                <!-- hidden fields for each phone group start-->
+                <input type="hidden"  [formControlName]="'phoneId'" id="phoneId" />
+                <input type="hidden" [formControlName]="'userId'" id="userId" />
+                <!-- hidden fields for each phone group end -->
+                <div  class="row"> <!--phone row 1-->
+                  <div class="col" >
+                  <div class="form-group">
+
+                    <label for="phoneContactTypeId">Phone Contact Type</label>
+
+                    <select [formControlName]="'phoneContactTypeId'" id="phoneContactTypeId">
+                      <option [ngValue]="phoneContactType.phoneContactTypeId" selected *ngFor="let phoneContactType of phoneContactTypes">{{phoneContactType.phoneContactType}}</option>
+                    </select>
+
+                  </div>
+                    </div> <!--col end-->
+                  <div class="col">
+                  <div class="form-group">
+                    <label for="isPrimaryPhoneNumber">Primary phone?</label>
+                    <input type="radio" [formControlName]="'isPrimaryPhoneNumber'" value="true" id="isPrimaryPhoneNumber" />
+                    <!-- <br class="clear" />-->
+                  </div>
+                  </div> <!--col end-->
+                  <div class="col">
+                  <div class="form-group">
+                    <label for="customLabel">Custom Label</label>
+                    <input type="text" [formControlName]="'customLabel'" value="true" id="customLabel" />
+                    <!-- <br class="clear" />-->
+                  </div>
+                  </div> <!--col end-->
+
+                </div> <!--phone row 1 end-->
+
+                <div  class="row"> <!--phone row 2 start -->
+                  <div class="col">
+                  <div class="form-group">
+                    <label for="countryPrefix">Country Prefix</label>
+                    <input type="text" [formControlName]="'countryPrefix'" value="true" id="countryPrefix" />
+                    <!-- <br class="clear" />-->
+                  </div>
+                  </div> <!--col end-->
+
+                  <div class="col">
+                  <div class="form-group">
+                    <label for="countyPrefix">County / Area Code </label>
+                    <input type="text" [formControlName]="'countyPrefix'" value="true" id="countyPrefix" />
+                    <!-- <br class="clear" />-->
+                  </div>
+                  </div> <!--col end-->
+                  <div class="col">
+                  <div class="form-group">
+                    <label for="localLeadingZeros">Local Leading Zeros</label>
+                    <input type="text" [formControlName]="'localLeadingZeros'" value="true" id="localLeadingZeros" />
+                    <!-- <br class="clear" />-->
+                  </div>
+                  </div> <!--col end-->
+
+                </div> <!--phone row 2 end-->
+
+                <div  class="row"> <!--phone num row  start -->
+                  <div class="col">
+                    <div class="form-group" >
+                    <label for="localTelNumber" > Phone Number</label>
+                      <input type="text"  [ngClass]="{'form-control': true,
+                  'is-invalid': !phoneNumber.get('localTelNumber').valid && phoneNumber.get('localTelNumber').touched,
+                  'is-valid': phoneNumber.get('localTelNumber').valid}"  [formControlName]="'localTelNumber'" id="localTelNumber" />
+                      <span *ngIf="phoneNumber.get('localTelNumber').errors?.required && phoneNumber.get('localTelNumber').touched"
+                            class="form-text invalid-feedback custom-invalid-feedback"> Phone Number is required.</span>
+                      <span *ngIf="phoneNumber.get('localTelNumber').errors?.minlength && phoneNumber.get('localTelNumber').touched"  class="form-text invalid-feedback custom-invalid-feedback">Phone Number should be at least 6 digits.</span>
+                    </div>
+
+                  </div> <!--col end-->
+                 </div> <!--phone row 3 end-->
+
+              </div> <!--phonegroup end-->
+
+            </div>
           </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio"
-                   [formControlName]="'gender'" id="female" value="female">
-            <label class="form-check-label" for="female">female</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio"
-                   [formControlName]="'gender'" id="other" value="other">
-            <label class="form-check-label" for="other">other</label>
-          </div>
-
-          <div class="form-check form-check-inline">
-            <input class="form-check-input" type="radio"
-                   [formControlName]="'gender'" id="decline" value="decline">
-            <label class="form-check-label" for="decline">decline to verify</label>
-          </div>
-          <!--<small *ngIf="regnForm.gender.errors?.required && regnForm.gender.touched" class="form-check-inline form-text custom-invalid-feedback">Pick one option.</small>-->
-          </div>
-          </div><!--col-->
-
-      </div> <!--row-->
-
-      <div class="col-12">
-
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="addressType"> Name Suffix </label>
-              <input type="text"
-                     [formControlName]="'addressTypeId'" id="addressType" placeholder="Address Type">
-            </div>
-          </div> <!--col-->
-
-        </div>  <!--row-->
-
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="namePrefix">Name Prefix</label>
-              <input type="text"
-                     [formControlName]="'namePrefix'" id="namePrefix" placeholder="Name Prefix">
-            </div>
-          </div> <!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="firstName">First Name </label>
-              <input type="text"
-                     [formControlName]="'firstName'" id="firstName" placeholder="First Name">
-            </div>
-          </div><!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="lastName">Last Name </label>
-              <input type="text"
-                    [formControlName]="'lastName'" id="lastName" placeholder="Last Name">
-            </div>
-          </div>
-
-        </div> <!--row-->
-
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="nameSuffix"> Name Suffix </label>
-              <input type="text"
-                     [formControlName]="'nameSuffix'" id="nameSuffix" placeholder="Name suffix">
-            </div>
-          </div> <!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="companyName"> Company name </label>
-              <input type="text"
-                     [formControlName]="'companyName'" id="companyName" placeholder="Company name">
-            </div>
-          </div><!--col-->
-
-        </div>  <!--row-->
-
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="addressLine1">Street Address</label>
-              <input type="text"
-                     [formControlName]="'addressLine1'" id="addressLine1" placeholder="Enter street address">
-            </div>
-          </div> <!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="addressLine2">Home / Apartment Number </label>
-              <input type="text"
-                     [formControlName]="'addressLine2'" id="addressLine2" placeholder="Address line two">
-            </div>
-          </div><!--col-->
-
-        </div> <!--row-->
-
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="addressLine3">Address Line 3</label>
-              <input type="text"
-                     [formControlName]="'addressLine3'" id="addressLine3" placeholder="Address Line 3">
-            </div>
-          </div> <!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="cityOrTown">City Or Town</label>
-              <input type="text"
-                     [formControlName]="'cityOrTown'" id="cityOrTown" placeholder="City Or Town">
-            </div>
-          </div><!--col-->
-
-        </div> <!--row-->
-
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="countyOrMuncipalOrSublocality">County Or Muncipal Or Sublocality</label>
-              <input type="text"
-                     [formControlName]="'countyOrMuncipalOrSublocality'" id="countyOrMuncipalOrSublocality" placeholder="County Or Muncipal Or Sublocality">
-            </div>
-          </div> <!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="stateOrProvince">Zip Or PostalCode</label>
-              <input type="text"
-                     [formControlName]="'stateOrProvince'" id="stateOrProvince" placeholder="State Or Province">
-            </div>
-          </div><!--col-->
-
-        </div> <!--row-->
-        <div class="row">
-          <div class="col" >
-            <div class="form-group">
-              <label for="zipOrPostalCode">County Or Muncipal Or Sublocality</label>
-              <input type="text"
-                     [formControlName]="'zipOrPostalCode'" id="zipOrPostalCode" placeholder="Zip Or Postal Code">
-            </div>
-          </div> <!--col-->
-
-          <div class="col" >
-            <div class="form-group">
-              <label for="country">Country</label>
-              <input type="text"
-                     [formControlName]="'countryId'" id="country" placeholder="Country">
-            </div>
-          </div><!--col-->
-
-        </div> <!--row-->
-
-      </div><!-- col-12-->
-
-      </div>
-
+        </div>
+    </div>
 
 			<div class="form-group">
-				<button class="btn btn-primary btn-block">Sign Up</button>
+				<button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Sign Up</button>
 			</div>
 			<div class="alert alert-warning" *ngIf="isSignUpFailed">
 				Signup failed!<br />{{ errorMessage }}

@@ -4,11 +4,13 @@ import java.util.HashSet;
 import java.util.Set;
 import javax.annotation.Generated;
 
+import com.javachinna.dto.RoleDTO;
 import com.javachinna.dto.SocialProvider;
 import com.javachinna.dto.UserDTO;
 import com.javachinna.model.Role;
 import com.javachinna.model.User;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -21,8 +23,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class UserMapperImpl implements UserMapper {
 
-private PostalAddressMapper postalAddressMapper;
-private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PhoneNumberMapper phoneNumberMapper;
+    @Autowired
+    private PostalAddressMapper postalAddressMapper;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public UserDTO userToUserDTO(User user) {
         if ( user == null ) {
@@ -44,6 +51,8 @@ private PasswordEncoder passwordEncoder;
         if ( set != null ) {
             userDTO.setRoles( new HashSet<Role>( set ) );
         }*/
+        userDTO.setPostalAddresses( postalAddressMapper.mapToDTOs( user.getPostalAddresses() ) );
+        userDTO.setPhoneNumbers( phoneNumberMapper.mapToDTOs( user.getPhoneNumbers() ) );
 
         return userDTO;
     }
@@ -70,7 +79,9 @@ private PasswordEncoder passwordEncoder;
             user.setProvider(SocialProvider.LOCAL.getProviderType());
             user.setEnabled(true);
             user.setProviderUserId(userDTO.getProviderUserId());
-            user.addPostalAddress(postalAddressMapper.postalAddressDTOToPostalAddress(userDTO.getPostalAddress()));
+            user.setPostalAddresses( postalAddressMapper.mapToEntities( userDTO.getPostalAddresses() ) );
+            user.setPhoneNumbers( phoneNumberMapper.mapToEntities( userDTO.getPhoneNumbers() ) );
+
 
         }else{
             user.setId( userDTO.getUserId() );
@@ -82,12 +93,14 @@ private PasswordEncoder passwordEncoder;
             user.setModifiedDate( userDTO.getModifiedDate() );
             user.setPassword( userDTO.getPassword() );
             user.setProvider( userDTO.getProvider() );
-            Set<Role> set = userDTO.getRoles();
+            Set<RoleDTO> set = userDTO.getRoles();
             if ( set != null ) {
               //  user.setRoles( new HashSet<Role>( set ) );
             }
 
-            user.addPostalAddress(postalAddressMapper.postalAddressDTOToPostalAddress(userDTO.getPostalAddress()));
+            user.setPostalAddresses( postalAddressMapper.mapToEntities( userDTO.getPostalAddresses() ) );
+            user.setPhoneNumbers( phoneNumberMapper.mapToEntities( userDTO.getPhoneNumbers() ) );
+
 
         }
         
@@ -109,7 +122,9 @@ private PasswordEncoder passwordEncoder;
         // user.setCreatedDate( UserDTO.getCreatedDate() );
         user.setModifiedDate( userDTO.getModifiedDate() );
         user.setPassword(passwordEncoder.encode(userDTO.getPassword())  );
-        user.addPostalAddress(postalAddressMapper.postalAddressDTOToPostalAddress(userDTO.getPostalAddress()));
+        user.setPostalAddresses( postalAddressMapper.mapToEntities( userDTO.getPostalAddresses() ) );
+        user.setPhoneNumbers( phoneNumberMapper.mapToEntities( userDTO.getPhoneNumbers() ) );
+
         // user.setProvider( UserDTO.getProvider() );
         /*Set<Role> set = UserDTO.getRoles();
         if ( set != null ) {

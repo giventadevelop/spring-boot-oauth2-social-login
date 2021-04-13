@@ -1,5 +1,6 @@
 package com.javachinna.service;
 
+import com.javachinna.mapper.UserMapper;
 import com.javachinna.model.Role;
 import com.javachinna.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +25,12 @@ import java.util.Set;
 @Service("localUserDetailService")
 public class LocalUserDetailService implements UserDetailsService {
 
+
+
 	@Autowired
 	private UserService userService;
+
+
 
 	@Override
 	@Transactional

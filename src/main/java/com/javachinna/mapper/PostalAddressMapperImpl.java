@@ -7,6 +7,10 @@ import com.javachinna.model.PostalAddress;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Generated;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
@@ -73,5 +77,33 @@ public class PostalAddressMapperImpl implements PostalAddressMapper {
         postalAddress.setCountry(country);
 
         return postalAddress;
+    }
+
+    @Override
+    public Set<PostalAddressDTO> mapToDTOs(Set<PostalAddress> PostalAddresses) {
+        if ( PostalAddresses == null ) {
+            return null;
+        }
+
+        Set<PostalAddressDTO> set = new HashSet<PostalAddressDTO>( Math.max( (int) ( PostalAddresses.size() / .75f ) + 1, 16 ) );
+        for ( PostalAddress postalAddress : PostalAddresses ) {
+            set.add( postalAddressToPostalAddressDTO( postalAddress ) );
+        }
+
+        return set;
+    }
+
+    @Override
+    public Set<PostalAddress> mapToEntities(Set<PostalAddressDTO> PostalAddresses) {
+        if ( PostalAddresses == null ) {
+            return null;
+        }
+
+        Set<PostalAddress> set = new HashSet<PostalAddress>( Math.max( (int) ( PostalAddresses.size() / .75f ) + 1, 16 ) );
+        for ( PostalAddressDTO postalAddressDTO : PostalAddresses ) {
+            set.add( postalAddressDTOToPostalAddress( postalAddressDTO ) );
+        }
+
+        return set;
     }
 }

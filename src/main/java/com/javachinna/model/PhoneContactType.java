@@ -12,7 +12,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "phone_contact_type")
+@Table(name = "PHONE_CONTACT_TYPE")
 public class PhoneContactType {
     @Id
     @Column(name = "PHONE_CONTACT_TYPE_ID")
@@ -21,4 +21,7 @@ public class PhoneContactType {
     @Column(name = "PHONE_CONTACT_TYPE")
     private String phoneContactType;
 
+    public PhoneContactType(Integer phoneContactTypeId) {
+        this.phoneContactTypeId = phoneContactTypeId;
+    }
 }

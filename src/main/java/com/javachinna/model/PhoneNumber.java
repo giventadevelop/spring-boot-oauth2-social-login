@@ -15,12 +15,12 @@ import javax.persistence.*;
 @Table(name = "PHONE_NUMBER")
 public class PhoneNumber {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "PHONE_ID")
     private Long phoneId;
 
-    @Column(name = "PHONE_CONTACT_TYPE_ID")
-    private Integer phoneContactTypeId;
+    @Column(name = "IS_PRIMARY_PHONE_NUMBER")
+    private Boolean isPrimaryPhoneNumber;
 
     @Column(name = "CUSTOM_LABEL")
     private String customLabel;
@@ -40,14 +40,10 @@ public class PhoneNumber {
     @Column(name = "LOCAL_LEADING_ZEROS")
     private Byte localLeadingZeros;
 
-    @ManyToOne
-    @JoinColumn(name="USER_ID")
-    private User user;
-
-    @ManyToOne
-    @JoinColumn(name="COUNTRY_ID")
-    private Country country;
-
+    /*uni-directional many-to-one association to PHONE_CONTACT_TYPE table
+    in this mapping you don't need to give the member field above and the
+    getters and setters just the below column mapping will suffice.
+    */
     @ManyToOne
     @JoinColumn(name="PHONE_CONTACT_TYPE_ID")
     private PhoneContactType phoneContactType;

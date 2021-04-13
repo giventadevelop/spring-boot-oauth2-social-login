@@ -36,7 +36,7 @@ dependencies {
     implementation 'org.projectlombok:lombok:1.18.16'
     implementation 'org.springframework.boot:spring-boot-configuration-processor:2.4.0'
     implementation 'org.junit.jupiter:junit-jupiter:5.4.2'
-    // annotationProcessor "org.mapstruct:mapstruct-processor:1.4.1.Final"
+    //annotationProcessor "org.mapstruct:mapstruct-processor:1.4.1.Final"
     testImplementation 'org.springframework.boot:spring-boot-starter-test:2.4.0'
 
     compile 'org.junit.jupiter:junit-jupiter:5.7.1'

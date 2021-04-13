@@ -2,6 +2,7 @@ package com.javachinna.dto;
 
 import com.javachinna.model.Role;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.Set;
@@ -12,6 +13,8 @@ import java.util.Set;
 @AllArgsConstructor
 @Data
 @EqualsAndHashCode
+@Builder
+@Component
 public class UserDTO {
     private Long userId;
     private Date createdDate;
@@ -22,10 +25,9 @@ public class UserDTO {
     private String password;
     private String provider;
     private String providerUserId;
-    private Long addressId;
-    private Set<Role> roles;
-    private PostalAddressDTO postalAddress;
-    private Set<PhoneNumberDTO> phoneNumber;
+    private Set<RoleDTO> roles;
+    private Set<PostalAddressDTO> postalAddresses;
+    private Set<PhoneNumberDTO> phoneNumbers;
 
 
 

@@ -7,6 +7,7 @@ import com.javachinna.mapper.UserMapper;
 import com.javachinna.model.*;
 import com.javachinna.repo.PostalAddressRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
 import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
@@ -50,6 +51,7 @@ public class UserServiceImpl implements UserService {
 
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
     private final UserMapper userMapper;
 
     @Override

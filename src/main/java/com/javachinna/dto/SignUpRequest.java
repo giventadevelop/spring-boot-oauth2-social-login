@@ -6,6 +6,8 @@ import javax.validation.constraints.Size;
 import com.javachinna.validator.PasswordMatches;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Chinna
@@ -13,11 +15,14 @@ import lombok.Data;
  */
 @Data
 @PasswordMatches
+//@Component
 public class SignUpRequest {
 
 	private Long userID;
 
 	private String providerUserId;
+
+
 
 	@NotEmpty
 	private String displayName;
@@ -51,6 +56,8 @@ public class SignUpRequest {
 		private String email;
 		private String password;
 		private SocialProvider socialProvider;
+		@Autowired
+		private UserDTO userDTO;
 
 		public Builder addProviderUserID(final String userID) {
 			this.providerUserID = userID;
@@ -78,8 +85,16 @@ public class SignUpRequest {
 		}
 
 		public UserDTO build() {
+
+			userDTO = UserDTO.builder()
+					.providerUserId(providerUserID)
+					.displayName(displayName)
+					.email(email)
+					.password(password)
+					.provider(socialProvider.getProviderType())
+					.build();
 			//return new SignUpRequest(providerUserID, displayName, email, password, socialProvider);
-			return null;
+			return userDTO;
 		}
 	}
 }

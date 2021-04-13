@@ -66,12 +66,15 @@ public class PostalAddress {
     @JoinColumn(name="USER_ID", insertable=false, updatable=false, referencedColumnName="USER_ID")
     private User user;*/
 
-    //uni-directional many-to-one association to Country
+    /*uni-directional many-to-one association to Country
+    in this mapping you don't need to give the member field above and the
+    getters and setters just the below column mapping will suffice.
+    */
     @ManyToOne
     @JoinColumn(name="COUNTRY_ID")
     private Country country;
 
-    //bi-directional many-to-one association to AddressType
+    //uni-directional many-to-one association to AddressType
     @ManyToOne
     @JoinColumn(name="ADDRESS_TYPE_ID")
     private AddressType addressType;
