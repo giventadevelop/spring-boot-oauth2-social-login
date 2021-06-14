@@ -1,27 +1,28 @@
 package com.javachinna.controller;
 
-import javax.validation.Valid;
-
 import com.javachinna.dto.*;
+import com.javachinna.exception.UserAlreadyExistAuthenticationException;
 import com.javachinna.model.User;
+import com.javachinna.security.jwt.TokenProvider;
 import com.javachinna.service.LocalUserDetailService;
 import com.javachinna.service.RefreshTokenService;
+import com.javachinna.service.UserService;
+import com.javachinna.util.GeneralUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.javachinna.exception.UserAlreadyExistAuthenticationException;
-import com.javachinna.security.jwt.TokenProvider;
-import com.javachinna.service.UserService;
-import com.javachinna.util.GeneralUtils;
-
-import lombok.extern.slf4j.Slf4j;
-
+import javax.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
 
@@ -39,6 +40,7 @@ public class AuthController {
     UserService userService;
 
     @Autowired
+    @Qualifier("localUserDetailService")
     LocalUserDetailService localUserDetailService;
 
     @Autowired
@@ -60,8 +62,7 @@ public class AuthController {
 
     /**
      * Register user signup
-     *
-     * @param userDTO
+    * @param userDTO
      * @return ResponseEntity<?> JwtAuthenticationResponse
      */
     @PostMapping("/signup")
@@ -84,7 +85,6 @@ public class AuthController {
 
     /**
      * Create authentication and token response for login and refresh token request
-     *
      * @param loginRequest
      * @param isRefreshToken
      * @return ResponseEntity<?> JwtAuthenticationResponse

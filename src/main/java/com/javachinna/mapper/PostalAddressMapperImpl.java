@@ -5,11 +5,10 @@ import com.javachinna.model.AddressType;
 import com.javachinna.model.Country;
 import com.javachinna.model.PostalAddress;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Generated;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Generated(
@@ -29,11 +28,12 @@ public class PostalAddressMapperImpl implements PostalAddressMapper {
         PostalAddressDTO postalAddressDTO = new PostalAddressDTO();
 
         postalAddressDTO.setAddressId( postal.getAddressId() );
+        postalAddressDTO.setAddressTypeId( postal.getAddressType().getAddressTypeId() );
         postalAddressDTO.setNamePrefix( postal.getNamePrefix() );
         postalAddressDTO.setFirstName( postal.getFirstName() );
         postalAddressDTO.setLastName( postal.getLastName() );
         postalAddressDTO.setNameSuffix( postal.getNameSuffix() );
-        postalAddressDTO.setGender( postal.getGender() );
+        postalAddressDTO.setGender( postal.getGender()==null?"D": postal.getGender());
         postalAddressDTO.setCompanyName( postal.getCompanyName() );
         postalAddressDTO.setAddressLine1( postal.getAddressLine1() );
         postalAddressDTO.setAddressLine2( postal.getAddressLine2() );
@@ -42,6 +42,7 @@ public class PostalAddressMapperImpl implements PostalAddressMapper {
         postalAddressDTO.setCountyOrMuncipalOrSublocality( postal.getCountyOrMuncipalOrSublocality() );
         postalAddressDTO.setStateOrProvince( postal.getStateOrProvince() );
         postalAddressDTO.setZipOrPostalCode( postal.getZipOrPostalCode() );
+        postalAddressDTO.setCountryId( postal.getCountry().getCountryId());
 
         return postalAddressDTO;
     }
@@ -62,7 +63,12 @@ public class PostalAddressMapperImpl implements PostalAddressMapper {
         postalAddress.setFirstName( postalAddressDTO.getFirstName() );
         postalAddress.setLastName( postalAddressDTO.getLastName() );
         postalAddress.setNameSuffix( postalAddressDTO.getNameSuffix() );
-        postalAddress.setGender( postalAddressDTO.getGender() );
+        if(StringUtils.isEmpty(postalAddressDTO.getGender())){
+            postalAddress.setGender( null );
+        }else{
+            postalAddress.setGender( postalAddressDTO.getGender() );
+        }
+
         postalAddress.setCompanyName( postalAddressDTO.getCompanyName() );
         postalAddress.setAddressLine1( postalAddressDTO.getAddressLine1() );
         postalAddress.setAddressLine2( postalAddressDTO.getAddressLine2() );

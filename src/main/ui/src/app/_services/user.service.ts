@@ -42,6 +42,20 @@ export class UserService {
     return this.http.get(environment.API_URL + 'user/me', httpOptions);
   }
 
+  /**
+   * to update an user profile
+   * by passing user id as a path parameter
+   * like user/userid
+   * get the userDTO details
+   * @param userId
+   */
+  getUserById(userId: number): Observable<any> {
+    return this.http.get(environment.API_URL + 'user/'+userId, httpOptions,);
+   /* let userByIdPath=environment.API_URL + 'user/${userId}';
+    return this.http.get(userByIdPath, httpOptions);*/
+   // return this.http.get(environment.API_URL + 'user/${userId}', httpOptions);
+  }
+
   upDateUserProfile(user): Observable<any> {
     console.log(
       ' environment.API_URL + user    ',

@@ -1,30 +1,25 @@
 package com.javachinna.service;
 
-import com.javachinna.dto.*;
-import com.javachinna.exception.OAuth2AuthenticationProcessingException;
-import com.javachinna.exception.UserAlreadyExistAuthenticationException;
+import com.javachinna.dto.AddressTypeDTO;
+import com.javachinna.dto.CountryDTO;
+import com.javachinna.dto.PhoneContactTypeDTO;
 import com.javachinna.mapper.AddressTypeMapper;
 import com.javachinna.mapper.CountryMapper;
 import com.javachinna.mapper.PhoneContactTypeMapper;
-import com.javachinna.mapper.UserMapper;
-import com.javachinna.model.*;
-import com.javachinna.repo.*;
-import com.javachinna.security.oauth2.user.OAuth2UserInfo;
-import com.javachinna.security.oauth2.user.OAuth2UserInfoFactory;
-import com.javachinna.util.GeneralUtils;
+import com.javachinna.model.AddressType;
+import com.javachinna.model.Country;
+import com.javachinna.model.PhoneContactType;
+import com.javachinna.repo.AddressTypeRepository;
+import com.javachinna.repo.CountryRepository;
+import com.javachinna.repo.PhoneContactTypeRepository;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import java.util.*;
+import java.util.List;
 
 
 /**
@@ -49,6 +44,7 @@ public class UIDropDownLoaderServiceImpl implements UIDropDownLoaderService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("addressTypes")
     public  List<AddressTypeDTO> findAllAddressTypes() {
         logger.debug("  return findAllAddressTypes ");
         List<AddressType> addressTypeList=addressTypeRepository.findAll();
@@ -57,6 +53,7 @@ public class UIDropDownLoaderServiceImpl implements UIDropDownLoaderService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("countries")
     public  List<CountryDTO> findAllCountries() {
         logger.debug("  return findAllCountries ");
         List<Country> countryList=countryRepository.findAll();
@@ -66,6 +63,7 @@ public class UIDropDownLoaderServiceImpl implements UIDropDownLoaderService {
 
     @Override
     @Transactional(readOnly = true)
+    @Cacheable("phoneContactTypes")
     public List<PhoneContactTypeDTO> findAllPhoneContactTypes() {
         logger.debug("  return findAllPhoneContactTypes ");
         List<PhoneContactType> phoneContactTypeList=phoneContactTypeRepository.findAll();

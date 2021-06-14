@@ -2,6 +2,8 @@ package com.javachinna.mapper;
 
 import com.javachinna.dto.AddressTypeDTO;
 import com.javachinna.model.AddressType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Generated;
@@ -15,7 +17,7 @@ import java.util.List;
 )
 @Component
 public class AddressTypeMapperImpl implements AddressTypeMapper {
-
+    private static final Logger logger = LoggerFactory.getLogger(AddressTypeMapperImpl.class);
     @Override
     public AddressTypeDTO addressTypeToAddressTypeDTO(AddressType addressType) {
         if ( addressType == null ) {
@@ -25,7 +27,11 @@ public class AddressTypeMapperImpl implements AddressTypeMapper {
         AddressTypeDTO addressTypeDTO = new AddressTypeDTO();
 
         addressTypeDTO.setAddressTypeId( addressType.getAddressTypeId() );
-        addressTypeDTO.setAddressType( addressType.getAddressType() );
+
+        logger.debug("addressType length"+ addressType.getAddressType().length());
+        logger.debug("addressType length after trim"+ addressType.getAddressType().trim().length());
+
+        addressTypeDTO.setAddressType( addressType.getAddressType().trim() );
 
         return addressTypeDTO;
     }

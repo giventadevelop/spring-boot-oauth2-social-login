@@ -17,7 +17,7 @@ public class PhoneNumberDTO {
     private String customLabel;
     private Short countryPrefix;
     private Short countyPrefix;
-    private Integer localTelNumber;
+    private String localTelNumber;
     private Byte localLeadingZeros;
 
 }

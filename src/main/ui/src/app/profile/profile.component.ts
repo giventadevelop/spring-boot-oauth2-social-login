@@ -3,6 +3,7 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import { AuthService } from '../_services/auth.service';
 import { UserService } from '../_services/user.service';
 import { analyzeAndValidateNgModules } from '@angular/compiler';
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -21,7 +22,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private userService: UserService,
-    private token: TokenStorageService
+    private token: TokenStorageService,private route: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -31,7 +33,9 @@ export class ProfileComponent implements OnInit {
   }
 
   onEditProfile(): void {
-    this.editProfile = true;
+   // this.editProfile = true;
+    this.router.navigateByUrl('/register');
+
   }
 
   onRefreshToken() {

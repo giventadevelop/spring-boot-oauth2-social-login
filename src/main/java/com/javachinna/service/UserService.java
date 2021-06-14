@@ -1,7 +1,6 @@
 package com.javachinna.service;
 
 import java.util.Map;
-import java.util.Optional;
 
 import com.javachinna.dto.UserDTO;
 import com.javachinna.model.User;
@@ -25,7 +24,7 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
-    Optional<User> findUserById(Long id);
+    UserDTO findUserById(Long id);
 
     LocalUser processUserRegistration(String registrationId, Map<String, Object> attributes, OidcIdToken idToken, OidcUserInfo userInfo);
 

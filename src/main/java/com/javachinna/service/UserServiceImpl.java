@@ -1,12 +1,25 @@
 package com.javachinna.service;
 
-import java.util.*;
-
+import com.javachinna.dto.LocalUser;
+import com.javachinna.dto.SignUpRequest;
+import com.javachinna.dto.SocialProvider;
 import com.javachinna.dto.UserDTO;
+import com.javachinna.exception.OAuth2AuthenticationProcessingException;
+import com.javachinna.exception.UserAlreadyExistAuthenticationException;
 import com.javachinna.mapper.UserMapper;
-import com.javachinna.model.*;
+import com.javachinna.model.PostalAddress;
+import com.javachinna.model.User;
+import com.javachinna.model.UserRole;
+import com.javachinna.model.UserRoleRepository;
 import com.javachinna.repo.PostalAddressRepository;
+import com.javachinna.repo.RoleRepository;
+import com.javachinna.repo.UserRepository;
+import com.javachinna.security.oauth2.user.OAuth2UserInfo;
+import com.javachinna.security.oauth2.user.OAuth2UserInfoFactory;
+import com.javachinna.util.GeneralUtils;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.oidc.OidcIdToken;
@@ -16,19 +29,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.javachinna.dto.LocalUser;
-import com.javachinna.dto.SignUpRequest;
-import com.javachinna.dto.SocialProvider;
-import com.javachinna.exception.OAuth2AuthenticationProcessingException;
-import com.javachinna.exception.UserAlreadyExistAuthenticationException;
-import com.javachinna.repo.RoleRepository;
-import com.javachinna.repo.UserRepository;
-import com.javachinna.security.oauth2.user.OAuth2UserInfo;
-import com.javachinna.security.oauth2.user.OAuth2UserInfoFactory;
-import com.javachinna.util.GeneralUtils;
+import java.util.*;
 
 
 /**
@@ -222,8 +223,18 @@ public class UserServiceImpl implements UserService {
                 .addSocialProvider(GeneralUtils.toSocialProvider(registrationId)).addPassword("changeit").build();
     }
 
+    /**
+     * findUserById
+     * @param id
+     * @return
+     */
     @Override
-    public Optional<User> findUserById(Long id) {
-        return userRepository.findById(id);
+    public UserDTO findUserById(Long id) {
+        UserDTO userDTO=null;
+        Optional<User> optionalUser = userRepository.findById(id);
+        if(optionalUser.isPresent()){
+          return  userDTO=userMapper.userToUserDTO(optionalUser.get());
+        }
+        return  userDTO;
     }
 }

@@ -2,18 +2,17 @@ package com.javachinna.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.javachinna.config.CurrentUser;
+import com.javachinna.dto.LocalUser;
 import com.javachinna.dto.UserDTO;
 import com.javachinna.service.UserService;
+import com.javachinna.util.GeneralUtils;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import com.javachinna.config.CurrentUser;
-import com.javachinna.dto.LocalUser;
-import com.javachinna.util.GeneralUtils;
 
 import java.util.Date;
 
@@ -23,6 +22,18 @@ import java.util.Date;
 public class UserController {
 	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private UserService userService;
+
+	/**
+	 * get User By userId
+	 * * @param userId
+	 * @return
+	 */
+	@GetMapping("/user/{userId}")
+	public ResponseEntity<UserDTO> getUserById(@PathVariable Long userId) throws Exception {
+		UserDTO userDto=userService.findUserById(userId);
+		return ResponseEntity.ok(userDto);
+	}
+
 
 	@GetMapping("/user/me")
 	@PreAuthorize("hasRole('USER')")

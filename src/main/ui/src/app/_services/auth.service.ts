@@ -51,13 +51,7 @@ export class AuthService {
     console.log('register/signup url ',url) ;
     return this.http.post(
       environment.AUTH_API + 'signup',
-      {
-        displayName: user.displayName,
-        email: user.email,
-        password: user.password,
-        matchingPassword: user.matchingPassword,
-        socialProvider: 'LOCAL',
-      },
+      user,
       httpOptions
     );
   }
@@ -90,7 +84,7 @@ export class AuthService {
       tap(
         (jwtAuthenticationResponse: JwtAuthenticationResponse) => {
           console.log(
-            'jwtAuthenticationResponse in refreshToken Auth Srvice ',
+            'jwtAuthenticationResponse in refreshToken Auth Service ',
             jwtAuthenticationResponse
           );
           this.tokenStorageService.saveTokens(jwtAuthenticationResponse);

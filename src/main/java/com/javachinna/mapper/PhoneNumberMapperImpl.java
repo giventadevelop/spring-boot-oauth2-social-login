@@ -1,15 +1,12 @@
 package com.javachinna.mapper;
 
 import com.javachinna.dto.PhoneNumberDTO;
-import com.javachinna.model.Country;
 import com.javachinna.model.PhoneContactType;
 import com.javachinna.model.PhoneNumber;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Generated;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Generated(
@@ -51,7 +48,14 @@ public class PhoneNumberMapperImpl implements PhoneNumberMapper {
 
         phoneNumber.setPhoneId( phoneNumberDTO.getPhoneId() );
         phoneNumber.setPhoneContactType( new PhoneContactType(phoneNumberDTO.getPhoneContactTypeId()));
-        phoneNumber.setIsPrimaryPhoneNumber(phoneNumberDTO.getIsPrimaryPhoneNumber());
+        /*if (StringUtils.isBlank(phoneNumberDTO.getIsPrimaryPhoneNumber())) {
+        }*/
+        if (phoneNumberDTO.getIsPrimaryPhoneNumber()== null) {
+            phoneNumber.setIsPrimaryPhoneNumber(false);
+        }else{
+            phoneNumber.setIsPrimaryPhoneNumber(phoneNumberDTO.getIsPrimaryPhoneNumber());
+        }
+
         phoneNumber.setCustomLabel( phoneNumberDTO.getCustomLabel() );
         phoneNumber.setUserId( phoneNumberDTO.getUserId() );
         phoneNumber.setCountryPrefix( phoneNumberDTO.getCountryPrefix() );

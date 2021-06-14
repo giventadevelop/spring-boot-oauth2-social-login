@@ -35,7 +35,7 @@ public class PhoneNumber {
     private Short countyPrefix;
 
     @Column(name = "LOCAL_TEL_NUMBER")
-    private Integer localTelNumber;
+    private String localTelNumber;
 
     @Column(name = "LOCAL_LEADING_ZEROS")
     private Byte localLeadingZeros;
