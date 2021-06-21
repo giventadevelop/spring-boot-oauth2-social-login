@@ -18,6 +18,6 @@ public class PhoneNumberDTO {
     private Short countryPrefix;
     private Short countyPrefix;
     private String localTelNumber;
-    private Byte localLeadingZeros;
+    private String localLeadingZeros;
 
 }

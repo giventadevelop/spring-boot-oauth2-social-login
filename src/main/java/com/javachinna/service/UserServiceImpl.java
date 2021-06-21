@@ -1,16 +1,14 @@
 package com.javachinna.service;
 
-import com.javachinna.dto.LocalUser;
-import com.javachinna.dto.SignUpRequest;
-import com.javachinna.dto.SocialProvider;
-import com.javachinna.dto.UserDTO;
+import com.javachinna.dto.*;
 import com.javachinna.exception.OAuth2AuthenticationProcessingException;
 import com.javachinna.exception.UserAlreadyExistAuthenticationException;
 import com.javachinna.mapper.UserMapper;
-import com.javachinna.model.PostalAddress;
+import com.javachinna.model.PhoneNumber;
 import com.javachinna.model.User;
 import com.javachinna.model.UserRole;
 import com.javachinna.model.UserRoleRepository;
+import com.javachinna.repo.PhoneNumberRepository;
 import com.javachinna.repo.PostalAddressRepository;
 import com.javachinna.repo.RoleRepository;
 import com.javachinna.repo.UserRepository;
@@ -30,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-
 
 /**
  * @author Chinna
@@ -53,21 +50,32 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
     @Autowired
+    private PhoneNumberRepository phoneNumberRepository;
+
+
+    @Autowired
     private final UserMapper userMapper;
 
     @Override
     @Transactional(value = "transactionManager",propagation = Propagation.REQUIRES_NEW)
     public User registerNewUser(final UserDTO userDTO) throws UserAlreadyExistAuthenticationException {
-        if (userDTO.getUserId() != null && userRepository.existsById(userDTO.getUserId())) {
-            throw new UserAlreadyExistAuthenticationException("User with User id " + userDTO.getUserId() + " already exist");
-        } else if (userRepository.existsByEmail(userDTO.getEmail())) {
+
+       if ( userDTO.getUserId() == null && userRepository.existsByEmail(userDTO.getEmail())) {
             throw new UserAlreadyExistAuthenticationException("User with email id " + userDTO.getEmail() + " already exist");
         }
-        final User user = buildUser(userDTO);
-        Set<PostalAddress> postalAddressList = user.getPostalAddresses();
+         User user = null;
 
         Date now = Calendar.getInstance().getTime();
-        user.setCreatedDate(now);
+        if ( userDTO.getUserId() == null){
+            user = buildUser(userDTO);
+            user.setCreatedDate(now);
+        }else{
+            Optional<User> userLoaded = userRepository.findById(userDTO.getUserId());
+            if(userLoaded.isPresent()) {
+                User user1 = userLoaded.get();
+                user = userMapper.userForUpdateProfile(userDTO, user1);
+            }
+        }
         user.setModifiedDate(now);
        // user.setPostalAddresses(null);
         Set<UserRole> userRoles=new HashSet<>();
@@ -211,6 +219,17 @@ public class UserServiceImpl implements UserService {
         existingUser=userMapper.userToUserDTO(user);
         return existingUser;
         //return userMapper.userToUserDTO(userRepository.save(user));
+    }
+
+    @Override
+    @Transactional
+    public void deleteUserPhone(Long phoneId) {
+        phoneNumberRepository.deleteById(phoneId);
+    }
+
+    @Override
+    public Optional<PhoneNumber> findUserPhone(Long phoneId) {
+      return  phoneNumberRepository.findById(phoneId);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {

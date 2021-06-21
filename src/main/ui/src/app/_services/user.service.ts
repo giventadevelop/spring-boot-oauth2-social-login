@@ -64,4 +64,12 @@ export class UserService {
     console.log(JSON.stringify(user));
     return this.http.post(environment.API_URL + 'user', user, httpOptions);
   }
+
+  deleteUserPhone(phoneId): Observable<any> {
+    //let url='${environment.API_URL} + ${phoneId}';
+    let url=environment.API_URL +'phone/'+phoneId;
+   // return this.http.delete('$environment.API_URL + ${phoneId}', httpOptions);
+    return this.http.delete(url, httpOptions);
+    //return this.http.post(environment.API_URL + 'phone', phone, httpOptions);
+  }
 }

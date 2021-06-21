@@ -1,6 +1,25 @@
   <!--dynamic forms based on the article at url
   https://codinglatte.com/posts/angular/angular-dynamic-form-fields-using-formarray/-->
 
+
+  <!--section for pop up alert primary phone selection-->
+  <ng-template #alertDialog let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Angular Bootstrap Modal Popup</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <p><strong>Please select one of the Phone as your  <span class="text-primary">Primary phone number.</span> profile?</strong></p>
+      <p>
+      </p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">OK</button>
+    </div>
+  </ng-template>
+
 <div class="row">
   <div class="col">
     <h1>Reactive Forms</h1>
@@ -13,7 +32,8 @@
 		<img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="avatar" class="profile-img-card" />
 		<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate >
       <div class="form-group">
-        <label for="displayName"> <i class="fa fa-asterisk fa-xs" aria-hidden="true"> </i> Display Name</label>
+        <label for="displayName">
+          <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Display Name </label>
         <input type="text" size="35" maxlength="30" class="shortenedInputText"
                [ngClass]="{'form-control': true,
                   'is-invalid': !displayName.valid && displayName.touched,
@@ -23,7 +43,7 @@
         <span *ngIf="displayName.errors?.minlength && displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name should be at least 2 characters.</span>
       </div>
 			<div class="form-group">
-				<label for="email"> <i class="fa fa-asterisk fa-xs" aria-hidden="true"> </i> Email </label>
+				<label for="email"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Email </label>
         <input type="email"  size="70" maxlength="80" class="shortenedInputText" [ngClass]="{'form-control': true,
                   'is-invalid': !email.valid && email.touched,
                   'is-valid': email.valid}"  [formControlName]="'email'" id="email" placeholder="email">
@@ -31,7 +51,7 @@
         <span *ngIf="email.errors?.email && email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Enter a valid email.</span>
       </div>
 			<div class="form-group">
-				<label for="password"> <i class="fa fa-asterisk fa-xs" aria-hidden="true"> </i> Password</label>
+				<label for="password"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"></fa-icon>Password</label>
         <input type="password" size="35" maxlength="30" class="shortenedInputText" [ngClass]="{'form-control': true,
                   'is-invalid': !password.valid && password.touched,
                   'is-valid': password.valid}"
@@ -41,7 +61,7 @@
       </div>
 
 			<div class="form-group">
-				<label for="matchingPassword"> <i class="fa fa-asterisk fa-xs" aria-hidden="true"> </i> Confirm Password</label>
+				<label for="matchingPassword"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Confirm Password</label>
         <input type="password" size="35" maxlength="30" class="shortenedInputText" [ngClass]="{'form-control': true,
                   'is-invalid': !matchingPassword.valid && matchingPassword.touched,
                   'is-valid': matchingPassword.valid}" [formControlName]="'matchingPassword'" id="matchingPassword" placeholder="matchingPassword">
@@ -55,7 +75,8 @@
           <div class="form-group">
             <div class="col-md-offset-2 col-md-4">
               <button type="button" class="btn btn-sm btn-primary" title="Add Address" (click)="addPostalAddress()">
-                <i class="fas fa-plus-circle fa-lg">&nbsp; </i>
+                <!--<i class="fas fa-plus-circle fa-lg">&nbsp; </i>-->
+                <fa-icon [icon]="['fas', 'plus-circle']" size="lg"> </fa-icon>
                 Address
               </button>
             </div>
@@ -110,7 +131,7 @@
                   </div> <!--gender formgroup end-->
                 </div> <!--col gender end-->
 
-                <div class="col-sm-2" *ngIf="postalAddressList.length>1">
+                <div class="col-sm-2" *ngIf="postalAddressGroupList.length>1">
                   <button type="button" class="btn btn-danger btn-sm pull-right"
                           title="Delete Address" (click)="removePostalAddress(i)">
                     <i class="fas fa-minus-circle fa-lg">&nbsp; </i>
@@ -271,7 +292,7 @@
           <div class="form-group">
             <div class="col-md-offset-2 col-md-4">
               <button type="button" class="btn btn-sm btn-primary" (click)="addPhoneNumber()">
-                <i class="fas fa-plus-circle fa-lg">&nbsp; </i>
+               <!-- <i class="fas fa-plus-circle fa-lg">&nbsp; </i>-->
                 Phone
               </button>
             </div>
@@ -304,10 +325,13 @@
                     </div> <!--col end-->
                   <div class="col">
                   <div class="form-group">
-                    <label [attr.for]="'isPrimaryPhoneNumber'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Primary phone?</label>
-                   <!-- <input #txt+i type="radio" [formControlName]="'isPrimaryPhoneNumber'" value="true" [id]="'isPrimaryPhoneNumber'+i" (change)="onPrimaryPhoneChange($event)"/>-->
-                    <input #txt+i type="radio" [formControlName]="'isPrimaryPhoneNumber'"
-                             [id]="'isPrimaryPhoneNumber'+i" (click)="onPrimaryPhoneChange($event)"/>
+                    <label [attr.for]="'isPrimaryPhoneNumber'+i" class="checkbox-container">  <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Primary phone?
+
+                    <input class="checkmark" #txt+i type="checkbox" [formControlName]="'isPrimaryPhoneNumber'"
+                           [value]   [id]="'isPrimaryPhoneNumber'+i" (click)="onPrimaryPhoneChange($event)"/>
+
+                     <!-- <span class="checkmark"> </span>-->
+                    </label>
                     <!-- <br class="clear" />-->
                   </div>
                   </div> <!--col end-->
@@ -319,7 +343,7 @@
                   </div>
                   </div> <!--col end-->
 
-                  <div class="col-sm-2" *ngIf="phoneNumberList.length>1">
+                  <div class="col-sm-2" *ngIf="phoneNumberGroupList.length>1">
                     <button type="button" class="btn btn-danger btn-sm pull-right"
                             title="Delete Phone" (click)="removePhoneNumber(i)">
                       <i class="fas fa-minus-circle fa-lg">&nbsp; </i>
@@ -341,15 +365,24 @@
                   <div class="col">
                   <div class="form-group">
                     <label [attr.for]="'countyPrefix'+i">County / Area Code </label>
-                    <input type="text" [formControlName]="'countyPrefix'" value="true" [id]="'countyPrefix'+i" />
+                    <input type="text" [formControlName]="'countyPrefix'"  [id]="'countyPrefix'+i" />
                     <!-- <br class="clear" />-->
                   </div>
                   </div> <!--col end-->
                   <div class="col">
                   <div class="form-group">
                     <label [attr.for]="'localLeadingZeros'+i"> Local Leading Zeros</label>
-                    <input type="text" [formControlName]="'localLeadingZeros'" value="true" [id]="'localLeadingZeros'+i" />
+                    <input type="text" [formControlName]="'localLeadingZeros'"
+                           [ngClass]="{'form-control': true,
+                  'is-invalid': !phoneNumber.get('localLeadingZeros').valid && phoneNumber.get('localLeadingZeros').touched,
+                  'is-valid': phoneNumber.get('localLeadingZeros').valid}"
+                           [id]="'localLeadingZeros'+i" />
                     <!-- <br class="clear" />-->
+                    <span *ngIf="phoneNumber.get('localLeadingZeros').errors?.pattern && phoneNumber.get('localLeadingZeros').touched"
+                          class="form-text invalid-feedback custom-invalid-feedback"> Only zeros allowed for Local Leading Zeros.</span>
+                    <span *ngIf="phoneNumber.get('localLeadingZeros').errors?.maxlength && phoneNumber.get('localLeadingZeros').touched"
+                          class="form-text invalid-feedback custom-invalid-feedback"> Only maximum of 4 zeros allowed for Local Leading Zeros.</span>
+
                   </div>
                   </div> <!--col end-->
 
@@ -377,13 +410,36 @@
         </div>
     </div>
 
-			<div class="form-group">
-				<button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Sign Up</button>
-			</div>
-			<div class="alert alert-warning" *ngIf="isSignUpFailed">
-				Signup failed!<br />{{ errorMessage }}
-			</div>
+      <div *ngIf="isUpDateUserProfile; else registerUserProfile" >
+        <div  class="form-group">
+				<button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Update Profile</button>
+			  </div>
+			  <div class="alert alert-warning" *ngIf="isSignUpFailed">
+          Update profile failed! <br />{{ errorMessage }}
+			  </div>
+     </div>
+
+      <ng-template #registerUserProfile>
+        <div  class="form-group">
+          <button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Register User</button>
+        </div>
+        <div class="alert alert-warning" *ngIf="isSignUpFailed">
+          Signup failed!<br /> {{ errorMessage }}
+        </div>
+      </ng-template>
+
 		</form>
-		<div class="alert alert-success" *ngIf="isSuccessful">Your registration is successful!</div>
+		<div class="alert alert-success" *ngIf="isSuccessful">
+
+      <div *ngIf="isUpDateUserProfile; else registerUserSuccess" >
+        User profile updated successfully
+
+      </div>
+
+        <ng-template #registerUserSuccess>
+          User registration successful
+        </ng-template>
+
+    </div>
 	</div>
 </div>

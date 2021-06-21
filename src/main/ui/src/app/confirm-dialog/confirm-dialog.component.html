@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>
+  {{title}}
+</h1>
+
+<div mat-dialog-content>
+  <p>{{message}}</p>
+</div>
+<!--<p>{{loadingMessage}} <span class="dot-flashing">   </span> </p>-->
+<div  *ngIf="loading && !successful">
+<!--  <p class="saving" >Saving<span>.</span><span>.</span><span>.</span></p>-->
+  <p  class="saving" style="color:violet;">{{loadingMessage}}<span>.</span><span>.</span><span>.</span></p>
+<mat-progress-spinner
+  class="spinner "
+  color="primary"
+  diameter="32"
+  mode="indeterminate" style="margin:0 auto;" >
+</mat-progress-spinner>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button color="accent" [disabled]="loading" (click)="onDismiss()">No</button>
+  <button mat-raised-button color="primary" [disabled]="loading" (click)="onConfirm()">Yes</button>
+</div>

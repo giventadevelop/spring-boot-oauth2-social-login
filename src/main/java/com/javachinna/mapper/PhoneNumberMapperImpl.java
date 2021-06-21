@@ -33,7 +33,7 @@ public class PhoneNumberMapperImpl implements PhoneNumberMapper {
         phoneNumberDTO.setCountryPrefix( phoneNumber.getCountryPrefix() );
         phoneNumberDTO.setCountyPrefix( phoneNumber.getCountyPrefix() );
         phoneNumberDTO.setLocalTelNumber( phoneNumber.getLocalTelNumber() );
-        phoneNumberDTO.setLocalLeadingZeros( phoneNumber.getLocalLeadingZeros() );
+        phoneNumberDTO.setLocalLeadingZeros(String.valueOf(phoneNumber.getLocalLeadingZeros()));
 
         return phoneNumberDTO;
     }
@@ -61,7 +61,8 @@ public class PhoneNumberMapperImpl implements PhoneNumberMapper {
         phoneNumber.setCountryPrefix( phoneNumberDTO.getCountryPrefix() );
         phoneNumber.setCountyPrefix( phoneNumberDTO.getCountyPrefix() );
         phoneNumber.setLocalTelNumber( phoneNumberDTO.getLocalTelNumber() );
-        phoneNumber.setLocalLeadingZeros( phoneNumberDTO.getLocalLeadingZeros() );
+        //phoneNumber.setLocalLeadingZeros(Byte.valueOf(phoneNumberDTO.getLocalLeadingZeros()));
+        phoneNumber.setLocalLeadingZeros(null);
 
         return phoneNumber;
     }

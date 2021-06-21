@@ -2,7 +2,7 @@ export interface PhoneNumber {
   phoneContactTypeId?: number;
   userId?: number;
   phoneId?: number;
-  localLeadingZeros?: number;
+  localLeadingZeros?: string;
   countyPrefix?: number;
   customLabel?: string;
   countryPrefix?: number;

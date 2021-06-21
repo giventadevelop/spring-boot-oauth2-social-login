@@ -67,6 +67,7 @@ public class AuthController {
      */
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
+        log.debug("post /signup");
         try {
            User retUser= userService.registerNewUser(userDTO);
         //   userService.saveuserRole(retUser);

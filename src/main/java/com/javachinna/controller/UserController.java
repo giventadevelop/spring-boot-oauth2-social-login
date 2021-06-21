@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.javachinna.config.CurrentUser;
 import com.javachinna.dto.LocalUser;
 import com.javachinna.dto.UserDTO;
+import com.javachinna.exception.ResourceNotFoundException;
+import com.javachinna.model.PhoneNumber;
 import com.javachinna.service.UserService;
 import com.javachinna.util.GeneralUtils;
 import lombok.AllArgsConstructor;
@@ -47,6 +49,19 @@ public class UserController {
 		return ResponseEntity.ok(GeneralUtils.buildUserInfo(user));
 	}
 
+	@DeleteMapping("/phone/{phoneId}")
+	public ResponseEntity<Void> deleteUserPhone(@PathVariable("phoneId") Long phoneId) throws ResourceNotFoundException {
+
+		PhoneNumber phoneNumber = userService.findUserPhone(phoneId).orElseThrow(() -> new ResourceNotFoundException("UserController " , "phone", phoneId));
+		userService.deleteUserPhone(phoneId);
+		return ResponseEntity.noContent().build();
+	}
+
+	/**
+	 * Delete user's phone number
+	 * @param userDto
+	 * @return
+	 */
 	@PostMapping("/user")
 	public ResponseEntity<UserDTO> updateUserProfile(@RequestBody UserDTO userDto) {
 		ObjectMapper mapper = new ObjectMapper();

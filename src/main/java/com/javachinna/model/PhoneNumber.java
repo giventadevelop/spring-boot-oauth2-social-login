@@ -19,7 +19,7 @@ public class PhoneNumber {
     @Column(name = "PHONE_ID")
     private Long phoneId;
 
-    @Column(name = "IS_PRIMARY_PHONE_NUMBER")
+    @Column(name = "IS_PRIMARY_PHONE_NUMBER", columnDefinition = "BOOLEAN")
     private Boolean isPrimaryPhoneNumber;
 
     @Column(name = "CUSTOM_LABEL")

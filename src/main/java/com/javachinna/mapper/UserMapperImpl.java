@@ -1,9 +1,5 @@
 package com.javachinna.mapper;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.annotation.Generated;
-
 import com.javachinna.dto.RoleDTO;
 import com.javachinna.dto.SocialProvider;
 import com.javachinna.dto.UserDTO;
@@ -13,6 +9,10 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Generated;
+import java.util.HashSet;
+import java.util.Set;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
@@ -104,6 +104,24 @@ public class UserMapperImpl implements UserMapper {
 
         }
         
+        return user;
+    }
+
+    @Override
+    public User userForUpdateProfile(UserDTO userDTO, User user) {
+
+
+        user.setEnabled( userDTO.getEnabled());
+        user.setDisplayName( userDTO.getDisplayName() );
+
+        Set<RoleDTO> set = userDTO.getRoles();
+        if ( set != null ) {
+            //  user.setRoles( new HashSet<Role>( set ) );
+        }
+
+        user.setPostalAddresses( postalAddressMapper.mapToEntities( userDTO.getPostalAddresses() ) );
+        user.setPhoneNumbers( phoneNumberMapper.mapToEntities( userDTO.getPhoneNumbers() ) );
+
         return user;
     }
 
