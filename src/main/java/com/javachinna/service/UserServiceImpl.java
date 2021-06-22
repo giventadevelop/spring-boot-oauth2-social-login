@@ -57,72 +57,60 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    @Transactional(value = "transactionManager",propagation = Propagation.REQUIRES_NEW)
-    public User registerNewUser(final UserDTO userDTO) throws UserAlreadyExistAuthenticationException {
+    @Transactional(value = "transactionManager", propagation = Propagation.REQUIRES_NEW)
+    public UserDTO registerNewUser(UserDTO userDTO) throws UserAlreadyExistAuthenticationException {
 
-       if ( userDTO.getUserId() == null && userRepository.existsByEmail(userDTO.getEmail())) {
+        if (userDTO.getUserId() == null && userRepository.existsByEmail(userDTO.getEmail())) {
             throw new UserAlreadyExistAuthenticationException("User with email id " + userDTO.getEmail() + " already exist");
         }
-         User user = null;
+        User user = null;
 
         Date now = Calendar.getInstance().getTime();
-        if ( userDTO.getUserId() == null){
+        if (userDTO.getUserId() == null) {
             user = buildUser(userDTO);
             user.setCreatedDate(now);
-        }else{
+        } else {
             Optional<User> userLoaded = userRepository.findById(userDTO.getUserId());
-            if(userLoaded.isPresent()) {
+            if (userLoaded.isPresent()) {
                 User user1 = userLoaded.get();
                 user = userMapper.userForUpdateProfile(userDTO, user1);
+
             }
         }
         user.setModifiedDate(now);
-       // user.setPostalAddresses(null);
-        Set<UserRole> userRoles=new HashSet<>();
+        // user.setPostalAddresses(null);
+        Set<UserRole> userRoles = new HashSet<>();
         // roles.stream().forEach(role -> userRoles.add(new UserRole(retUser.getId(),role.getRoleId())) );
-        UserRole userRole = new  UserRole();
-       // userRole.setUserId(retUser.getId());
+        UserRole userRole = new UserRole();
+        // userRole.setUserId(retUser.getId());
         userRole.setRoleId(1L);
         userRoles.add(userRole);
 
         user.setUserRoles(userRoles);
-        /*save a user first and then save the dependent entities
-        like user role ids in the join table and then the postalAddress and phone numbers.*/
-       final User retUser = userRepository.save(user);
-
-
-        // roles.stream().forEach(role -> userRoles.add(userRole) );
-       // userRoleRepository.saveAll(userRoles);
-
-       // postalAddressList.stream().forEach(postalAddress -> postalAddress.setUserId(retUser.getId()));
-        //postalAddressRepository.saveAll(postalAddressList);
-
-        //userRepository.flush();
-
-        // Set<Role> roles=user.getRoles();
-
-        return retUser;
+        user = userRepository.save(user);
+        userDTO = userMapper.userToUserDTO(user);
+        return userDTO;
     }
 
     @Override
     @Transactional(value = "transactionManager")
     public void saveuserRole(User retUser) {
-        Set roles=new HashSet();
+        Set roles = new HashSet();
 
-        Set<UserRole> userRoles=new HashSet<>();
+        Set<UserRole> userRoles = new HashSet<>();
         // roles.stream().forEach(role -> userRoles.add(new UserRole(retUser.getId(),role.getRoleId())) );
-        UserRole userRole = new  UserRole();
+        UserRole userRole = new UserRole();
         userRole.setUserId(retUser.getId());
         userRole.setRoleId(1L);
         userRoles.add(userRole);
-       // roles.stream().forEach(role -> userRoles.add(userRole) );
+        // roles.stream().forEach(role -> userRoles.add(userRole) );
         userRoleRepository.saveAll(userRoles);
         userRoleRepository.flush();
     }
 
     private User buildUser(final UserDTO userDTO) {
         User user = new User();
-        user=userMapper.userDTOToUser(userDTO);
+        user = userMapper.userDTOToUser(userDTO);
         /*user.setDisplayName(userDTO.getDisplayName());
         user.setEmail(userDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -146,8 +134,8 @@ public class UserServiceImpl implements UserService {
 
         OAuth2UserInfo oAuth2UserInfo = OAuth2UserInfoFactory.getOAuth2UserInfo(registrationId, attributes);
 
-        logger.info("received processUserRegistration oAuth2UserInfo "+ oAuth2UserInfo.getName());
-        logger.debug("received processUserRegistration oAuth2UserInfo "+ oAuth2UserInfo.getName());
+        logger.info("received processUserRegistration oAuth2UserInfo " + oAuth2UserInfo.getName());
+        logger.debug("received processUserRegistration oAuth2UserInfo " + oAuth2UserInfo.getName());
 
         if (StringUtils.isEmpty(oAuth2UserInfo.getName())) {
             if (!registrationId.equalsIgnoreCase("github")) {
@@ -169,11 +157,12 @@ public class UserServiceImpl implements UserService {
                 throw new OAuth2AuthenticationProcessingException(
                         "Looks like you're signed up with " + user.getProvider() + " account. Please use your " + user.getProvider() + " account to login.");
             }
-            logger.debug(" Save updateExistingUser userDetails :"+ userDetails.toString());
+            logger.debug(" Save updateExistingUser userDetails :" + userDetails.toString());
             user = updateExistingUser(user, oAuth2UserInfo);
         } else {
-            logger.debug(" Save registerNewUser oAuth2UserInfo :"+ oAuth2UserInfo.toString());
-            user = registerNewUser(userDetails);
+            logger.debug(" Save registerNewUser oAuth2UserInfo :" + oAuth2UserInfo.toString());
+            userDetails = registerNewUser(userDetails);
+            user = userMapper.userDTOToUser(userDetails);
         }
         if (user.getEmail() == null) {
             if (attributes.get("login") != null) {
@@ -215,8 +204,8 @@ public class UserServiceImpl implements UserService {
         user = userMapper.userDTOToJpaUser(existingUser, user);
         logger.trace("updateUserProfile updating User Profile");
         logger.debug("updateUserProfile updating User Profile before save line 153 :-");
-        user=userRepository.save(user);
-        existingUser=userMapper.userToUserDTO(user);
+        user = userRepository.save(user);
+        existingUser = userMapper.userToUserDTO(user);
         return existingUser;
         //return userMapper.userToUserDTO(userRepository.save(user));
     }
@@ -229,7 +218,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<PhoneNumber> findUserPhone(Long phoneId) {
-      return  phoneNumberRepository.findById(phoneId);
+        return phoneNumberRepository.findById(phoneId);
     }
 
     private User updateExistingUser(User existingUser, OAuth2UserInfo oAuth2UserInfo) {
@@ -244,17 +233,18 @@ public class UserServiceImpl implements UserService {
 
     /**
      * findUserById
+     *
      * @param id
      * @return
      */
-    @Transactional(readOnly  = true)
+    @Transactional(readOnly = true)
     @Override
     public UserDTO findUserById(Long id) {
-        UserDTO userDTO=null;
+        UserDTO userDTO = null;
         Optional<User> optionalUser = userRepository.findById(id);
-        if(optionalUser.isPresent()){
-          return  userDTO=userMapper.userToUserDTO(optionalUser.get());
+        if (optionalUser.isPresent()) {
+            return userDTO = userMapper.userToUserDTO(optionalUser.get());
         }
-        return  userDTO;
+        return userDTO;
     }
 }

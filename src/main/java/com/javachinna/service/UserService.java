@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public interface UserService {
 
-    public User registerNewUser(UserDTO signUpRequest) throws UserAlreadyExistAuthenticationException;
+    UserDTO registerNewUser(UserDTO signUpRequest) throws UserAlreadyExistAuthenticationException;
 
     @Transactional(value = "transactionManager")
     void saveuserRole(User retUser);

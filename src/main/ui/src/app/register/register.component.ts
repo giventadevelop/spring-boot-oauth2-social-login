@@ -372,9 +372,11 @@ export class RegisterComponent implements OnInit {
     console.log('user json', JSON.stringify(this.user));
     this.authService.register(this.user).subscribe(
       data => {
-        console.log(data);
+        console.log('reg/update return user data :', data);
+        this.user=data;
         this.isSuccessful = true;
         this.isSignUpFailed = false;
+        this.createForm();
       },
       err => {
         if (err.status === 500) {

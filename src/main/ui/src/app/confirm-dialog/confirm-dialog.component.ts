@@ -38,9 +38,9 @@ export class ConfirmDialogComponent implements OnInit {
     /*  this.loading = false;
       this.successful = true;*/
       this.deletePhoneNumber();
-    }, 10000);
+    }, 5000);
     if (!this.loading) {
-      this.dialogRef.close(true);
+      this.dialogRef.close(this.confirmDialogResult);
     }
   }
 

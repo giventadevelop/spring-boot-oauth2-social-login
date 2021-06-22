@@ -2,7 +2,6 @@ package com.javachinna.controller;
 
 import com.javachinna.dto.*;
 import com.javachinna.exception.UserAlreadyExistAuthenticationException;
-import com.javachinna.model.User;
 import com.javachinna.security.jwt.TokenProvider;
 import com.javachinna.service.LocalUserDetailService;
 import com.javachinna.service.RefreshTokenService;
@@ -68,16 +67,18 @@ public class AuthController {
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO) {
         log.debug("post /signup");
+
         try {
-           User retUser= userService.registerNewUser(userDTO);
+            userDTO= userService.registerNewUser(userDTO);
         //   userService.saveuserRole(retUser);
         } catch (UserAlreadyExistAuthenticationException e) {
             log.error("Exception Ocurred", e);
             return new ResponseEntity<>(new ApiResponse(false, "Email Address already in use!"), HttpStatus.BAD_REQUEST);
         }
-        return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
-    }
+        //return ResponseEntity.ok().body(new ApiResponse(true, "User registered successfully"));
+        return ResponseEntity.ok().body(userDTO);
 
+    }
 
     @PostMapping("/refresh/token")
     public ResponseEntity<?> refreshTokens(@Valid @RequestBody LoginRequest loginRequest, Principal principal) throws Exception {
@@ -97,7 +98,6 @@ public class AuthController {
         Authentication authentication = null;
         if (!isRefreshToken) {
             authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
             jwt = tokenProvider.createToken(authentication,null );
             // cretae new refreshToken if not refreshing token
@@ -132,4 +132,3 @@ public class AuthController {
         return ResponseEntity.status(OK).body("Refresh Token Deleted Successfully!!");
     }
 }
-
