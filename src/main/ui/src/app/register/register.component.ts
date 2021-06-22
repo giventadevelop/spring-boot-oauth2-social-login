@@ -528,9 +528,11 @@ export class RegisterComponent implements OnInit {
     dialogRef.afterClosed().subscribe(dialogResult => {
       this.confirmDialogResult = dialogResult;
       console.log('Not deleting phone number this time ');
+      if(this.confirmDialogResult){
       if(this.confirmDialogResult.confirmStatus){
         this.phoneNumberGroupList.removeAt(index);
-      }else{
+      }
+      } else{
         console.log('Not deleting phone number this time ');
       }
 
