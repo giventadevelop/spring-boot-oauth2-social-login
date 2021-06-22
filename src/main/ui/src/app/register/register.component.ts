@@ -15,6 +15,7 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {AlertDialogComponent} from "../alert-dialog/alert-dialog.component";
 import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
+import {ConfirmDialogResult} from "../common/confirm.dialog.result.interface";
 
 @Component({
   selector: 'app-register',
@@ -87,7 +88,7 @@ export class RegisterComponent implements OnInit {
     customLabel           : FormControl | undefined;
     primaryPhoneIndex: any=null;
     closeModal: string;
-    confirmDialogResult: string = '';
+    confirmDialogResult= {} as ConfirmDialogResult;
 
    constructor(private modalService: NgbModal,private formBuilder: FormBuilder,private userService: UserService, private authService: AuthService,
               private uiDropDownLoaderService: UiDropDownLoaderService,
@@ -526,12 +527,8 @@ export class RegisterComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(dialogResult => {
       this.confirmDialogResult = dialogResult;
-      if(this.confirmDialogResult){
-       /* let phoneNumberToDelete = ((this.registerForm.get('phoneNumbers') as FormArray).at(Number(index)) as FormGroup).getRawValue();
-        let phoneNumberToDeleteJson=JSON.stringify(phoneNumberToDelete)
-        this.phoneNumber = JSON.parse(phoneNumberToDeleteJson);*/
-       // this.phoneNumber=Object.assign( this.phoneNumber, phoneNumberToDelete);
-       // this.deletePhoneNumber( this.phoneNumber,index);
+      console.log('Not deleting phone number this time ');
+      if(this.confirmDialogResult.confirmStatus){
         this.phoneNumberGroupList.removeAt(index);
       }else{
         console.log('Not deleting phone number this time ');

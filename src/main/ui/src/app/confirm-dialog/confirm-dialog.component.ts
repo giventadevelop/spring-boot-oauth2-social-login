@@ -2,6 +2,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
 import {PhoneNumber} from "../common/phone.number.interface";
 import {UserService} from "../_services/user.service";
+import {User} from "../common/user.interface";
+import {ConfirmDialogResult} from "../common/confirm.dialog.result.interface";
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -14,7 +16,8 @@ export class ConfirmDialogComponent implements OnInit {
   loadingMessage: string;
   loading = false;
   successful = false;
-  phoneId: any
+  phoneId: any;
+  confirmDialogResult = {} as ConfirmDialogResult;
   constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>,
               @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel, private userService: UserService) {
     // Update view with given values
@@ -52,10 +55,13 @@ export class ConfirmDialogComponent implements OnInit {
    * @param index
    */
   deletePhoneNumber() {
+
+    if(this.phoneId){
     this.userService.deleteUserPhone(this.phoneId).subscribe(
       data => {
        // console.log('phone data json getUserById', JSON.stringify(data));
-        this.dialogRef.close(true);
+        this.confirmDialogResult.confirmStatus=true;
+        this.dialogRef.close(this.confirmDialogResult);
 
       },
       err => {
@@ -64,6 +70,7 @@ export class ConfirmDialogComponent implements OnInit {
         // this.errorMessage = 'An unexpected error occurred loading user in loadUserDetails';
       }
     );
+    }
   }
 }
 
@@ -74,6 +81,6 @@ export class ConfirmDialogComponent implements OnInit {
  */
 export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string, public loadingMessage: string,public inPutData: any) {
+  constructor(public title: string, public message: string, public loadingMessage: string,public inPutData: any, ) {
   }
 }

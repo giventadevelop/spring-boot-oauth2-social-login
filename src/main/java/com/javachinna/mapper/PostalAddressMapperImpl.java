@@ -91,7 +91,7 @@ public class PostalAddressMapperImpl implements PostalAddressMapper {
             return null;
         }
 
-        Set<PostalAddressDTO> set = new HashSet<PostalAddressDTO>( Math.max( (int) ( PostalAddresses.size() / .75f ) + 1, 16 ) );
+        Set<PostalAddressDTO> set = new HashSet<PostalAddressDTO>(  );
         for ( PostalAddress postalAddress : PostalAddresses ) {
             set.add( postalAddressToPostalAddressDTO( postalAddress ) );
         }
@@ -105,7 +105,7 @@ public class PostalAddressMapperImpl implements PostalAddressMapper {
             return null;
         }
 
-        Set<PostalAddress> set = new HashSet<PostalAddress>( Math.max( (int) ( PostalAddresses.size() / .75f ) + 1, 16 ) );
+        Set<PostalAddress> set = new HashSet<PostalAddress>(  );
         for ( PostalAddressDTO postalAddressDTO : PostalAddresses ) {
             set.add( postalAddressDTOToPostalAddress( postalAddressDTO ) );
         }

@@ -247,6 +247,7 @@ public class UserServiceImpl implements UserService {
      * @param id
      * @return
      */
+    @Transactional(readOnly  = true)
     @Override
     public UserDTO findUserById(Long id) {
         UserDTO userDTO=null;

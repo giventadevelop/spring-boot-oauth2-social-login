@@ -38,7 +38,7 @@ public class PhoneNumber {
     private String localTelNumber;
 
     @Column(name = "LOCAL_LEADING_ZEROS")
-    private Byte localLeadingZeros;
+    private String localLeadingZeros;
 
     /*uni-directional many-to-one association to PHONE_CONTACT_TYPE table
     in this mapping you don't need to give the member field above and the
