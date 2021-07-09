@@ -14,8 +14,11 @@ import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
 //import { BsModalRef } from '@ng--bootstrap/modal/bs-modal-ref.service';
 import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {AlertDialogComponent} from "../alert-dialog/alert-dialog.component";
-import {ConfirmDialogComponent, ConfirmDialogModel} from "../confirm-dialog/confirm-dialog.component";
+import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 import {ConfirmDialogResult} from "../common/confirm.dialog.result.interface";
+import {ConfirmDialogModel} from '../common/confirm.dialog.model.class';
+import {Router} from '@angular/router';
+import {SuccessDialogComponent} from '../success-dialog/success-dialog.component';
 
 @Component({
   selector: 'app-register',
@@ -93,7 +96,7 @@ export class RegisterComponent implements OnInit {
    constructor(private modalService: NgbModal,private formBuilder: FormBuilder,private userService: UserService, private authService: AuthService,
               private uiDropDownLoaderService: UiDropDownLoaderService,
               private token: TokenStorageService,
-              private matDialog: MatDialog) {
+              private matDialog: MatDialog, private router: Router) {
   }
 
   ngOnInit(): void {
@@ -150,7 +153,6 @@ export class RegisterComponent implements OnInit {
      }
 
   }
-
 
   private loadUserDetails(currentLoggedInUser: any) {
     let userId=this.currentLoggedInUser.id;
@@ -303,21 +305,11 @@ export class RegisterComponent implements OnInit {
    * @param index
    */
   removePhoneNumber(index: number) {
-
     this.removePhoneConfirmDialog(index);
-
-   /* let phoneNumberToDelete = ((this.registerForm.get('phoneNumbers') as FormArray).at(Number(index)) as FormGroup).getRawValue();
-     let phoneNumberToDeleteJson=JSON.stringify(phoneNumberToDelete)
-    this.phoneNumber = JSON.parse(phoneNumberToDeleteJson);
-   //  this.phoneNumber=Object.assign( this.phoneNumber, phoneNumberToDelete);
-    this.deletePhoneNumber( this.phoneNumber,index);*/
-   // this.phoneNumberGroupList.removeAt(index);
-
-
   }
 
   /**
-   * called from delete dialog and calles user service
+   * called from delete dialog and calls user service
    * to delete from DB
    * @param index
    */
@@ -334,14 +326,10 @@ export class RegisterComponent implements OnInit {
   }
 
   getPostalAddressFormGroup(index: number): FormGroup {
-    // this.contactList = this.form.get('contacts') as FormArray;
-    // @ts-ignore
-    return this.postalAddressList.controls[index] as FormGroup;
+      return this.postalAddressList.controls[index] as FormGroup;
   }
 
   getPhoneNumberFormGroup(index: number): FormGroup {
-    // this.contactList = this.form.get('contacts') as FormArray;
-    // @ts-ignore
     const formGroup = this.phoneNumberList.controls[index] as FormGroup;
     return formGroup;
   }
@@ -364,9 +352,6 @@ export class RegisterComponent implements OnInit {
       }
     }
 
-   /* if(!this.isPrimaryFix()){
-      return;
-    }*/
     console.log('this.user', this.user);
 
     console.log('user json', JSON.stringify(this.user));
@@ -376,7 +361,8 @@ export class RegisterComponent implements OnInit {
         this.user=data;
         this.isSuccessful = true;
         this.isSignUpFailed = false;
-        this.createForm();
+        // this.createForm();
+        this.regnSuccessConfirmDialog();
       },
       err => {
         if (err.status === 500) {
@@ -404,30 +390,15 @@ export class RegisterComponent implements OnInit {
    isPrimaryFix() {
      var self = this;
     let iterPhoneNumbers = this.user.phoneNumbers;
-    const fixedPhoneNumbers : PhoneNumber[]=[];
-    //let fixedPhoneNumbers = array<PhoneNumber>[];
+
     let trueCount=0;
     iterPhoneNumbers.forEach(function (phoneNumber) {
-      //if (typeof phoneNumber.isPrimaryPhoneNumber==="undefined" || phoneNumber.isPrimaryPhoneNumber) {
       if (phoneNumber.isPrimaryPhoneNumber
       ) {
         trueCount=trueCount+1;
-       // this.primaryPhoneIndex
-        // someglobal is now safe to use
-       // phoneNumber.isPrimaryPhoneNumber=true;
       }
+ });
 
-      /*fixedPhoneNumbers.push(phoneNumber);
-      trueCount=trueCount+1;
-      console.log(phoneNumber);*/
-    });
-
-  /*  fixedPhoneNumbers.forEach(function (phoneNumber) {
-      if(phoneNumber.isPrimaryPhoneNumber){
-        trueCount=trueCount+1;
-      }
-    });
-*/
     if(trueCount===0){
       this.primaryPhoneIndex=null;
 
@@ -504,16 +475,10 @@ export class RegisterComponent implements OnInit {
     this.matDialog.open(AlertDialogComponent, dialogConfig);
    }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return 'by pressing ESC';
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return 'by clicking on a backdrop';
-    } else {
-      return  `with: ${reason}`;
-    }
-  }
-
+  /**
+   * remove phone dialog
+   * @param index
+   */
   removePhoneConfirmDialog(index:number): void {
     const message = `Do you want to delete this phone number?`;
     const dialogLoadingMessage = 'Please wait deleting' ;
@@ -539,6 +504,30 @@ export class RegisterComponent implements OnInit {
       }
 
     });
-
   }
+
+  /**
+   * Registration Success Confirm Dialog
+   * @param index
+   */
+  regnSuccessConfirmDialog(): void {
+    const message = `You have successfully registered !`;
+    const dialogData = new ConfirmDialogModel("Success", message," ",0);
+
+    const dialogRef = this.matDialog.open(SuccessDialogComponent, {
+      maxWidth: "600px",
+      maxHeight: "500px",
+      data: dialogData
+    });
+
+    setTimeout(() => {
+      dialogRef.close();
+    }, 5000) ;
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      this.confirmDialogResult = dialogResult;
+      console.log('Not deleting phone number this time ');
+      this.router.navigateByUrl('/web-home');
+    });
+  }
+
 }

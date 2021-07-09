@@ -20,6 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.stream.Collectors;
 
 @ControllerAdvice
+@ResponseStatus
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
 	public GlobalExceptionHandler() {

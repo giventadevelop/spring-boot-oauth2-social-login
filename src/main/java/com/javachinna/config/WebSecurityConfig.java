@@ -76,7 +76,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authenticationEntryPoint(new RestAuthenticationEntryPoint())
 				.and()
 			.authorizeRequests()
-				.antMatchers("/","/home","/assets/**",
+				.antMatchers("/","/*.jpg","/*.png",
+						"/home","/assets/**","/web/**",
+						"/css/*","/images/*","css/*","images/*",
 						"/polyfills.js","polyfills.js",
 						"/main.js","main.js",
 						"/styles.css","styles.css",

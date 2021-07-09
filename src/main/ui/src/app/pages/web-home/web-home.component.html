@@ -1,0 +1,177 @@
+  <div class="content" >
+
+    <div class="clear"></div>
+    <div *ngIf="hideLoggedOutMessage"  class="alert alert-success alert-dismissible fade show" role="alert" >
+      <strong> You have successfully logged out.</strong>
+      <button type="button" class="btn-close"  data-bs-dismiss="alert" aria-label="Close" (click)="fadeOutLoggedClose()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+<!--<div class="bodywrap homepage">-->
+    <div id="topslider" class="tabs-bottom ui-tabs ui-widget ui-widget-content ui-corner-all">
+
+      <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+
+        <li class="first ui-corner-top ui-state-default " [class.ui-tabs-selected]="pageFragments[0].fragmentVisible" >  <a (mouseover)="enableFragment(0)" class="ico-1" ><span><b>Flexible</b>
+                                                Marketing</span></a></li>
+        <!--<li class="ui-corner-top ui-tabs-selected ui-state-default ui-state-active ico-2" (click)="enableFragment(1)"><span><b>Schedule</b>
+                                                Advertisement</span></li>-->
+        <li class="ui-corner-top ui-state-default " [class.ui-tabs-selected]="pageFragments[1].fragmentVisible"><a (mouseover)="enableFragment(1)" class="ico-2" ><span><b>Schedule</b>
+                                                Advertisement</span></a></li>
+        <li class="ui-corner-top ui-state-default" [class.ui-tabs-selected]="pageFragments[2].fragmentVisible"> <a (mouseover)="enableFragment(2)" class="ico-3"><span><b>Digital</b>
+                                                Signage</span></a></li>
+        <!--<li class="ui-corner-top ui-state-default"><a href="#fragment-4" class="ico-4"><span><b>Powerful</b>
+                    analytics</span></a></li>-->
+        <li class="ui-corner-top ui-state-default" [class.ui-tabs-selected]="pageFragments[3].fragmentVisible"><a (mouseover)="enableFragment(3)" class="ico-4"><span><b>Android Media Signage</b>
+                                    Player</span></a></li>
+
+      </ul>
+
+      <div style="" class="ui-tabs-panel ui-widget-content ui-corner-bottom"  [class.ui-tabs-hide]="pageFragments[0].fragmentVisible" id="fragment-1" >
+        <div class="left-text"> <span class="slide-title"><strong><span>Flexible</span>
+                                                Marketing</strong></span> <a href="#"><img src="../../assets/images/btn_plus.gif" alt="" class="btn-plus" width="41"  height="41" /></a>
+          <p>Flexible Digital Sign board can control various contents such as
+            Movie, flash, Image files etc. Product is a powerful tool for sales
+            and marketing. </p>
+        </div>
+        <div class="right-text"> <a href="#"><img src="../../assets/images/img-6.png" alt="" width="483"  height="300" /></a>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div style="" class="ui-tabs-panel ui-widget-content ui-corner-bottom"  [class.ui-tabs-hide]="pageFragments[1].fragmentVisible"  id="fragment-2">
+        <div class="left-text"> <span class="slide-title"><strong><span>Schedule</span>
+                                                Advertisement</strong></span> <a href="#"><img src="../../assets/images/btn_plus.gif" alt="" class="btn-plus" width="41"  height="41" /></a>
+          <p>We make Digital Signage Software that enables you to communicate
+            your message to your audience. You can schedule your videos, images,
+            flash according to your marketing strategies. </p>
+        </div>
+        <div class="right-text"> <a href="#"><img src="../../assets/images/img-7.png" alt="" width="483"  height="300" /></a>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <div style="" class="ui-tabs-panel ui-widget-content ui-corner-bottom"  [class.ui-tabs-hide]="pageFragments[2].fragmentVisible" id="fragment-3">
+        <div class="left-text"> <span class="slide-title"><strong><span>Digital</span>
+                                                Signage</strong></span> <a href="#"><img src="../../assets/images/btn_plus.gif" alt="" class="btn-plus" width="41"  height="41" /></a>
+          <p>Digital signage is everywhere. We see it in airports, restaurants,
+            banks, shopping malls and anywhere else customers we provide software
+            to control these signage device according to your requirement. </p>
+        </div>
+        <div class="right-text"> <img src="../../assets/images/img-5.png" alt="" width="483"  height="300" />
+        </div>
+        <div class="clear"></div>
+      </div>
+
+      <div style="" class="ui-tabs-panel ui-widget-content ui-corner-bottom" [class.ui-tabs-hide]="pageFragments[3].fragmentVisible" id="fragment-4">
+        <div class="left-text"> <span class="slide-title"><strong><span>Android Media Signage</span>
+                                                Player </strong> </span> <a href="#"><img src="../../assets/images/btn_plus.gif" alt="" class="btn-plus" width="41"  height="41" /></a>
+          <p>Available for free download in the Google Play previously Android Market. </p>
+        </div>
+        <div class="right-text"> <img src="../../assets/images/adwiise_ggle_play.jpg" alt="" width="483" height="300" />
+        </div>
+        <div class="clear"></div>
+      </div>
+      <!--<div style="" class="ui-tabs-panel ui-widget-content ui-corner-bottom ui-tabs-hide" id="fragment-4">
+         <div class="left-text"> <span class="slide-title"><strong><span>Powerful</span>
+                     analytics </strong> </span> <a href="#"><img src="../../assets/images/btn_plus.gif" alt="" class="btn-plus" width="41"  height="41" /></a>
+             <p>Analytics will be extremely powerful which will help you market your
+                 product well. </p>
+         </div>
+         <div class="right-text"> <img src="../../assets/images/img-8.png" alt="" width="483" height="300" />
+         </div>
+         <div class="clear"></div>
+     </div> -->
+
+      <div class="clear"></div>
+    </div>
+    <!-- top-slider -->
+    <!-- middle -->
+    <div class="middle">
+      <!-- content -->
+      <div class="wrapper">
+        <div class="content">
+          <!-- top baner-->
+          <div class="upper-title">WHY USE OUR SERVICES?</div>
+          <h1>iNfoAdPlatform</h1>
+          <div class="mobile-box">
+            <div class="box-text">
+              <p>The iNfoAdPlatform product solves the problem of managing advertisement
+                and data content for small business and the general public in
+                a very cost effective manner using wireless/mobile technology.
+                <br />
+                <a class="iNfoAdPlatform" href="#"><img src="../../assets/images/btn_plus_white.gif" alt="" class="alignright" width="35"  height="35" /></a></p>
+            </div>
+          </div>
+          <!--/ top baner-->
+          <!-- two-columns -->
+          <div class="two-columns">
+            <div class="col-1">
+              <!--<h2>LATEST NEWS AND INFO</h2>-->
+              <h3><a href="#">How It Works?</a></h3>
+              <div class="short-entry" style="text-align:justify;padding:12px">
+                <p> A store would have one or multiple displays with the iNfoAdPlatform
+                  wireless STB attached. A video stream will be sent to the display
+                  with a combination of news, stories, and advertising. A customer
+                  can customize the video stream as desired and each customer
+                  has a unique stream, or the customer can just buy commercial
+                  time in the stream that serves multiple customers.</p>
+              </div>
+              <!-- <ul>
+    <li><a href="#">Connect to Remote Support</a></li>
+                        <li><a href="#">Via telephone: 800.898.3838</a></li>
+                        <li><a href="#">Troubleshooting F.A.Q.</a></li>
+                    </ul>-->
+            </div>
+            <div class="gutter"></div>
+            <div class="col-1">
+              <!--<h2>WANT TO LEARN MORE?</h2>-->
+              <h3><a href="#">Advantage</a></h3>
+              <div class="short-entry" style="text-align:justify;padding:12px;border-left:3px solid #0a58ca">
+                <p>The solution will provide streaming video to static content
+                  over the 3G wireless network and also will be backed by the
+                  high performance ad network servers across the nation. The product
+                  is designed in such a fashion that even a customer with a single
+                  store can subscribe to one set top box or device and also scalable
+                  to retailers with even 10,000 stores or more.</p>
+              </div>
+              <!-- <ul class="list-icons">
+    <li class="ico-pdf"><a href="#">Download the PDF file</a></li>
+                        <li class="ico-arr"><a href="#">Sign up for a plan</a></li>
+                    </ul> -->
+            </div>
+            <div class="clear"></div>
+          </div>
+          <!--/ two-columns -->
+        </div>
+      </div>
+      <!--/ content -->
+      <!-- navigation -->
+      <div class="navigation">
+        <div class="testimonials">
+          <h3>Market Research And Analysis</h3>
+          <p class="quote">"The latest forecast for Internet advertising is out
+            from eMarketer, which says that in the U.S. it will rise from $21
+            billion this year to $42 billion in 2011."</p>
+          <p class="author"><strong>Interactive Advertising Bureau and PWC</strong></p>
+          <a href="#" class="btn-more marketresearch">view more</a> </div>
+        <div class="recent-posts">
+          <div class="recent-posts-top"></div>
+          <div class="space">
+            <h3>Software Platform Details</h3>
+            <ul>
+              <li> <a href="#">Remote management of the SetTop Boxes by operators.</a>
+              </li>
+              <li> <a href="#">Capability for Customers to Upload custom Ads and
+                Broadcasts.</a> </li>
+              <li> <a href="#">Customer Billing and details management.</a> </li>
+              <li> <a href="#">Customer Service features.</a> </li>
+            </ul>
+          </div>
+        </div>
+        <div class="clear"></div>
+      </div>
+      <!--/ navigation -->
+      <div class="clear"></div>
+    </div>
+
+   <!--</div> &lt;!&ndash;bodywrap&ndash;&gt;-->
+  </div> <!--content-->

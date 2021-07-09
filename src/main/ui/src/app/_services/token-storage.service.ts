@@ -8,6 +8,7 @@ const USER_ID = 'user_id';
 const USER_EMAIL = 'user_email';
 const REFRESH_TOKEN = 'refersh_token';
 const TOKEN_EXPIRY_TIME = 'token_expiry_time';
+const USER_LOGGED_OUT = 'user_logged_out';
 
 @Injectable({
   providedIn: 'root',
@@ -19,6 +20,15 @@ export class TokenStorageService {
 
   signOut(): void {
     window.sessionStorage.clear();
+  }
+
+  public userLoggedOut(): void {
+    //window.sessionStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.setItem(USER_LOGGED_OUT, USER_LOGGED_OUT);
+  }
+
+  public getUserLoggedOut(): string {
+    return sessionStorage.getItem(USER_LOGGED_OUT);
   }
 
   public saveToken(token: string): void {

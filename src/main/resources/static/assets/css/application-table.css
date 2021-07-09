@@ -1,0 +1,127 @@
+@CHARSET "UTF-8";
+
+#mainbody div.table
+{
+	margin: 0;
+	padding: 0 20px 10px 20px;
+	clear: both;
+	overflow: hidden;
+}
+
+#mainbody div.table table
+{
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	border-spacing: 0px;
+}
+
+#mainbody div.table table th
+{
+	padding: 10px;
+	background: #eeeeee;
+	/*border-left: 1px solid #cdcdcd;
+	border-bottom: 1px solid #cdcdcd;*/
+	border: 1px solid #cdcdcd;
+}
+
+#mainbody div.table table th.last
+{
+	border-right: 1px solid #cdcdcd;
+}
+
+#mainbody div.table table th.left
+{
+	text-align: left;   
+}
+
+#mainbody div.table table th.right
+{
+	text-align: right;   	
+}
+
+#mainbody div.table table th.center
+{
+	text-align: center;   
+}
+
+#mainbody div.table table th.selected
+{
+	padding: 0;
+	vertical-align: middle;
+}
+
+#mainbody div.table table th.selected input
+{
+	margin: 0;	
+}
+
+#mainbody div.table table td
+{
+	padding: 10px;
+	background: #ffffff;
+	/*border-left: 1px solid #cdcdcd;
+	border-bottom: 1px solid #cdcdcd;*/
+	border: 1px solid #cdcdcd;
+}
+
+#mainbody div.table table td.last
+{
+	border-right: 1px solid #cdcdcd;	
+}
+
+#mainbody div.table table td.center
+{
+	text-align: center;   
+}
+
+#mainbody div.table table tr.selected td
+{
+	background: #FFFFCC;
+}
+
+#mainbody div.table table td.selected
+{
+	padding: 0;
+	width: 3%;
+	text-align: center;
+	vertical-align: middle;
+}
+
+#mainbody div.table table td.selected input
+{
+	margin: 0;	
+}
+
+#mainbody div.table table td.title
+{
+	width: 45%;
+	text-align: left;
+}
+
+#mainbody div.table table td.price
+{
+	width: 10%;
+	text-align: center;
+}
+
+#mainbody div.table table td.date
+{
+	width: 33%;
+	text-align: center;
+}
+
+#mainbody div.table table td.category
+{
+	width: 10%;
+	text-align: center;
+}
+
+label.error {
+	font-weight: bold;
+	color: red;
+}
+
+input.error {
+	border: 2px solid red;
+}

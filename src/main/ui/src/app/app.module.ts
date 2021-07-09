@@ -28,6 +28,15 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { AlertDialogComponent } from './alert-dialog/alert-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { WebHomeComponent } from './pages/web-home/web-home.component';
+import { WebFooterComponent } from './pages/web-footer/web-footer.component';
+import { WebHeaderComponent } from './pages/web-header/web-header.component';
+import { SuccessDialogComponent } from './success-dialog/success-dialog.component';
+import { WebServicesComponent } from './pages/web-services/web-services.component';
+import { WebPricingComponent } from './pages/web-pricing/web-pricing.component';
+import { WebAboutComponent } from './pages/web-about/web-about.component';
+import { WebContactComponent } from './pages/web-contact/web-contact.component';
+import { WebHowitworksComponent } from './pages/web-howitworks/web-howitworks.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +49,16 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
     BoardModeratorComponent,
     BoardUserComponent,
     AlertDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    WebHomeComponent,
+    WebFooterComponent,
+    WebHeaderComponent,
+    SuccessDialogComponent,
+    WebServicesComponent,
+    WebPricingComponent,
+    WebAboutComponent,
+    WebContactComponent,
+    WebHowitworksComponent
   ],
     imports: [
         BrowserModule,

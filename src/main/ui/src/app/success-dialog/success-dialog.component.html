@@ -1,0 +1,12 @@
+  <h1 mat-dialog-title>
+    {{title}}
+  </h1>
+
+  <div mat-dialog-content>
+    <img src="../assets/images/success.png" alt="" height="150"  width="150"  />
+    <p>{{message}}</p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary"  (click)="onConfirm()">OK</button>
+  </div>

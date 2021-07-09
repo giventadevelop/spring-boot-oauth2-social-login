@@ -8,8 +8,15 @@ import { ProfileComponent } from './profile/profile.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
+import {WebHomeComponent} from './pages/web-home/web-home.component';
+import {WebServicesComponent} from './pages/web-services/web-services.component';
+import {WebPricingComponent} from './pages/web-pricing/web-pricing.component';
+import {WebAboutComponent} from './pages/web-about/web-about.component';
+import {WebContactComponent} from './pages/web-contact/web-contact.component';
+import {WebHowitworksComponent} from './pages/web-howitworks/web-howitworks.component';
 
 const routes: Routes = [
+
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
@@ -17,12 +24,23 @@ const routes: Routes = [
   { path: 'user', component: BoardUserComponent },
   { path: 'mod', component: BoardModeratorComponent },
   { path: 'admin', component: BoardAdminComponent },
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: 'web-home', component: WebHomeComponent },
+  { path: 'web-services', component: WebServicesComponent },
+  { path: 'web-pricing', component: WebPricingComponent },
+  { path: 'web-contact', component: WebContactComponent },
+  { path: 'web-howitworks', component: WebHowitworksComponent },
+  { path: 'logout', redirectTo: '/web-home'},
+  /*{ path: '', component: HomeComponent }*/
+  /*{ path: 'logout',  'web-home/logout' },*/
+ /* { path: '', component: WebHomeComponent }*/
+  /*{ path: '', component: WebHomeComponent }*/
+  /*{ path: '', redirectTo: '/web-home', pathMatch: 'full' }*/
+  { path: '', component: WebHomeComponent }
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, {
+    RouterModule.forRoot(routes, {useHash:true,
       relativeLinkResolution: 'legacy',
     }),
   ],

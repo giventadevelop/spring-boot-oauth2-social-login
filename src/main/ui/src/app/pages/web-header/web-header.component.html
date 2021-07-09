@@ -1,0 +1,50 @@
+
+<!--<div class="bodywrap homepage">-->
+<!--  <div class="container">-->
+    <!-- header -->
+<div class="content" width="50%" margin="auto">
+<div class="header" xmlns="http://www.w3.org/1999/html">
+      <!--  <s:actionmessage cssClass="infomsg" cssStyle="background-color: #FFF1A8; display: block; left: 370px; margin: 10px 100px 0; padding: 5px; position: fixed; text-align: center; top: 10px; width: 300px;	-moz-border-radius: 1em 1em 1em 1em; -webkit-border-radius: 1em 1em 1em 1em; border-radius: 1em 1em 1em 1em;"/>-->
+      <div class="logo"><a href="home"><img src="../assets/images/logo02.png" alt="C3 Clean Glassy Corporate" width="238" border="0" height="78" /></a></div>
+
+      <div class="login" *ngIf="!isUserLoggedIn;else userLoggedIn">
+        <a href="/register" class="nav-link" routerLink="register"><img height="35" border="0" width="175" alt="Free Sign Up" src="../assets/images/btn-signup.gif" /></a><a href="pricing"><img height="35" border="0" width="135" alt="Plans and Pricing" src="../assets/images/btn-plans.gif" /></a>
+       <!-- <p> <a href="/login" class="nav-link" routerLink="login">&lt;!&ndash;Already registered?&ndash;&gt; Sign In. </a>  <a href="forgotPassword">Forgot Password ?</a></p>-->
+        <p> <a  class="nav-link" [routerLink]="['/login']"><!--Already registered?--> Sign In. </a>  <a href="forgotPassword">Forgot Password ?</a></p>
+        <p class="logintext">
+          <!-- <s:form theme="simple" action="processLogin">
+             <s:textfield name="userId" id="userId" size="17" />
+             <s:password name="password" id="password" size="17" />
+             <s:submit value="login" />
+           </s:form>-->
+        </p>
+      </div>
+
+     <ng-template #userLoggedIn>
+      <div style="width:34%;margin-left:auto;padding-right:3%;">
+        <a href="/register" class="nav-link" routerLink="register"> Profile </a>
+        <p> <a class="nav-link" (click)="logout()"><!--Already registered?--> Logout </a>  </p>
+
+      </div>
+     </ng-template>
+      <div class="topmenu">
+        <ul>
+          <li><a [routerLink]="['/web-home']" class="active"><span>Home</span></a></li>
+          <li><a [routerLink]="['/web-services']"><span>Services</span></a></li>
+          <li><a [routerLink]="['/web-pricing']"><span>Pricing</span></a></li>
+          <!--  <li><a href="work.html"><span>Work</span></a></li>-->
+          <li><a  [routerLink]="['/web-about']"><span>About</span></a></li>
+          <li><a  [routerLink]="['/web-contact']"><span>Contact</span></a></li>
+          <!-- <li class="last"><a href="blog"><span>Blog</span></a></li> -->
+          <li class="last"><a [routerLink]="['/web-howitworks']"><span>How it works?</span></a></li>
+
+        </ul>
+
+      </div>
+    </div>
+    <div class="clear"></div>
+
+    <!--/ header -->
+ <!-- </div> &lt;!&ndash;container&ndash;&gt;-->
+<!--  </div> &lt;!&ndash;bodywrap&ndash;&gt;-->
+ </div>  <!--content-->

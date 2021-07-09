@@ -1,9 +1,8 @@
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+  import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Component, OnInit, Inject } from '@angular/core';
-import {PhoneNumber} from "../common/phone.number.interface";
 import {UserService} from "../_services/user.service";
-import {User} from "../common/user.interface";
 import {ConfirmDialogResult} from "../common/confirm.dialog.result.interface";
+  import {ConfirmDialogModel} from "../common/confirm.dialog.model.class";
 
 @Component({
   selector: 'app-confirm-dialog',
@@ -32,13 +31,10 @@ export class ConfirmDialogComponent implements OnInit {
   }
 
   onConfirm(): void {
-    // Close the dialog, return true
     this.loading = true;
     setTimeout(() => {
-    /*  this.loading = false;
-      this.successful = true;*/
       this.deletePhoneNumber();
-    }, 5000);
+    }, 2000);
     if (!this.loading) {
       this.dialogRef.close(this.confirmDialogResult);
     }
@@ -68,20 +64,15 @@ export class ConfirmDialogComponent implements OnInit {
       err => {
         console.log(err.error);
         this.loadingMessage='An unexpected error occurred loading user in loadUserDetails'
-        // this.errorMessage = 'An unexpected error occurred loading user in loadUserDetails';
       }
     );
+    }else{
+      // case where there is no phone id then just return and get it deleted from the array and no  backend call
+      this.confirmDialogResult.confirmStatus=true;
+      this.dialogRef.close(this.confirmDialogResult);
+      this.loading = false;
     }
   }
 }
 
-/**
- * Class to represent confirm dialog model.
- *
- * It has been kept here to keep it as part of shared component.
- */
-export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string, public loadingMessage: string,public inPutData: any, ) {
-  }
-}

@@ -1,0 +1,84 @@
+@CHARSET "UTF-8";
+
+#navcontainer ul #subnavlist {
+    padding: 10px 12px;
+}
+
+#navcontainer {
+    background: none repeat scroll 0 0 transparent;
+    float: right;
+    margin-right: 10px;
+    margin-top: 12px;
+    padding-right: 10px;
+    width: 740px;
+}
+#navcontainer a {
+    text-decoration: none;
+}
+#navcontainer ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 10px;
+    position: relative;
+}
+#navcontainer li {
+    display: inline;
+}
+#navcontainer ul {
+    float: right;
+    margin-bottom: 2em;
+}
+#navcontainer li {
+    margin: 0 0 0;
+}
+#navcontainer ul a, #navcontainer ul a:link, #navcontainer ul a:visited {
+    background-color: #ADADAD;
+    border: 1px solid #ADADAD;
+    color: #6C6C6C;
+    padding: 10px 15px;
+}
+#navcontainer ul a:hover, #navcontainer ul a:focus {
+    background-color: #6C6C6C;
+    border: 1px solid #6C6C6C;
+    color: white;
+}
+#navcontainer ul a#current, #navcontainer ul a#current:link, #navcontainer ul a#current:visited {
+    font-weight: bold;
+    background-color: #6C6C6C;
+    border: 1px solid #6C6C6C;
+    color: white;
+}
+#navcontainer ul ul {
+    background: none repeat scroll 0 0 transparent;
+    border-top: medium none;
+    float: right;
+    position: absolute;
+    right: 0;
+    top: 35px;
+    width: 230%; /* width: 450%;*/
+}
+#navcontainer ul ul li {
+    display: inline;
+    float: right;
+}
+#navcontainer ul ul a, #navcontainer ul ul a:link, #navcontainer ul ul a:visited {
+    background: none repeat scroll 0 0 transparent;
+    border: medium none;
+    color: white;
+}
+#navcontainer ul ul a:hover, #navcontainer ul ul a:focus {
+    color: #EEEDF2;
+}
+#navcontainer ul ul a#subcurrent, #navcontainer ul ul a#subcurrent:link, #navcontainer ul ul a#subcurrent:visited {
+    font-weight: bold;
+}
+#help a#helplink{background: url("../img/help-hint.png") no-repeat scroll 11px 0px whitesmoke;width: 32px;text-decoration: none;text-indent: -9999px;display: inline-block;padding: 32px 10px 0px;top: 0px;position: relative;border: none;}
+
+#helpwrapper{width: 300px;background: #F4D45F;position: absolute;right: 41px;z-index: 9999999;top: 122px;-moz-border-radius: 0 0 4px 4px;-webkit-border-radius: 0 0 4px 4px;border-radius: 0 0 4px 4px;box-shadow: -5px 5px 10px 0px #656565;-moz-box-shadow: -5px 5px 10px 0px #656565;-webkit-box-shadow: -5px 5px 10px 0px #656565;padding: 10px;text-align: justify;display: none;cursor: pointer;}
+#helpw ul {margin-left:14px;}
+#helpw ul li {list-style-type:circle;margin:6px 0px;}
+#helpw {padding:2px;width:100%;height:400px;overflow:auto;}
+
+#helpcontent {display:none;}
+
+
