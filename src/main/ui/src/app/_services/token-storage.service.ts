@@ -22,7 +22,7 @@ export class TokenStorageService {
 
   signOut(): void {
     window.sessionStorage.removeItem(TOKEN_KEY);
-    sessionStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.clear();
     window.sessionStorage.setItem(USER_LOGGED_OUT, USER_LOGGED_OUT);
   }
@@ -39,7 +39,7 @@ export class TokenStorageService {
 
   public clearUserLoggedIn(){
     window.sessionStorage.removeItem(USER_LOGGED_IN);
-    sessionStorage.removeItem(USER_LOGGED_IN);
+    window.sessionStorage.removeItem(USER_LOGGED_IN);
   }
   public userLoggedOut(): void {
     //window.sessionStorage.removeItem(TOKEN_KEY);
@@ -47,12 +47,12 @@ export class TokenStorageService {
   }
 
   public getUserLoggedOut(): string {
-    return sessionStorage.getItem(USER_LOGGED_OUT);
+    return window.sessionStorage.getItem(USER_LOGGED_OUT);
   }
 
   public clearUserLoggedOut(){
     window.sessionStorage.removeItem(USER_LOGGED_OUT);
-    sessionStorage.removeItem(USER_LOGGED_OUT);
+    window.sessionStorage.removeItem(USER_LOGGED_OUT);
   }
 
 
@@ -71,13 +71,13 @@ export class TokenStorageService {
     window.sessionStorage.setItem(TOKEN_EXPIRY_TIME, data.expiresAt);
     window.sessionStorage.removeItem(USER_LOGGED_OUT);
     window.sessionStorage.setItem(USER_LOGGED_IN, USER_LOGGED_IN);
-    sessionStorage.setItem(USER_LOGGED_IN, USER_LOGGED_IN);
-    sessionStorage.removeItem(USER_LOGGED_OUT);
+    window.sessionStorage.setItem(USER_LOGGED_IN, USER_LOGGED_IN);
+    window.sessionStorage.removeItem(USER_LOGGED_OUT);
     this.saveUser(data.user);
   }
 
   public getToken(): string {
-    return sessionStorage.getItem(TOKEN_KEY);
+    return window.sessionStorage.getItem(TOKEN_KEY);
   }
 
   public saveUser(user): void {
@@ -91,7 +91,7 @@ export class TokenStorageService {
   }
 
   public getUser(): any {
-    return JSON.parse(sessionStorage.getItem(USER_KEY));
+    return JSON.parse(window.sessionStorage.getItem(USER_KEY));
   }
 
   public getRefreshTokenPayload(): RefreshTokenPayload {
