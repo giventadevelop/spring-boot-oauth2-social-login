@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {PageFragment} from '../../common/page.fragment.interface';
 import {of, Subscription, timer} from 'rxjs';
 import {delay, map, tap} from 'rxjs/operators';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TokenStorageService} from '../../_services/token-storage.service';
+import {AuthService} from '../../_services/auth.service';
 
 @Component({
   selector: 'app-web-home',
@@ -11,10 +12,13 @@ import {TokenStorageService} from '../../_services/token-storage.service';
   styleUrls: ['./web-home.component.css', '../../../assets/css/stylesheet.css', '../../../assets/css/form.css',
     '../../../assets/css/ui.css', '../../../assets/css/colorbox.css']
 })
+
 export class WebHomeComponent implements OnInit {
+
   showLoggedOutMessage :boolean = false;
   hideLoggedOutMessage :boolean = false;
-  logoutPathParam :string;
+  logoutRouteQueryParam :string;
+  loggedInRouteQueryParam :string;
   animateMethodTimerSubscription : Subscription;
   logoutMessageTimerSubscription : Subscription;
   routerParamSubscription : Subscription;
@@ -23,65 +27,41 @@ export class WebHomeComponent implements OnInit {
   pageFragment2 = {fragmentVisible: true} as PageFragment;
   pageFragment3 = {fragmentVisible: true} as PageFragment;
   pageFragment4 = {fragmentVisible: true} as PageFragment;
-  //var pageFragments: Array<PageFragment> ;
-  // pageFragments: PageFragment[] ;
   pageFragments = new Array<PageFragment>();
+  loginStatus: any;
 
-  constructor(private router: ActivatedRoute, private tokenStorageService: TokenStorageService) {
+  constructor(private router: ActivatedRoute, private tokenStorageService: TokenStorageService,private authService: AuthService) {
   }
 
   ngOnInit(): void {
-    console.log('in  WebHomeComponent ngOnInit ');
 
-   let isLoggingOut = this.tokenStorageService.getUserLoggedOut();
-    console.log('isLoggingOut', isLoggingOut);
-    if(isLoggingOut) {
+    this.logoutRouteQueryParam = this.router.snapshot.queryParamMap.get('logout')
+    this.loggedInRouteQueryParam = this.router.snapshot.queryParamMap.get('isLoggedIn')
+
+    if(this.logoutRouteQueryParam && this.logoutRouteQueryParam==='true' ){
       this.hideLoggedOutMessage = true;
+      this.loginStatus= 'You have successfully logged out.'
+      this.tokenStorageService.signOut();
       this.fadeOutLoggedOutMsg();
-
+    }else if (this.loggedInRouteQueryParam && this.loggedInRouteQueryParam==='true'){
+      this.hideLoggedOutMessage = true;
+      this.authService.updateLoginLogoutMessage('isLoggedIn');
+      this.loginStatus= 'You are logged in.'
+      this.tokenStorageService.clearUserLoggedOut();
+      this.fadeOutLoggedOutMsg();
     }
-
-   // this.logoutPathParam = this.router.snapshot.paramMap.get('logout')
-  // this.logoutPathParam = this.router.snapshot.queryParamMap.get('logout')
-
-  /*  if(this.logoutPathParam && this.logoutPathParam==='true' ){
-      this.hideLoggedOutMessage = true;
-      this.fadeOutLoggedOutMsg();
-      /!*this.logoutMessageTimerSubscription = timer(5000, 0).pipe(
-        map(() => {
-          this.fadeOutLoggedOutMsg();
-        })
-      ).subscribe();*!/
-    }*/
-
-
-      //this.fadeOutLoggedOutMsg();
-
-
-
     this.pageFragment1.fragmentVisible = true;
     this.initPageFragment();
 
+    if(this.logoutRouteQueryParam && this.logoutRouteQueryParam==='true' ) {
+      this.authService.updateLoginLogoutMessage('logout');
+    }
 
-
-   /* if(this.showLoggedOutMessage){
-      this.hideLoggedOutMessage = true;
-      this.logoutMessageTimerSubscription = timer(5000, 0).pipe(
-        map(() => {
-          this.fadeOutLoggedOutMsg();
-        })
-      ).subscribe();
-    }*/
-
-   /* if(this.logoutPathParam) {
-      if (this.logoutPathParam == 'logout') {
-        this.hideLoggedOutMessage = true;
-
-      }
-    }*/
+    if(!this.logoutRouteQueryParam && ! this.loggedInRouteQueryParam ) {
+      this.authService.updateLoginLogoutMessage('home');
+    }
 
   }
-
 
   private initPageFragment() {
 
@@ -109,92 +89,31 @@ export class WebHomeComponent implements OnInit {
         pageFragment.fragmentVisible = true;
       }
     });
-
   }
 
   animateSlideFragment() {
-
-   /* let isLoggingOut = this.tokenStorageService.getUserLoggedOut();
-    console.log('isLoggingOut', isLoggingOut);
-   if(isLoggingOut) {
-     this.hideLoggedOutMessage = true;
-     this.tokenStorageService.signOut();
-   }*/
-    /*if(this.logoutPathParam && this.logoutPathParam==='true' ){
-      this.hideLoggedOutMessage = true;
-    }*/
-
-   /* if(this.logoutPathParam) {
-      if (this.logoutPathParam == 'logout') {
-        this.hideLoggedOutMessage = true;
-
-      }
-    }*/
       this.enableFragment(this.timerCounter);
       this.timerCounter++;
-    /*if(this.timerCounter == 2){
-      this.hideLoggedOutMessage = false;
-    }*/
       if(this.timerCounter == this.pageFragments.length){
         console.log('this.timerCounter is ', this.timerCounter);
         console.log(' this.hideLoggedOutMessage ',  this.hideLoggedOutMessage );
-       // this.hideLoggedOutMessage = false;
         this.timerCounter=0;
       }
   }
 
   /**
-   * call to fade out on page landing
+   * Call to fade out the successful
+   * login_logout alert message
    */
-  fadeOutLoggedOutMsgStep1() {
-
-    this.routerParamSubscription = this.router
-      .queryParams
-      .subscribe(params => {
-        // Defaults to false if no query param provided.
-        console.log('params[logout] in fadeOutLoggedOutMsg ', params['logout'])
-        // this.hideLoggedOutMessage = params['logout'] || false;
-        if( params['logout']){
-         // this.hideLoggedOutMessage=true;
-         this.fadeOutLoggedOutMsg();
-        }
-
-      });
-
-    // this.hideLoggedOutMessage = false;
-   // this.hideLoggedOutMessage = false;
-    // this.hideLoggedOutMessage = true;
-   /* this.routerParamSubscription = this.router
-      .queryParams
-      .subscribe(params => {
-        // Defaults to false if no query param provided.
-        console.log('params[logout] ', params['logout'])
-        this.hideLoggedOutMessage = params['logout'] || false;
-        if( this.hideLoggedOutMessage){
-       //   this.fadeOutLoggedOutMsg();
-        }
-
-      });*/
-
-  }
-
   fadeOutLoggedOutMsg() {
-
-   /* let isLoggingOut = this.tokenStorageService.getUserLoggedOut();
-    console.log('isLoggingOut', isLoggingOut);
-    if(isLoggingOut) {
-      this.hideLoggedOutMessage = true;
-      this.tokenStorageService.signOut();
-    }*/
     setTimeout( () => {
-      this.tokenStorageService.signOut();
       this.hideLoggedOutMessage = false;
-    }, 12000);
+    }, 4000);
   }
-
 
   /**
-   * close button click on alert
+   * Close the login_logout alert message
+   * on cross button click.
    */
   fadeOutLoggedClose() {
     this.hideLoggedOutMessage = false;
@@ -205,33 +124,12 @@ export class WebHomeComponent implements OnInit {
     this.animateMethodTimerSubscription = timer(0, 10000).pipe(
       map(() => {
         this.animateSlideFragment();
-        //  this.loadData(); // load data contains the http request
       })
     ).subscribe();
-
-  //this.fadeOutLoggedOutMsgStep1();
-
-
-   /* of(1)
-      .pipe(
-
-        tap(val => { this.hideLoggedOutMessage = true;console.log("Before " + val);}),
-        delay(12000)
-      )
-      .subscribe(
-        val => console.log(val),
-        e => console.log(e),
-        () =>{console.log("Complete");this.hideLoggedOutMessage = false;}
-      );*/
-
-
-  //this.animateSlideFragment();
-   }
+  }
 
   ngOnDestroy(): void {
     this.animateMethodTimerSubscription.unsubscribe();
-  //  this.logoutMessageTimerSubscription.unsubscribe();
-   //this.routerParamSubscription.unsubscribe();
   }
 
 }

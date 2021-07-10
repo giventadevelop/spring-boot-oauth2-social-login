@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import {BehaviorSubject, Observable, throwError} from 'rxjs';
 import { tap, catchError, switchMap, take, filter } from 'rxjs/operators';
 import { AppConstants } from '../common/app.constants';
 import { environment } from '../../environments/environment';
@@ -22,6 +22,9 @@ export class AuthService {
   // refreshTokenPayload: RefreshTokenPayload;
   refreshTokenPayloadIntfc: RefreshTokenPayloadIntfc;
   private refreshTokenTimeout;
+
+  private loginLogoutMessage = new BehaviorSubject('home');
+  currentloginLogoutMessage = this.loginLogoutMessage.asObservable();
 
   constructor(
     private http: HttpClient,
@@ -98,5 +101,14 @@ export class AuthService {
         })
       )
     );
+  }
+
+  /**
+   * To update the whether its Login or Logout link on the header
+   * @param loginLogoutMessageIn
+   */
+  updateLoginLogoutMessage(loginLogoutMessageIn: string) {
+    this.loginLogoutMessage.next(loginLogoutMessageIn);
+    console.log('currentloginLogoutMessage  in authService',this.currentloginLogoutMessage);
   }
 }

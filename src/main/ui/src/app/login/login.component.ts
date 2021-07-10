@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../_services/auth.service';
 import { UserService } from '../_services/user.service';
 import { TokenStorageService } from '../_services/token-storage.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { AppConstants } from '../common/app.constants';
 import { environment } from '../../environments/environment';
 
@@ -26,17 +26,19 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private tokenStorage: TokenStorageService,
+    private router: Router,
     private route: ActivatedRoute,
     private userService: UserService
   ) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = false;
     const token: string = this.route.snapshot.queryParamMap.get('token');
     const error: string = this.route.snapshot.queryParamMap.get('error');
-    if (this.tokenStorage.getToken()) {
+    /*if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
       this.currentUser = this.tokenStorage.getUser();
-    } else if (token) {
+    } else*/ if (token) {
       this.tokenStorage.saveToken(token);
       this.userService.getCurrentUser().subscribe(
         (data) => {
@@ -72,6 +74,7 @@ export class LoginComponent implements OnInit {
     this.isLoginFailed = false;
     this.isLoggedIn = true;
     this.currentUser = this.tokenStorage.getUser();
-    window.location.reload();
+    this.router.navigate(['/web-home'], { queryParams: { isLoggedIn: true } });
+   // window.location.reload();
   }
 }

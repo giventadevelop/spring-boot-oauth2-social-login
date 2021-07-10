@@ -1,445 +1,445 @@
-  <!--dynamic forms based on the article at url
-  https://codinglatte.com/posts/angular/angular-dynamic-form-fields-using-formarray/-->
+        <!--dynamic forms based on the article at url
+        https://codinglatte.com/posts/angular/angular-dynamic-form-fields-using-formarray/-->
 
 
-  <!--section for pop up alert primary phone selection-->
-  <ng-template #alertDialog let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Angular Bootstrap Modal Popup</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">×</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <p><strong>Please select one of the Phone as your  <span class="text-primary">Primary phone number.</span> profile?</strong></p>
-      <p>
-      </p>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">OK</button>
-    </div>
-  </ng-template>
-
-<div class="row">
-  <div class="col">
-    <h1>Reactive Forms</h1>
-    <hr>
-  </div>
-</div>
-<div class="container" *ngIf="isFormLoaded">
-  <div class="col-md-12">
-
-		<img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="avatar" class="profile-img-card" />
-		<form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate >
-      <div class="form-group">
-        <label for="displayName">
-          <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Display Name </label>
-        <input type="text" size="35" maxlength="30" class="shortenedInputText"
-               [ngClass]="{'form-control': true,
-                  'is-invalid': !displayName.valid && displayName.touched,
-                  'is-valid': displayName.valid}"
-               formControlName="displayName" id="displayName" placeholder="Enter display name">
-        <span *ngIf="displayName.errors?.required && displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name is required.</span>
-        <span *ngIf="displayName.errors?.minlength && displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name should be at least 2 characters.</span>
-      </div>
-			<div class="form-group">
-				<label for="email"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Email </label>
-        <input type="email"  size="70" maxlength="80" class="shortenedInputText" [ngClass]="{'form-control': true,
-                  'is-invalid': !email.valid && email.touched,
-                  'is-valid': email.valid}"  [formControlName]="'email'" id="email" placeholder="email">
-        <span *ngIf="email.errors?.required && email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Email is required.</span>
-        <span *ngIf="email.errors?.email && email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Enter a valid email.</span>
-      </div>
-			<div class="form-group">
-				<label for="password"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"></fa-icon>Password</label>
-        <input type="password" size="35" maxlength="30" class="shortenedInputText" [ngClass]="{'form-control': true,
-                  'is-invalid': !password.valid && password.touched,
-                  'is-valid': password.valid}"
-                                                      [formControlName]="'password'" id="password" placeholder="password">
-        <span *ngIf="password.errors?.required && password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password is required.</span>
-        <span *ngIf="password.errors?.minlength && password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password should be at least 6 characters.</span>
-      </div>
-
-			<div class="form-group">
-				<label for="matchingPassword"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Confirm Password</label>
-        <input type="password" size="35" maxlength="30" class="shortenedInputText" [ngClass]="{'form-control': true,
-                  'is-invalid': !matchingPassword.valid && matchingPassword.touched,
-                  'is-valid': matchingPassword.valid}" [formControlName]="'matchingPassword'" id="matchingPassword" placeholder="matchingPassword">
-        <span *ngIf="matchingPassword.errors?.required && matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password is required.</span>
-        <span *ngIf="matchingPassword.errors?.minlength && matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password should be at least 6 characters.</span>
-      </div>
-        <!--address start -->
-      <div class="card">
-        <div class="card-body" formArrayName="postalAddresses">
-          <div class="card-title">Address</div>
-          <div class="form-group">
-            <div class="col-md-offset-2 col-md-4">
-              <button type="button" class="btn btn-sm btn-primary" title="Add Address" (click)="addPostalAddress()">
-                <!--<i class="fas fa-plus-circle fa-lg">&nbsp; </i>-->
-                <fa-icon [icon]="['fas', 'plus-circle']" size="lg"> </fa-icon>
-                Address
-              </button>
-            </div>
+        <!--section for pop up alert primary phone selection-->
+        <ng-template #alertDialog let-modal>
+          <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Angular Bootstrap Modal Popup</h4>
+            <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+              <span aria-hidden="true">×</span>
+            </button>
           </div>
-          <div  *ngFor="let postalAddress of postalAddressGroupList.controls; let i = index;">
-            <hr *ngIf="i>0">
-            <div [formGroupName]="i" > <!--phonegroup start-->
-              <input type="hidden"  formControlName="addressId" [id]="'addressId'+i" />
-              <div class="row" >
-                <div class="col-md-3">
-                  <div class="form-group">
-                    <label [attr.for]="'addressTypeId'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Address Type  </label>
-
-                    <select class="shortenedSelect" [formControlName]="'addressTypeId'"  [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('addressTypeId').valid ,
-                  'is-valid': postalAddress.get('addressTypeId').valid}"  [id]="'addressTypeId'+i">
-                      <option  [ngValue]="null" disabled> Select Address Type</option>
-                      <option [ngValue]="addressType.addressTypeId"  *ngFor="let addressType of addressTypes">{{addressType.addressType}}</option>
-                    </select>
-                    <span *ngIf="postalAddress.get('addressTypeId').errors?.required && postalAddress.get('addressTypeId').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> Address Type is required.</span>
-
-                  </div>
-                </div> <!--col addressTypeId  end-->
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label  class="form-check-inline">Choose Gender</label>
-                    <div class=" form-check form-check-inline">
-                      <input class=" form-check-input" type="radio"
-
-                             name="gender"   formControlName="gender" [id]="'male'+i" value="M">
-                      <label class="form-check-label" [attr.for]="'male'+i">male</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio"
-                             name="gender"  formControlName="gender" [id]="'female'+i" value="F">
-                      <label class="form-check-label" [attr.for]="'female'+i">female</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio"
-                             name="gender"    formControlName="gender" [id]="'other'+i" value="O">
-                      <label class="form-check-label" [attr.for]="'other'+i">other</label>
-                    </div>
-
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" type="radio"
-                             name="gender"   formControlName="gender" [id]="'decline'+i" value="D">
-                      <label class="form-check-label" [attr.for]="'decline'+i">decline to verify</label>
-                    </div>
-                  <!--  <small *ngIf="gender.errors?.required && gender.touched" class="form-check-inline form-text custom-invalid-feedback">Pick one option.</small>-->
-                  </div> <!--gender formgroup end-->
-                </div> <!--col gender end-->
-
-                <div class="col-sm-2" *ngIf="postalAddressGroupList.length>1">
-                  <button type="button" class="btn btn-danger btn-sm pull-right"
-                          title="Delete Address" (click)="removePostalAddress(i)">
-                    <i class="fas fa-minus-circle fa-lg">&nbsp; </i>
-                    Address
-                  </button>
-                </div>
-
-              </div>  <!--row 1 adrs  end-->
-
-              <div class="row"> <!--row name details-->
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'namePrefix'+i">Name Prefix</label>
-                    <input type="text"
-                           formControlName="namePrefix" [id]="'namePrefix'+i" placeholder="Name Prefix">
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'firstName'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> First Name </label>
-                    <input type="text"  formControlName="firstName" [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('firstName').valid && postalAddress.get('firstName').touched,
-                  'is-valid': postalAddress.get('firstName').valid}"
-                           [id]="'firstName'+i" placeholder="First Name">
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'lastName'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Last Name </label>
-                    <input type="text" formControlName="lastName" [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('lastName').valid && postalAddress.get('lastName').touched,
-                  'is-valid': postalAddress.get('lastName').valid}" [id]="'lastName'+i" placeholder="Last Name">
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'nameSuffix'+i"> Name Suffix </label>
-                    <input type="text"
-                           formControlName="nameSuffix" [id]="'nameSuffix'+i" placeholder="Name suffix">
-                  </div>
-                </div>
-            </div>  <!--row 2 name  end-->
-
-              <div class="row">
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'companyName'+i"> Company name </label>
-                    <input type="text"
-                           formControlName="companyName" [id]="'companyName'+i" placeholder="Company name">
-                  </div>
-                </div>
-              </div>  <!--row end single column company name-->
-
-              <div class="row"> <!--row address lines-->
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'addressLine1'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Street Address </label>
-                    <input type="text" [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('addressLine1').valid && postalAddress.get('addressLine1').touched,
-                  'is-valid': postalAddress.get('addressLine1').valid}"
-                           formControlName="addressLine1" [id]="'addressLine1'+i" placeholder="Enter street address">
-                    <span *ngIf="postalAddress.get('addressLine1').errors?.required && postalAddress.get('addressLine1').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> Address line is required.</span>
-                    <span *ngIf="postalAddress.get('addressLine1').errors?.minlength && postalAddress.get('addressLine1').touched"  class="form-text invalid-feedback custom-invalid-feedback">Address line should be at least 3 characters long.</span>
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'addressLine2'+i">Home / Apartment Number </label>
-                    <input type="text"
-                           formControlName="addressLine2" [id]="'addressLine2'+i" placeholder="Address line two">
-                  </div>
-                </div>
-
-           <div class="col" >
-           <div class="form-group">
-             <label [attr.for]="'addressLine3'+i">Address Line 3</label>
-           <input type="text"
-             formControlName="addressLine3" [id]="'addressLine3'+i" placeholder="Address Line 3">
-             </div>
-             </div>
-
-              </div> <!--row address lines 1,2.. end-->
-
-              <div class="row">
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'cityOrTown'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> City Or Town </label>
-                    <input type="text" [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('cityOrTown').valid && postalAddress.get('cityOrTown').touched,
-                  'is-valid': postalAddress.get('cityOrTown').valid}"
-                           formControlName="cityOrTown" [id]="'cityOrTown'+i" placeholder="City Or Town">
-                    <span *ngIf="postalAddress.get('cityOrTown').errors?.required && postalAddress.get('cityOrTown').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> City Or Town is required.</span>
-                    <span *ngIf="postalAddress.get('cityOrTown').errors?.minlength && postalAddress.get('addressLine1').touched"  class="form-text invalid-feedback custom-invalid-feedback">City Or Town should be at least 3 characters long.</span>
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'countyOrMuncipalOrSublocality'+i">County Or Muncipal Or Sublocality</label>
-                    <input type="text"
-                           formControlName="countyOrMuncipalOrSublocality" [id]="'countyOrMuncipalOrSublocality'+i" placeholder="County Or Muncipal Or Sublocality">
-                  </div>
-                </div>
-
-              </div> <!--row city county end-->
-
-              <div class="row">
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'stateOrProvince'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> State Or Province </label>
-                    <input type="text" [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('stateOrProvince').valid && postalAddress.get('stateOrProvince').touched,
-                  'is-valid': postalAddress.get('stateOrProvince').valid}"
-                           formControlName="stateOrProvince" [id]="'stateOrProvince'+i" placeholder="State Or Province">
-                    <span *ngIf="postalAddress.get('stateOrProvince').errors?.required && postalAddress.get('stateOrProvince').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> State Or Province is required.</span>
-                    <span *ngIf="postalAddress.get('stateOrProvince').errors?.minlength && postalAddress.get('stateOrProvince').touched"  class="form-text invalid-feedback custom-invalid-feedback">State Or Province  should be at least 3 characters long.</span>
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'zipOrPostalCode'+i">Zip Or PostalCode</label>
-                    <input type="text"
-                           formControlName="zipOrPostalCode" [id]="'zipOrPostalCode'+i" placeholder="Zip Or Postal Code">
-                  </div>
-                </div>
-
-                <div class="col" >
-                  <div class="form-group">
-                    <label [attr.for]="'country'+i">Country</label>
-                    <select class="shortenedSelect" formControlName="countryId"  [ngClass]="{'form-control': true,
-                  'is-invalid': !postalAddress.get('countryId').valid ,
-                  'is-valid': postalAddress.get('countryId').valid}" [id]="'country'+i">
-                      <option  [ngValue]="null" disabled> Select Country</option>
-                    <option [ngValue]="country.countryId" selected *ngFor="let country of countries">{{country.name}}</option>
-                    </select>
-                  </div>
-                </div>
-              </div> <!--row state country end-->
-
-            </div> <!--i iter end-->
-          </div> <!--ngfor end-->
-       </div>  <!--card body end-->
-      </div><!--card main end-->
-
-    <div class="card">
-        <div class="card-body" formArrayName="phoneNumbers">
-          <div class="card-title">Phone Details</div>
-          <div class="form-group">
-            <div class="col-md-offset-2 col-md-4">
-              <button type="button" class="btn btn-sm btn-primary" (click)="addPhoneNumber()">
-               <!-- <i class="fas fa-plus-circle fa-lg">&nbsp; </i>-->
-                Phone
-              </button>
-            </div>
+          <div class="modal-body">
+            <p><strong>Please select one of the Phone as your  <span class="text-primary">Primary phone number.</span> profile?</strong></p>
+            <p>
+            </p>
           </div>
-          <div class="row">
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="modal.close('Save click')">OK</button>
+          </div>
+        </ng-template>
 
-            <div  *ngFor="let phoneNumber of phoneNumberGroupList.controls; let i = index;">
-              <hr *ngIf="i>0">
-              <div [formGroupName]="i" > <!--phonegroup start-->
-                <!-- hidden fields for each phone group start-->
-                <input type="hidden"  [formControlName]="'phoneId'" [id]="'phoneId'+i" />
+      <div class="row">
+        <div class="col">
+          <h1>Reactive Forms</h1>
+          <hr>
+        </div>
+      </div>
+      <div class="container" *ngIf="isFormLoaded">
+        <div class="col-md-12">
 
-                <!-- hidden fields for each phone group end -->
-                <div  class="row"> <!--phone row 1-->
-                  <div class="col" >
-                  <div class="form-group">
+          <img id="profile-img" src="//ssl.gstatic.com/accounts/ui/avatar_2x.png" alt="avatar" class="profile-img-card" />
+          <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" novalidate >
+            <div class="form-group">
+              <label for="displayName">
+                <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Display Name </label>
+              <input type="text" size="35" maxlength="30" class="shortenedInputText"
+                     [ngClass]="{'form-control': true,
+                        'is-invalid': !displayName.valid && displayName.touched,
+                        'is-valid': displayName.valid}"
+                     formControlName="displayName" id="displayName" placeholder="Enter display name">
+              <span *ngIf="displayName.errors?.required && displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name is required.</span>
+              <span *ngIf="displayName.errors?.minlength && displayName.touched"  class="form-text invalid-feedback custom-invalid-feedback">Display name should be at least 2 characters.</span>
+            </div>
+            <div class="form-group">
+              <label for="email"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Email </label>
+              <input type="email"  size="70" maxlength="80" class="shortenedInputText" [ngClass]="{'form-control': true,
+                        'is-invalid': !email.valid && email.touched,
+                        'is-valid': email.valid}"  [formControlName]="'email'" id="email" placeholder="email">
+              <span *ngIf="email.errors?.required && email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Email is required.</span>
+              <span *ngIf="email.errors?.email && email.touched"  class="form-text invalid-feedback custom-invalid-feedback">Enter a valid email.</span>
+            </div>
+            <div class="form-group">
+              <label for="password"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"></fa-icon>Password</label>
+              <input type="password" size="35" maxlength="30" class="shortenedInputText" [ngClass]="{'form-control': true,
+                        'is-invalid': !password.valid && password.touched,
+                        'is-valid': password.valid}"
+                                                            [formControlName]="'password'" id="password" placeholder="password">
+              <span *ngIf="password.errors?.required && password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password is required.</span>
+              <span *ngIf="password.errors?.minlength && password.touched"  class="form-text invalid-feedback custom-invalid-feedback">Password should be at least 6 characters.</span>
+            </div>
 
-                    <label [attr.for]="'phoneContactTypeId'+i">Phone Contact Type</label>
-
-                    <select class="shortenedSelect" [formControlName]="'phoneContactTypeId'"  [ngClass]="{'form-control': true,
-                  'is-invalid': !phoneNumber.get('phoneContactTypeId').valid ,
-                  'is-valid': phoneNumber.get('phoneContactTypeId').valid}"    [id]="'phoneContactTypeId'+i">
-                      <option  [ngValue]="null" disabled> Select Phone Type</option>
-                      <option [ngValue]="phoneContactType.phoneContactTypeId" selected *ngFor="let phoneContactType of phoneContactTypes">{{phoneContactType.phoneContactType}}</option>
-                    </select>
-                    <span *ngIf="phoneNumber.get('phoneContactTypeId').errors?.required && phoneNumber.get('phoneContactTypeId').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> Phone Contact Type is required.</span>
-
+            <div class="form-group">
+              <label for="matchingPassword"> <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Confirm Password</label>
+              <input type="password" size="35" maxlength="30" class="shortenedInputText" [ngClass]="{'form-control': true,
+                        'is-invalid': !matchingPassword.valid && matchingPassword.touched,
+                        'is-valid': matchingPassword.valid}" [formControlName]="'matchingPassword'" id="matchingPassword" placeholder="matchingPassword">
+              <span *ngIf="matchingPassword.errors?.required && matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password is required.</span>
+              <span *ngIf="matchingPassword.errors?.minlength && matchingPassword.touched"  class="form-text invalid-feedback custom-invalid-feedback">Matching password should be at least 6 characters.</span>
+            </div>
+              <!--address start -->
+            <div class="card">
+              <div class="card-body" formArrayName="postalAddresses">
+                <div class="card-title">Address</div>
+                <div class="form-group">
+                  <div class="col-md-offset-2 col-md-4">
+                    <button type="button" class="btn btn-sm btn-primary" title="Add Address" (click)="addPostalAddress()">
+                      <!--<i class="fas fa-plus-circle fa-lg">&nbsp; </i>-->
+                      <fa-icon [icon]="['fas', 'plus-circle']" size="lg"> </fa-icon>
+                      Address
+                    </button>
                   </div>
-                    </div> <!--col end-->
-                  <div class="col">
-                  <div class="form-group">
-                    <label [attr.for]="'isPrimaryPhoneNumber'+i" class="checkbox-container">  <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Primary phone?
+                </div>
+                <div  *ngFor="let postalAddress of postalAddressGroupList.controls; let i = index;">
+                  <hr *ngIf="i>0">
+                  <div [formGroupName]="i" > <!--phonegroup start-->
+                    <input type="hidden"  formControlName="addressId" [id]="'addressId'+i" />
+                    <div class="row" >
+                      <div class="col-md-3">
+                        <div class="form-group">
+                          <label [attr.for]="'addressTypeId'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Address Type  </label>
 
-                    <input class="checkmark" #txt+i type="checkbox" [formControlName]="'isPrimaryPhoneNumber'"
-                           [value]   [id]="'isPrimaryPhoneNumber'+i" (click)="onPrimaryPhoneChange($event)"/>
+                          <select class="shortenedSelect" [formControlName]="'addressTypeId'"  [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('addressTypeId').valid ,
+                        'is-valid': postalAddress.get('addressTypeId').valid}"  [id]="'addressTypeId'+i">
+                            <option  [ngValue]="null" disabled> Select Address Type</option>
+                            <option [ngValue]="addressType.addressTypeId"  *ngFor="let addressType of addressTypes">{{addressType.addressType}}</option>
+                          </select>
+                          <span *ngIf="postalAddress.get('addressTypeId').errors?.required && postalAddress.get('addressTypeId').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> Address Type is required.</span>
 
-                     <!-- <span class="checkmark"> </span>-->
-                    </label>
-                    <!-- <br class="clear" />-->
-                  </div>
-                  </div> <!--col end-->
-                  <div class="col">
-                  <div class="form-group">
-                    <label [attr.for]="'customLabel'+i">Custom Label</label>
-                    <input type="text" [formControlName]="'customLabel'" value="true" [id]="'customLabel'+i" />
-                    <!-- <br class="clear" />-->
-                  </div>
-                  </div> <!--col end-->
+                        </div>
+                      </div> <!--col addressTypeId  end-->
 
-                  <div class="col-sm-2" *ngIf="phoneNumberGroupList.length>1">
-                    <button type="button" class="btn btn-danger btn-sm pull-right"
-                            title="Delete Phone" (click)="removePhoneNumber(i)">
-                      <i class="fas fa-minus-circle fa-lg">&nbsp; </i>
+                      <div class="col" >
+                        <div class="form-group">
+                          <label  class="form-check-inline">Choose Gender</label>
+                          <div class=" form-check form-check-inline">
+                            <input class=" form-check-input" type="radio"
+
+                                   name="gender"   formControlName="gender" [id]="'male'+i" value="M">
+                            <label class="form-check-label" [attr.for]="'male'+i">male</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio"
+                                   name="gender"  formControlName="gender" [id]="'female'+i" value="F">
+                            <label class="form-check-label" [attr.for]="'female'+i">female</label>
+                          </div>
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio"
+                                   name="gender"    formControlName="gender" [id]="'other'+i" value="O">
+                            <label class="form-check-label" [attr.for]="'other'+i">other</label>
+                          </div>
+
+                          <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio"
+                                   name="gender"   formControlName="gender" [id]="'decline'+i" value="D">
+                            <label class="form-check-label" [attr.for]="'decline'+i">decline to verify</label>
+                          </div>
+                        <!--  <small *ngIf="gender.errors?.required && gender.touched" class="form-check-inline form-text custom-invalid-feedback">Pick one option.</small>-->
+                        </div> <!--gender formgroup end-->
+                      </div> <!--col gender end-->
+
+                      <div class="col-sm-2" *ngIf="postalAddressGroupList.length>1">
+                        <button type="button" class="btn btn-danger btn-sm pull-right"
+                                title="Delete Address" (click)="removePostalAddress(i)">
+                          <i class="fas fa-minus-circle fa-lg">&nbsp; </i>
+                          Address
+                        </button>
+                      </div>
+
+                    </div>  <!--row 1 adrs  end-->
+
+                    <div class="row"> <!--row name details-->
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'namePrefix'+i">Name Prefix</label>
+                          <input type="text"
+                                 formControlName="namePrefix" [id]="'namePrefix'+i" placeholder="Name Prefix">
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'firstName'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> First Name </label>
+                          <input type="text"  formControlName="firstName" [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('firstName').valid && postalAddress.get('firstName').touched,
+                        'is-valid': postalAddress.get('firstName').valid}"
+                                 [id]="'firstName'+i" placeholder="First Name">
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'lastName'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Last Name </label>
+                          <input type="text" formControlName="lastName" [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('lastName').valid && postalAddress.get('lastName').touched,
+                        'is-valid': postalAddress.get('lastName').valid}" [id]="'lastName'+i" placeholder="Last Name">
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'nameSuffix'+i"> Name Suffix </label>
+                          <input type="text"
+                                 formControlName="nameSuffix" [id]="'nameSuffix'+i" placeholder="Name suffix">
+                        </div>
+                      </div>
+                  </div>  <!--row 2 name  end-->
+
+                    <div class="row">
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'companyName'+i"> Company name </label>
+                          <input type="text"
+                                 formControlName="companyName" [id]="'companyName'+i" placeholder="Company name">
+                        </div>
+                      </div>
+                    </div>  <!--row end single column company name-->
+
+                    <div class="row"> <!--row address lines-->
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'addressLine1'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Street Address </label>
+                          <input type="text" [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('addressLine1').valid && postalAddress.get('addressLine1').touched,
+                        'is-valid': postalAddress.get('addressLine1').valid}"
+                                 formControlName="addressLine1" [id]="'addressLine1'+i" placeholder="Enter street address">
+                          <span *ngIf="postalAddress.get('addressLine1').errors?.required && postalAddress.get('addressLine1').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> Address line is required.</span>
+                          <span *ngIf="postalAddress.get('addressLine1').errors?.minlength && postalAddress.get('addressLine1').touched"  class="form-text invalid-feedback custom-invalid-feedback">Address line should be at least 3 characters long.</span>
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'addressLine2'+i">Home / Apartment Number </label>
+                          <input type="text"
+                                 formControlName="addressLine2" [id]="'addressLine2'+i" placeholder="Address line two">
+                        </div>
+                      </div>
+
+                 <div class="col" >
+                 <div class="form-group">
+                   <label [attr.for]="'addressLine3'+i">Address Line 3</label>
+                 <input type="text"
+                   formControlName="addressLine3" [id]="'addressLine3'+i" placeholder="Address Line 3">
+                   </div>
+                   </div>
+
+                    </div> <!--row address lines 1,2.. end-->
+
+                    <div class="row">
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'cityOrTown'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> City Or Town </label>
+                          <input type="text" [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('cityOrTown').valid && postalAddress.get('cityOrTown').touched,
+                        'is-valid': postalAddress.get('cityOrTown').valid}"
+                                 formControlName="cityOrTown" [id]="'cityOrTown'+i" placeholder="City Or Town">
+                          <span *ngIf="postalAddress.get('cityOrTown').errors?.required && postalAddress.get('cityOrTown').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> City Or Town is required.</span>
+                          <span *ngIf="postalAddress.get('cityOrTown').errors?.minlength && postalAddress.get('addressLine1').touched"  class="form-text invalid-feedback custom-invalid-feedback">City Or Town should be at least 3 characters long.</span>
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'countyOrMuncipalOrSublocality'+i">County Or Muncipal Or Sublocality</label>
+                          <input type="text"
+                                 formControlName="countyOrMuncipalOrSublocality" [id]="'countyOrMuncipalOrSublocality'+i" placeholder="County Or Muncipal Or Sublocality">
+                        </div>
+                      </div>
+
+                    </div> <!--row city county end-->
+
+                    <div class="row">
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'stateOrProvince'+i"> <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> State Or Province </label>
+                          <input type="text" [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('stateOrProvince').valid && postalAddress.get('stateOrProvince').touched,
+                        'is-valid': postalAddress.get('stateOrProvince').valid}"
+                                 formControlName="stateOrProvince" [id]="'stateOrProvince'+i" placeholder="State Or Province">
+                          <span *ngIf="postalAddress.get('stateOrProvince').errors?.required && postalAddress.get('stateOrProvince').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> State Or Province is required.</span>
+                          <span *ngIf="postalAddress.get('stateOrProvince').errors?.minlength && postalAddress.get('stateOrProvince').touched"  class="form-text invalid-feedback custom-invalid-feedback">State Or Province  should be at least 3 characters long.</span>
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'zipOrPostalCode'+i">Zip Or PostalCode</label>
+                          <input type="text"
+                                 formControlName="zipOrPostalCode" [id]="'zipOrPostalCode'+i" placeholder="Zip Or Postal Code">
+                        </div>
+                      </div>
+
+                      <div class="col" >
+                        <div class="form-group">
+                          <label [attr.for]="'country'+i">Country</label>
+                          <select class="shortenedSelect" formControlName="countryId"  [ngClass]="{'form-control': true,
+                        'is-invalid': !postalAddress.get('countryId').valid ,
+                        'is-valid': postalAddress.get('countryId').valid}" [id]="'country'+i">
+                            <option  [ngValue]="null" disabled> Select Country</option>
+                          <option [ngValue]="country.countryId" selected *ngFor="let country of countries">{{country.name}}</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div> <!--row state country end-->
+
+                  </div> <!--i iter end-->
+                </div> <!--ngfor end-->
+             </div>  <!--card body end-->
+            </div><!--card main end-->
+
+          <div class="card">
+              <div class="card-body" formArrayName="phoneNumbers">
+                <div class="card-title">Phone Details</div>
+                <div class="form-group">
+                  <div class="col-md-offset-2 col-md-4">
+                    <button type="button" class="btn btn-sm btn-primary" (click)="addPhoneNumber()">
+                     <!-- <i class="fas fa-plus-circle fa-lg">&nbsp; </i>-->
                       Phone
                     </button>
                   </div>
+                </div>
+                <div class="row">
 
-                </div> <!--phone row 1 end-->
+                  <div  *ngFor="let phoneNumber of phoneNumberGroupList.controls; let i = index;">
+                    <hr *ngIf="i>0">
+                    <div [formGroupName]="i" > <!--phonegroup start-->
+                      <!-- hidden fields for each phone group start-->
+                      <input type="hidden"  [formControlName]="'phoneId'" [id]="'phoneId'+i" />
 
-                <div  class="row"> <!--phone row 2 start -->
-                  <div class="col">
-                  <div class="form-group">
-                    <label [attr.for]="'countryPrefix'+i">Country Prefix</label>
-                    <input type="text" [formControlName]="'countryPrefix'" value="true" [id]="'countryPrefix'+i" />
-                    <!-- <br class="clear" />-->
+                      <!-- hidden fields for each phone group end -->
+                      <div  class="row"> <!--phone row 1-->
+                        <div class="col" >
+                        <div class="form-group">
+
+                          <label [attr.for]="'phoneContactTypeId'+i">Phone Contact Type</label>
+
+                          <select class="shortenedSelect" [formControlName]="'phoneContactTypeId'"  [ngClass]="{'form-control': true,
+                        'is-invalid': !phoneNumber.get('phoneContactTypeId').valid ,
+                        'is-valid': phoneNumber.get('phoneContactTypeId').valid}"    [id]="'phoneContactTypeId'+i">
+                            <option  [ngValue]="null" disabled> Select Phone Type</option>
+                            <option [ngValue]="phoneContactType.phoneContactTypeId" selected *ngFor="let phoneContactType of phoneContactTypes">{{phoneContactType.phoneContactType}}</option>
+                          </select>
+                          <span *ngIf="phoneNumber.get('phoneContactTypeId').errors?.required && phoneNumber.get('phoneContactTypeId').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> Phone Contact Type is required.</span>
+
+                        </div>
+                          </div> <!--col end-->
+                        <div class="col">
+                        <div class="form-group">
+                          <label [attr.for]="'isPrimaryPhoneNumber'+i" class="checkbox-container">  <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Primary phone?
+
+                          <input class="checkmark" #txt+i type="checkbox" [formControlName]="'isPrimaryPhoneNumber'"
+                                 [value]   [id]="'isPrimaryPhoneNumber'+i" (click)="onPrimaryPhoneChange($event)"/>
+
+                           <!-- <span class="checkmark"> </span>-->
+                          </label>
+                          <!-- <br class="clear" />-->
+                        </div>
+                        </div> <!--col end-->
+                        <div class="col">
+                        <div class="form-group">
+                          <label [attr.for]="'customLabel'+i">Custom Label</label>
+                          <input type="text" [formControlName]="'customLabel'" value="true" [id]="'customLabel'+i" />
+                          <!-- <br class="clear" />-->
+                        </div>
+                        </div> <!--col end-->
+
+                        <div class="col-sm-2" *ngIf="phoneNumberGroupList.length>1">
+                          <button type="button" class="btn btn-danger btn-sm pull-right"
+                                  title="Delete Phone" (click)="removePhoneNumber(i)">
+                            <i class="fas fa-minus-circle fa-lg">&nbsp; </i>
+                            Phone
+                          </button>
+                        </div>
+
+                      </div> <!--phone row 1 end-->
+
+                      <div  class="row"> <!--phone row 2 start -->
+                        <div class="col">
+                        <div class="form-group">
+                          <label [attr.for]="'countryPrefix'+i">Country Prefix</label>
+                          <input type="text" [formControlName]="'countryPrefix'" value="true" [id]="'countryPrefix'+i" />
+                          <!-- <br class="clear" />-->
+                        </div>
+                        </div> <!--col end-->
+
+                        <div class="col">
+                        <div class="form-group">
+                          <label [attr.for]="'countyPrefix'+i">County / Area Code </label>
+                          <input type="text" [formControlName]="'countyPrefix'"  [id]="'countyPrefix'+i" />
+                          <!-- <br class="clear" />-->
+                        </div>
+                        </div> <!--col end-->
+                        <div class="col">
+                        <div class="form-group">
+                          <label [attr.for]="'localLeadingZeros'+i"> Local Leading Zeros</label>
+                          <input type="text" [formControlName]="'localLeadingZeros'"
+                                 [ngClass]="{'form-control': true,
+                        'is-invalid': !phoneNumber.get('localLeadingZeros').valid && phoneNumber.get('localLeadingZeros').touched,
+                        'is-valid': phoneNumber.get('localLeadingZeros').valid}"
+                                 [id]="'localLeadingZeros'+i" />
+                          <!-- <br class="clear" />-->
+                          <span *ngIf="phoneNumber.get('localLeadingZeros').errors?.pattern && phoneNumber.get('localLeadingZeros').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> Only zeros allowed for Local Leading Zeros.</span>
+                          <span *ngIf="phoneNumber.get('localLeadingZeros').errors?.maxlength && phoneNumber.get('localLeadingZeros').touched"
+                                class="form-text invalid-feedback custom-invalid-feedback"> Only maximum of 4 zeros allowed for Local Leading Zeros.</span>
+
+                        </div>
+                        </div> <!--col end-->
+
+                      </div> <!--phone row 2 end-->
+
+                      <div  class="row"> <!--phone num row  start -->
+                        <div class="col-md-3">
+                          <div class="form-group" >
+                          <label [attr.for]="'localTelNumber'+i" > <fa-icon [icon]="['fas', 'asterisk']" size="xs"> </fa-icon> Phone Number</label>
+                            <input type="text"  [formControlName]="'localTelNumber'" size="35" maxlength="20" [ngClass]="{'form-control': true,
+                        'is-invalid': !phoneNumber.get('localTelNumber').valid && phoneNumber.get('localTelNumber').touched,
+                        'is-valid': phoneNumber.get('localTelNumber').valid}"  [id]="'localTelNumber'+i" />
+                            <span *ngIf="phoneNumber.get('localTelNumber').errors?.required && phoneNumber.get('localTelNumber').touched"
+                                  class="form-text invalid-feedback custom-invalid-feedback"> Phone Number is required.</span>
+                            <span *ngIf="phoneNumber.get('localTelNumber').errors?.minlength && phoneNumber.get('localTelNumber').touched"  class="form-text invalid-feedback custom-invalid-feedback">Phone Number should be at least 10 digits.</span>
+                          </div>
+
+                        </div> <!--col end-->
+                       </div> <!--phone row 3 end-->
+
+                    </div> <!--phonegroup end-->
+
                   </div>
-                  </div> <!--col end-->
+                </div>
+              </div>
+          </div>
 
-                  <div class="col">
-                  <div class="form-group">
-                    <label [attr.for]="'countyPrefix'+i">County / Area Code </label>
-                    <input type="text" [formControlName]="'countyPrefix'"  [id]="'countyPrefix'+i" />
-                    <!-- <br class="clear" />-->
-                  </div>
-                  </div> <!--col end-->
-                  <div class="col">
-                  <div class="form-group">
-                    <label [attr.for]="'localLeadingZeros'+i"> Local Leading Zeros</label>
-                    <input type="text" [formControlName]="'localLeadingZeros'"
-                           [ngClass]="{'form-control': true,
-                  'is-invalid': !phoneNumber.get('localLeadingZeros').valid && phoneNumber.get('localLeadingZeros').touched,
-                  'is-valid': phoneNumber.get('localLeadingZeros').valid}"
-                           [id]="'localLeadingZeros'+i" />
-                    <!-- <br class="clear" />-->
-                    <span *ngIf="phoneNumber.get('localLeadingZeros').errors?.pattern && phoneNumber.get('localLeadingZeros').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> Only zeros allowed for Local Leading Zeros.</span>
-                    <span *ngIf="phoneNumber.get('localLeadingZeros').errors?.maxlength && phoneNumber.get('localLeadingZeros').touched"
-                          class="form-text invalid-feedback custom-invalid-feedback"> Only maximum of 4 zeros allowed for Local Leading Zeros.</span>
+            <div *ngIf="isUpDateUserProfile; else registerUserProfile" >
+              <div  class="form-group">
+              <button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Update Profile</button>
+              </div>
+              <div class="alert alert-warning" *ngIf="isSignUpFailed">
+                Update profile failed! <br />{{ errorMessage }}
+              </div>
+           </div>
 
-                  </div>
-                  </div> <!--col end-->
+            <ng-template #registerUserProfile>
+              <div  class="form-group">
+                <button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Register User</button>
+              </div>
+              <div class="alert alert-warning" *ngIf="isSignUpFailed">
+                Signup failed!<br /> {{ errorMessage }}
+              </div>
+            </ng-template>
 
-                </div> <!--phone row 2 end-->
+          </form>
+          <div class="alert alert-success" *ngIf="isSuccessful">
 
-                <div  class="row"> <!--phone num row  start -->
-                  <div class="col-md-3">
-                    <div class="form-group" >
-                    <label [attr.for]="'localTelNumber'+i" > <i class="fa fa-asterisk fa-xs" aria-hidden="true">  </i> Phone Number</label>
-                      <input type="text"  [formControlName]="'localTelNumber'" size="35" maxlength="20" [ngClass]="{'form-control': true,
-                  'is-invalid': !phoneNumber.get('localTelNumber').valid && phoneNumber.get('localTelNumber').touched,
-                  'is-valid': phoneNumber.get('localTelNumber').valid}"  [id]="'localTelNumber'+i" />
-                      <span *ngIf="phoneNumber.get('localTelNumber').errors?.required && phoneNumber.get('localTelNumber').touched"
-                            class="form-text invalid-feedback custom-invalid-feedback"> Phone Number is required.</span>
-                      <span *ngIf="phoneNumber.get('localTelNumber').errors?.minlength && phoneNumber.get('localTelNumber').touched"  class="form-text invalid-feedback custom-invalid-feedback">Phone Number should be at least 10 digits.</span>
-                    </div>
-
-                  </div> <!--col end-->
-                 </div> <!--phone row 3 end-->
-
-              </div> <!--phonegroup end-->
+            <div *ngIf="isUpDateUserProfile; else registerUserSuccess" >
+              User profile updated successfully
 
             </div>
+
+              <ng-template #registerUserSuccess>
+                User registration successful
+              </ng-template>
+
           </div>
         </div>
-    </div>
-
-      <div *ngIf="isUpDateUserProfile; else registerUserProfile" >
-        <div  class="form-group">
-				<button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Update Profile</button>
-			  </div>
-			  <div class="alert alert-warning" *ngIf="isSignUpFailed">
-          Update profile failed! <br />{{ errorMessage }}
-			  </div>
-     </div>
-
-      <ng-template #registerUserProfile>
-        <div  class="form-group">
-          <button class="btn btn-primary btn-block" [disabled]="!registerForm.valid">Register User</button>
-        </div>
-        <div class="alert alert-warning" *ngIf="isSignUpFailed">
-          Signup failed!<br /> {{ errorMessage }}
-        </div>
-      </ng-template>
-
-		</form>
-		<div class="alert alert-success" *ngIf="isSuccessful">
-
-      <div *ngIf="isUpDateUserProfile; else registerUserSuccess" >
-        User profile updated successfully
-
       </div>
-
-        <ng-template #registerUserSuccess>
-          User registration successful
-        </ng-template>
-
-    </div>
-	</div>
-</div>

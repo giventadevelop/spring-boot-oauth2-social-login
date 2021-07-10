@@ -9,6 +9,8 @@ const USER_EMAIL = 'user_email';
 const REFRESH_TOKEN = 'refersh_token';
 const TOKEN_EXPIRY_TIME = 'token_expiry_time';
 const USER_LOGGED_OUT = 'user_logged_out';
+const USER_LOGGED_IN = 'user_logged_in';
+
 
 @Injectable({
   providedIn: 'root',
@@ -19,9 +21,26 @@ export class TokenStorageService {
   constructor() {}
 
   signOut(): void {
+    window.sessionStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.clear();
+    window.sessionStorage.setItem(USER_LOGGED_OUT, USER_LOGGED_OUT);
   }
 
+  public userLoggedIn(): void {
+    //window.sessionStorage.removeItem(TOKEN_KEY);
+    window.sessionStorage.setItem(USER_LOGGED_IN, USER_LOGGED_IN);
+  }
+
+  public getUserLoggedIn(): string {
+    console.log('USER_LOGGED_IN',window.sessionStorage.getItem(USER_LOGGED_IN));
+    return window.sessionStorage.getItem(USER_LOGGED_IN);
+  }
+
+  public clearUserLoggedIn(){
+    window.sessionStorage.removeItem(USER_LOGGED_IN);
+    sessionStorage.removeItem(USER_LOGGED_IN);
+  }
   public userLoggedOut(): void {
     //window.sessionStorage.removeItem(TOKEN_KEY);
     window.sessionStorage.setItem(USER_LOGGED_OUT, USER_LOGGED_OUT);
@@ -30,6 +49,13 @@ export class TokenStorageService {
   public getUserLoggedOut(): string {
     return sessionStorage.getItem(USER_LOGGED_OUT);
   }
+
+  public clearUserLoggedOut(){
+    window.sessionStorage.removeItem(USER_LOGGED_OUT);
+    sessionStorage.removeItem(USER_LOGGED_OUT);
+  }
+
+
 
   public saveToken(token: string): void {
     window.sessionStorage.removeItem(TOKEN_KEY);
@@ -43,6 +69,10 @@ export class TokenStorageService {
     window.sessionStorage.setItem(REFRESH_TOKEN, data.refreshToken);
     window.sessionStorage.removeItem(TOKEN_EXPIRY_TIME);
     window.sessionStorage.setItem(TOKEN_EXPIRY_TIME, data.expiresAt);
+    window.sessionStorage.removeItem(USER_LOGGED_OUT);
+    window.sessionStorage.setItem(USER_LOGGED_IN, USER_LOGGED_IN);
+    sessionStorage.setItem(USER_LOGGED_IN, USER_LOGGED_IN);
+    sessionStorage.removeItem(USER_LOGGED_OUT);
     this.saveUser(data.user);
   }
 
