@@ -14,6 +14,7 @@ import {WebPricingComponent} from './pages/web-pricing/web-pricing.component';
 import {WebAboutComponent} from './pages/web-about/web-about.component';
 import {WebContactComponent} from './pages/web-contact/web-contact.component';
 import {WebHowitworksComponent} from './pages/web-howitworks/web-howitworks.component';
+import {WebHeaderComponent} from './pages/web-header/web-header.component';
 
 const routes: Routes = [
 
@@ -25,6 +26,7 @@ const routes: Routes = [
   { path: 'mod', component: BoardModeratorComponent },
   { path: 'admin', component: BoardAdminComponent },
   { path: 'web-home', component: WebHomeComponent },
+  { path: 'web-header', component: WebHeaderComponent },
   { path: 'web-services', component: WebServicesComponent },
   { path: 'web-pricing', component: WebPricingComponent },
   { path: 'web-contact', component: WebContactComponent },

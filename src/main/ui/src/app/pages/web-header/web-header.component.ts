@@ -38,9 +38,13 @@ export class WebHeaderComponent implements OnInit {
       this.isUserLoggedIn = true;
     } else if (loginLogoutMessageIn === 'logout') {
       this.isUserLoggedIn = false;
+      // this.logout();
+    }else if (loginLogoutMessageIn === 'logoutUsingSessionTimer') {
+      this.isUserLoggedIn = false;
+      this.logout();
     } else {
 
-      if (this.tokenStorageService.getUserLoggedOut()) {
+      if (this. tokenStorageService.getUserLoggedOut()) {
         this.isUserLoggedIn  = false;
       }else if(this.tokenStorageService.getUserLoggedIn()){
         this.isUserLoggedIn = true;
@@ -51,7 +55,7 @@ export class WebHeaderComponent implements OnInit {
   logout(): void {
     this.isUserLoggedIn = false;
     this.tokenStorageService.signOut();
-    this.authService.updateLoginLogoutMessage('logout');
+    // this.authService.updateLoginLogoutMessage('logout');
     /*the below will just reload the web-home component and not the whole page tand thus
     still able to show the logout message*/
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;

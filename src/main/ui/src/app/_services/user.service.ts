@@ -9,7 +9,7 @@ const httpOptions = {
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class UserService {
   constructor(private http: HttpClient) {}

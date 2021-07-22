@@ -39,6 +39,7 @@ public class UIDropDownLoaderController {
      * findAllCountries
      * @return ResponseEntity<List<CountryDTO>>
      */
+    @CrossOrigin
     @GetMapping("/country")
     public ResponseEntity<List<CountryDTO>> findAllCountries() throws Exception {
         List<CountryDTO> countryDTOList;
@@ -51,6 +52,7 @@ public class UIDropDownLoaderController {
      * @return ResponseEntity<List<AddressTypeDTO>>
      * @throws Exception
      */
+    @CrossOrigin
     @GetMapping("/address_type")
     public ResponseEntity<List<AddressTypeDTO>> findAllAddressTypes() throws Exception {
         List<AddressTypeDTO> addressTypeDTOList;
@@ -63,6 +65,7 @@ public class UIDropDownLoaderController {
      * @return ResponseEntity<List<PhoneContactTypeDTO>>
      * @throws Exception
      */
+    @CrossOrigin
     @GetMapping("/phone_contact_type")
     public ResponseEntity<List<PhoneContactTypeDTO>> findAllPhoneContactTypes() throws Exception {
         List<PhoneContactTypeDTO> phoneContactTypeDTOList;

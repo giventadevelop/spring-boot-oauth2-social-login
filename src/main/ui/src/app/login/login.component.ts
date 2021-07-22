@@ -5,6 +5,9 @@ import { TokenStorageService } from '../_services/token-storage.service';
 import {ActivatedRoute, Router} from '@angular/router';
 import { AppConstants } from '../common/app.constants';
 import { environment } from '../../environments/environment';
+import {AppComponent} from '../app.component';
+import {UserIdleSessionTimeoutService} from '../_services/user-idle-session-timeout.service';
+import {SessionTimeoutEventEmitterService} from '../_services/session-timeout-event-emitter.service';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +31,8 @@ export class LoginComponent implements OnInit {
     private tokenStorage: TokenStorageService,
     private router: Router,
     private route: ActivatedRoute,
-    private userService: UserService
+    private userService: UserService,
+    private sessionTimeoutEventEmitter: SessionTimeoutEventEmitterService
   ) {}
 
   ngOnInit(): void {
@@ -74,6 +78,11 @@ export class LoginComponent implements OnInit {
     this.isLoginFailed = false;
     this.isLoggedIn = true;
     this.currentUser = this.tokenStorage.getUser();
+
+    /* invoke the event emitter to start the SessionTimeout count down on user inactivity/idle
+    https://www.c-sharpcorner.com/article/simple-way-to-execute-a-function-in-a-component-from-another-component/ */
+
+    this.sessionTimeoutEventEmitter.onLoginSessionTimeoutSubscription();
     this.router.navigate(['/web-home'], { queryParams: { isLoggedIn: true } });
    // window.location.reload();
   }

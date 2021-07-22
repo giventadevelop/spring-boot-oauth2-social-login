@@ -18,10 +18,9 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 
 import { FontAwesomeModule, FaIconLibrary } from '@fortawesome/angular-fontawesome';
-import { faSquare, faCheckSquare,faAsterisk,faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import {faSquare, faCheckSquare, faAsterisk, faPlusCircle, faMinusCircle, faTrashAlt, faTrash} from '@fortawesome/free-solid-svg-icons';
 import { faSquare as farSquare, faCheckSquare as farCheckSquare } from '@fortawesome/free-regular-svg-icons';
 import { faStackOverflow, faGithub, faMedium } from '@fortawesome/free-brands-svg-icons';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
@@ -37,6 +36,15 @@ import { WebPricingComponent } from './pages/web-pricing/web-pricing.component';
 import { WebAboutComponent } from './pages/web-about/web-about.component';
 import { WebContactComponent } from './pages/web-contact/web-contact.component';
 import { WebHowitworksComponent } from './pages/web-howitworks/web-howitworks.component';
+import {AuthService} from './_services/auth.service';
+import {SessionTimeoutEventEmitterService} from './_services/session-timeout-event-emitter.service';
+import {TokenStorageService} from './_services/token-storage.service';
+import {UiDropDownLoaderService} from './_services/ui.dropdown.loader.service';
+import {UserService} from './_services/user.service';
+import {UserIdleSessionTimeoutService} from './_services/user-idle-session-timeout.service';
+import { SessionTimeoutDialogComponent } from './session-timeout-dialog/session-timeout-dialog.component';
+
+
 
 @NgModule({
   declarations: [
@@ -58,7 +66,8 @@ import { WebHowitworksComponent } from './pages/web-howitworks/web-howitworks.co
     WebPricingComponent,
     WebAboutComponent,
     WebContactComponent,
-    WebHowitworksComponent
+    WebHowitworksComponent,
+    SessionTimeoutDialogComponent
   ],
     imports: [
         BrowserModule,
@@ -67,11 +76,11 @@ import { WebHowitworksComponent } from './pages/web-howitworks/web-howitworks.co
         FormsModule,
         ReactiveFormsModule,
         FontAwesomeModule,
-        NgbModule,
         BrowserAnimationsModule, MatDialogModule, MatButtonModule, MatProgressSpinnerModule
     ],
 
-  providers: [authInterceptorProviders],
+  providers: [authInterceptorProviders, AuthService,SessionTimeoutEventEmitterService,
+    TokenStorageService,UiDropDownLoaderService,UserService,UserIdleSessionTimeoutService],
   bootstrap: [AppComponent],
   entryComponents: [AlertDialogComponent],
   exports: [
@@ -81,7 +90,7 @@ import { WebHowitworksComponent } from './pages/web-howitworks/web-howitworks.co
 export class AppModule {
 
   constructor(private library: FaIconLibrary) {
-    library.addIcons(faSquare, faCheckSquare, faAsterisk,faPlusCircle, farSquare, farCheckSquare, faStackOverflow, faGithub, faMedium);
+    library.addIcons(faSquare, faCheckSquare, faAsterisk,faPlusCircle,faMinusCircle,faTrashAlt,faTrash, farSquare, farCheckSquare, faStackOverflow, faGithub, faMedium);
   }
 
 }

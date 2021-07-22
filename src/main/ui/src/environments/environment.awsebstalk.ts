@@ -21,4 +21,7 @@ export const environment = {
 
   LINKEDIN_AUTH_URL:
     'https://www.adwiise.com/oauth2/authorization/linkedin?redirect_uri=https://www.adwiise.com/login/oauth2/code/google',
+  SESSION_TIMEOUT_DURATION: 10,
+
+  SESSION_TIMEOUT_REMAINING_DURATION: 2
 };

@@ -1,6 +1,6 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {AuthService} from '../_services/auth.service';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators} from '@angular/forms';
 import {User} from "../common/user.interface";
 import {PhoneContactType} from "../common/phone.contact.type.interface";
 import {AddressType} from "../common/address.type.interface";
@@ -10,8 +10,6 @@ import {UserService} from "../_services/user.service";
 import {TokenStorageService} from "../_services/token-storage.service";
 import {PostalAddress} from "../common/postal.address.interface";
 import {PhoneNumber} from "../common/phone.number.interface";
-import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
-//import { BsModalRef } from '@ng--bootstrap/modal/bs-modal-ref.service';
 import {MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import {AlertDialogComponent} from "../alert-dialog/alert-dialog.component";
 import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
@@ -19,6 +17,40 @@ import {ConfirmDialogResult} from "../common/confirm.dialog.result.interface";
 import {ConfirmDialogModel} from '../common/confirm.dialog.model.class';
 import {Router} from '@angular/router';
 import {SuccessDialogComponent} from '../success-dialog/success-dialog.component';
+import {count} from 'rxjs/operators';
+
+function phoneNumberTenDigitsValidator(c: FormControl) {
+  // let PHONE_NUMBER_TEN_DIGITS_REGEXP = '^([^0-9]*[0-9]){10}.*$';
+  let PHONE_NUMBER_TEN_DIGITS_REGEXP = '(\d){10}';
+  let count;
+  if (c.value) {
+    count = (c.value.match(/\d/g) || []).length;
+  }
+
+  return count==10 ? null : {
+    phoneNumberTenDigitsValidator: {
+      valid: false
+    }
+  };
+}
+
+function phoneNumberDigitsSpaceValidator(c: FormControl) {
+  // let PHONE_NUMBER_TEN_DIGITS_REGEXP = '^([^0-9]*[0-9]){10}.*$';
+  // const PHONE_NUMBER_DIGITS_AND_SPACE_ONLY_VALIDATOR = ^(?.*\d)[\d ]+$;
+  // let digitAndSpaceOnlyRegExp  = new RegExp('^(?=.*\\d)[\\d ]+$');
+  let  digitAndSpaceOnly:boolean =true;
+  let digitAndSpaceOnlyRegExp = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  if (c.value) {
+    // digitAndSpaceOnly = c.value.match(digitAndSpaceOnlyRegExp);
+    digitAndSpaceOnly = digitAndSpaceOnlyRegExp.test(c.value);
+    console.log('digitAndSpaceOnly ', digitAndSpaceOnly);
+  }
+  return  !digitAndSpaceOnly ? null : {
+    phoneNumberDigitsSpaceValidator: {
+      valid: false
+    }
+  };
+}
 
 @Component({
   selector: 'app-register',
@@ -93,7 +125,7 @@ export class RegisterComponent implements OnInit {
     closeModal: string;
     confirmDialogResult= {} as ConfirmDialogResult;
 
-   constructor(private modalService: NgbModal,private formBuilder: FormBuilder,private userService: UserService, private authService: AuthService,
+   constructor(private formBuilder: FormBuilder,private userService: UserService, private authService: AuthService,
               private uiDropDownLoaderService: UiDropDownLoaderService,
               private token: TokenStorageService,
               private matDialog: MatDialog, private router: Router) {
@@ -115,6 +147,7 @@ export class RegisterComponent implements OnInit {
       this.isUserDetailsLoaded=true;
       this.loadDropDownLists();
       this.createForm();
+
     }
   }
 
@@ -230,8 +263,8 @@ export class RegisterComponent implements OnInit {
       gender: postalAddress.gender,
       addressTypeId: new FormControl(postalAddress.addressTypeId, [Validators.required]),
       namePrefix: postalAddress.namePrefix,
-      firstName: new FormControl(postalAddress.firstName, [Validators.required]),
-      lastName: new FormControl(postalAddress.lastName, [Validators.required]),
+      firstName: new FormControl(postalAddress.firstName, [Validators.required,Validators.minLength(2)]),
+      lastName: new FormControl(postalAddress.lastName, [Validators.required,Validators.minLength(2)]),
       nameSuffix: postalAddress.nameSuffix,
       addressLine1: new FormControl(postalAddress.addressLine1, [Validators.required]),
       addressLine2: postalAddress.addressLine2,
@@ -270,9 +303,21 @@ export class RegisterComponent implements OnInit {
       isPrimaryPhoneNumber: phoneNumber.isPrimaryPhoneNumber,
       countryPrefix: phoneNumber.countryPrefix,
       countyPrefix: phoneNumber.countyPrefix,
-     // localLeadingZeros: phoneNumber.localLeadingZeros,
-      localLeadingZeros: new FormControl(phoneNumber.localLeadingZeros, [Validators.pattern(/^[0]\d*$/), Validators.maxLength(4)]),
-      localTelNumber: new FormControl(phoneNumber.localTelNumber, [Validators.required, Validators.minLength(6)]),
+       localLeadingZeros: phoneNumber.localLeadingZeros,
+     //   localLeadingZeros: new FormControl(phoneNumber.localLeadingZeros, [Validators.pattern(/^[0]\d*$/), Validators.maxLength(4)]),
+     //  localLeadingZeros: new FormControl(phoneNumber.localLeadingZeros, [Validators.required, Validators.maxLength(4)]),
+     /* localTelNumber: new FormControl(phoneNumber.localTelNumber, [Validators.required, Validators.minLength(10),
+                                                  Validators.maxLength(14),Validators.pattern(/^[0-9 ]+$/)]),
+   */
+    /*  localTelNumber: new FormControl(phoneNumber.localTelNumber, [Validators.required, Validators.minLength(10),
+        Validators.maxLength(14),Validators.pattern(/^[0-9 ]+$/),phoneNumberTenDigitsValidator]),*/
+      // (?:\d+ ?){7,12}
+
+      /*localTelNumber: new FormControl(phoneNumber.localTelNumber, [Validators.required, Validators.minLength(10),
+        Validators.pattern('^(?=.*\d)[\d ]+$'),phoneNumberTenDigitsValidator]),*/
+      localTelNumber: new FormControl(phoneNumber.localTelNumber, [Validators.required, Validators.minLength(10),
+        phoneNumberDigitsSpaceValidator,phoneNumberTenDigitsValidator]),
+
       customLabel: phoneNumber.customLabel,
       userId: phoneNumber.userId
     });
@@ -296,8 +341,9 @@ export class RegisterComponent implements OnInit {
   }
 
   removePostalAddress(index: number) {
-   // this.postalAddressList.removeAt(index);
-    this.phoneNumberGroupList.removeAt(index);
+    this.postalAddressGroupList.removeAt(index);
+   //  this.phoneNumberGroupList.removeAt(index);
+
   }
 
   /**
@@ -438,8 +484,8 @@ export class RegisterComponent implements OnInit {
     this.isPrimaryPhoneNumber= new FormControl(this.phoneNumber.isPrimaryPhoneNumber);
     this.countryPrefix= new FormControl(this.phoneNumber.countryPrefix);
     this.countyPrefix= new FormControl(this.phoneNumber.countyPrefix);
-    this.localLeadingZeros= new FormControl(this.phoneNumber.localLeadingZeros);
-    this.localTelNumber= new FormControl(this.phoneNumber.localTelNumber, [Validators.required, Validators.minLength(6)]);
+    this.localLeadingZeros= new FormControl(this.phoneNumber.localLeadingZeros,[Validators.minLength(6)]);
+    this.localTelNumber= new FormControl(this.phoneNumber.localTelNumber, [Validators.required, Validators.minLength(10),Validators.maxLength(10),phoneNumberTenDigitsValidator]);
     this.customLabel= new FormControl(this.phoneNumber.customLabel);
     this.userId= new FormControl(this.phoneNumber.userId);
   }
@@ -484,7 +530,7 @@ export class RegisterComponent implements OnInit {
     const dialogLoadingMessage = 'Please wait deleting' ;
     let phoneNumberToDelete = ((this.registerForm.get('phoneNumbers') as FormArray).at(Number(index)) as FormGroup).getRawValue();
     let phoneId=phoneNumberToDelete.phoneId;
-    const dialogData = new ConfirmDialogModel("Confirm Action", message,dialogLoadingMessage,phoneId);
+    const dialogData = new ConfirmDialogModel('PhoneConfirm',"Confirm Action", message,dialogLoadingMessage,phoneId);
 
     const dialogRef = this.matDialog.open(ConfirmDialogComponent, {
       maxWidth: "600px",
@@ -512,7 +558,7 @@ export class RegisterComponent implements OnInit {
    */
   regnSuccessConfirmDialog(): void {
     const message = `You have successfully registered !`;
-    const dialogData = new ConfirmDialogModel("Success", message," ",0);
+    const dialogData = new ConfirmDialogModel('registration',"Success", message," ",0);
 
     const dialogRef = this.matDialog.open(SuccessDialogComponent, {
       maxWidth: "600px",
@@ -528,6 +574,113 @@ export class RegisterComponent implements OnInit {
       console.log('Not deleting phone number this time ');
       this.router.navigateByUrl('/web-home');
     });
+  }
+
+  callValidateAllFormFields(event: any) {
+    console.log('callValidateAllFormFields called ');
+        this.validateAllFormFields(this.registerForm);
+      }
+
+
+  /**
+   * https://loiane.com/2017/08/angular-reactive-forms-trigger-validation-on-submit/#trigger-validation-of-all-fields-on-submit
+   * @param formGroup
+   */
+  validateAllFormFields(formGroup: FormGroup) {
+    let dropdownFields = ['phoneContactTypeId', 'addressTypeId', 'countryId'];
+    formGroup.markAllAsTouched();//{1}
+    // formGroup.markAllAsD();
+    Object.keys(formGroup.controls).forEach(field => {  //{2}
+      const control = formGroup.get(field);             //{3}
+      if (control instanceof FormControl) {
+        console.log('key' , control);//{4}
+        // check for drop down fields and mark them invalid
+        if(dropdownFields.includes(field)){
+          control.markAsDirty();
+          console.log('marked dirty' , field );//{4}
+        }
+        control.markAsTouched();
+        // control.reset();
+        // control.markAsTouched({ onlySelf: true });
+      } else if (control instanceof FormGroup) {        //{5}
+        this.validateAllFormFields(control);            //{6}
+      } else if (control instanceof FormArray) {
+        Object.keys(control.controls).forEach(field => {
+          const formArrayFormGroup = control.get(field);
+          if (formArrayFormGroup instanceof FormGroup){
+            this.validateAllFormFields(formArrayFormGroup);
+        }
+        });
+               //{6}
+    }
+    });
+  }
+
+  getFormValidationErrors() {
+
+    console.log('%c ==>> Validation Errors: ', 'color: red; font-weight: bold; font-size:25px;');
+
+    let totalErrors = 0;
+
+    Object.keys(this.registerForm.controls).forEach(key => {
+      const controlErrors: ValidationErrors = this.registerForm.get(key).errors;
+      if (controlErrors != null) {
+        totalErrors++;
+        Object.keys(controlErrors).forEach(keyError => {
+          console.log('Key control: ' + key + ', keyError: ' + keyError + ', err value: ', controlErrors[keyError]);
+        });
+      }
+    });
+
+    console.log('Number of errors: ' ,totalErrors);
+  }
+
+  calculateClasses() {
+    return {
+      'form-control': true,
+      shortenedSelect: true,
+      'ng-invalid': false,
+      'is-invalid': false,
+      'ng-pristine': true,
+      'ng-touched': false
+
+    };
+  }
+
+  ngAfterViewInit(): void{
+    // this.registerForm.reset();
+    /*const control = this.registerForm.controls['addressTypeId'];
+    control.markAsPristine();
+    control.markAsUntouched();*/
+    /*this.postalAddressGroupList.at(0).markAsPristine();
+    console.log('control type valid' ,  this.postalAddressGroupList.at(0).valid);
+    // this.postalAddressGroupList.at(0).reset();
+    // this.postalAddressGroupList.at(0).get('addressTypeId').setErrors(null);
+    this.postalAddressGroupList.at(0).get('addressTypeId').markAsPristine();
+    this.postalAddressGroupList.at(0).get('addressTypeId').markAsUntouched();
+    this.postalAddressGroupList.at(0).get('addressTypeId').clearValidators();
+    this.postalAddressGroupList.at(0).get('addressTypeId').clearAsyncValidators();
+    this.postalAddressGroupList.at(0).get('addressTypeId').updateValueAndValidity()
+    // this.postalAddressGroupList.at(0).get('addressTypeId').setErrors(null);
+    var element = document.getElementById('addressTypeId0');*/
+   /* element. classList. add('class-1');
+    element. classList. add('class-2', 'class-3');*/
+    // this.postalAddressGroupList.at(0).get('addressTypeId').classList.remove('ng-invalid');
+   /* element.classList.remove('ng-invalid');
+    element.classList.remove('is-invalid');*/
+    // document.querySelector('$0').classList.remove('ng-invalid');
+    // $0.classList.remove('is-invalid');
+    // console.log('control type valid' ,  this.postalAddressGroupList.at(0)reset());
+    // this.validateAllFormFields(this.registerForm);
+    // this.addressTypeId.reset();
+    // document.getElementById('addressTypeId').;
+    /*
+    Object.keys(this.registerForm.controls).forEach((key) => {
+      const control = this.registerForm.controls[this.registerForm.postalAddresses.addressTypeId];
+      // control.setErrors(null);
+      console.log('key' , key);
+    });*/
+
   }
 
 }

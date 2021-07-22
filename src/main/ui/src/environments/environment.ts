@@ -26,6 +26,10 @@ export const environment = {
 
   LINKEDIN_AUTH_URL:
     'http://localhost:8080/oauth2/authorization/linkedin?redirect_uri=http://localhost:8080/login/oauth2/code/google',
+
+  SESSION_TIMEOUT_DURATION: 1,
+
+  SESSION_TIMEOUT_REMAINING_DURATION: 1
 };
 
 /*

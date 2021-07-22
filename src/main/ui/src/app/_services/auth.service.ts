@@ -15,7 +15,7 @@ const httpOptions = {
 };
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
   refreshTokenPayload = {} as RefreshTokenPayload;

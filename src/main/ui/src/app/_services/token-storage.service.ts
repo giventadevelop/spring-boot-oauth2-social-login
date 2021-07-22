@@ -13,7 +13,7 @@ const USER_LOGGED_IN = 'user_logged_in';
 
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class TokenStorageService {
   refreshTokenPayload = {} as RefreshTokenPayload;

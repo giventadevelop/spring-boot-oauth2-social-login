@@ -5,6 +5,6 @@
  */
 export class ConfirmDialogModel {
 
-  constructor(public title: string, public message: string, public loadingMessage: string,public inPutData: any ) {
+  constructor(public dialogCaller: string,public title: string, public message: string, public loadingMessage: string,public inPutData: any ) {
   }
 }
